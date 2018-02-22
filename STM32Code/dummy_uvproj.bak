@@ -413,6 +413,16 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Filters</GroupName>
+          <Files>
+            <File>
+              <FileName>MajvikFilter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Filters\MajvikFilter.c</FilePath>
+            </File>
+          </Files>
+        </Group>
       </Groups>
     </Target>
   </Targets>

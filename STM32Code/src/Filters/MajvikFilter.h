@@ -1,3 +1,4 @@
+/* Фильтр Маджвика */
 #ifndef MAJVIKFILER_H_
 #define MAJVIKFILER_H_
 #include <stdint.h>
@@ -15,3 +16,4 @@ static inline float fastInvSqrt(float x);		// ф-ия извлечения бы�
 void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, float time);	// Фильтр Маджвика
 void getEulerAngle(float* yaw, float* pitch, float* roll);  // получение углов Эйлера из квартерниона
 #endif /* MAJVIKFILER_H_ */
+

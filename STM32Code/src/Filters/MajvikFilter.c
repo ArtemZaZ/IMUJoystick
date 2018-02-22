@@ -15,8 +15,6 @@ void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, fl
 	float norm;	// временная переменная для вычисления нормы
 	float qHatDotw, qHatDotx, qHatDoty, qHatDotz; // составляющие квартерниона компенсации
 	float qDotOmegaw, qDotOmegax, qDotOmegay, qDotOmegaz;	// составляющее квартерниона скорости изменения ориентации
-	//float f1, f2, f3; // составляющие целевой ф-и. !подр(https://habrahabr.ru/post/255661/)
-	//float _2qxqx, _2qyqy, _2qw, _2qx, _2qy, _2qz, _4qx, _4qy;		// комбинированные компоненты - оптимизация
 	float temp1, temp2; 	// переменные оптимизации
 	if(ax && ay && az) 
 	{
@@ -24,20 +22,7 @@ void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, fl
 		ax = ax*norm;
 		ay = ay*norm;
 		az = az*norm;
-		/*
-		_2qxqx = 2*qx*qx;
-		_2qyqy = 2*qy*qy;
-		_2qw = 2*qw;
-		_2qx = 2*qx;
-		_2qy = 2*qy;
-		_2qz = 2*qz;
-		_4qx = 4*qx;
-		_4qy = 4*qy;		
-		
-		qHatDotw = 
-		qHatDotw = _2qw *_2qyqy + _2qy*ax + _2qw *_2qxqx - _2qx*ay;
-		qHatDotx = _4qx*qz*qz + 4*qw*qw*qx - 4*qx + 2*
-		*/
+
 		temp1 = qx*qx + qy*qy;												//magic variable
 		temp2 = qz*qz + qw*qw - 1.f + 2.f*temp1 + az;
 		
@@ -72,7 +57,7 @@ void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, fl
 
 void getEulerAngle(float* yaw, float* pitch, float* roll)
 {
-	*yaw = atan2(2.f*(qw*qz + qx*qy), qx*qx + qw*qw - qz*qz - qy*qy);
-	*pitch = asin(2.f*(qx*qz - qw*qy));
-	*roll = atan2(2.f*(qw*qx + qy*qz), qz*qz - qy*qy - qx*qx + qw*qw);
+	*yaw = atan2f(2.f*(qw*qz + qx*qy), qx*qx + qw*qw - qz*qz - qy*qy);
+	*pitch = asinf(2.f*(qx*qz - qw*qy));
+	*roll = atan2f(2.f*(qw*qx + qy*qz), qz*qz - qy*qy - qx*qx + qw*qw);
 }
