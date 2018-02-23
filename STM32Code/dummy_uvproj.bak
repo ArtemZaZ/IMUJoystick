@@ -423,6 +423,9 @@
             </File>
           </Files>
         </Group>
+        <Group>
+          <GroupName>Devices</GroupName>
+        </Group>
       </Groups>
     </Target>
   </Targets>

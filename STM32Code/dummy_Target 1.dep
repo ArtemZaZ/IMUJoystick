@@ -7,16 +7,33 @@ I (D:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x50F9A7A0)
 I (.\src\CMSIS\core_cmInstr.h)(0x5122091C)
 I (.\src\CMSIS\core_cmFunc.h)(0x5122091C)
 I (src\CMSIS\system_stm32f10x.h)(0x4D7882FA)
-F (.\src\main.c)(0x5A8D201C)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork -I.\src\CMSIS --c99 -I D:\Keil\ARM\RV31\INC -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\ST\STM32F10x -o ".\obj\main.o" --omf_browse ".\obj\main.crf" --depend ".\obj\main.d")
+F (.\src\main.c)(0x5A8FFF7E)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork -I.\src\CMSIS --c99 -I D:\Keil\ARM\RV31\INC -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\ST\STM32F10x -o ".\obj\main.o" --omf_browse ".\obj\main.crf" --depend ".\obj\main.d")
 I (src\CMSIS/stm32f10x.h)(0x52A1F9B0)
 I (src\CMSIS/core_cm3.h)(0x5122091C)
 I (D:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x50F9A7A0)
 I (.\src\CMSIS\core_cmInstr.h)(0x5122091C)
 I (.\src\CMSIS\core_cmFunc.h)(0x5122091C)
 I (src\CMSIS/system_stm32f10x.h)(0x4D7882FA)
-I (src\Filters/MajvikFilter.h)(0x5A8B56DB)
+I (src\Filters/MajvikFilter.h)(0x5A8F251E)
 I (D:\Keil\ARM\ARMCC\bin\..\include\math.h)(0x50F9A7A0)
+I (src\Bluetooth/Command/CommandParser.h)(0x5A8FFC37)
+I (D:\Keil\ARM\ARMCC\bin\..\include\string.h)(0x50F9A7A0)
+I (src\Devices/devices.h)(0x5A8FE968)
+I (src\Devices/IMU.h)(0x5A8FE8F6)
+I (src\Devices/RegisterMaps/MPU6050RM.h)(0x5A8F6550)
+I (src\Devices/motor.h)(0x5A8F5994)
 F (.\src\Filters\MajvikFilter.c)(0x5A8F011C)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork -I.\src\CMSIS --c99 -I D:\Keil\ARM\RV31\INC -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\ST\STM32F10x -o ".\obj\majvikfilter.o" --omf_browse ".\obj\majvikfilter.crf" --depend ".\obj\majvikfilter.d")
-I (src\Filters\MajvikFilter.h)(0x5A8B56DB)
+I (src\Filters\MajvikFilter.h)(0x5A8F251E)
 I (D:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x50F9A7A0)
 I (D:\Keil\ARM\ARMCC\bin\..\include\math.h)(0x50F9A7A0)
+F (.\src\Devices\motor.c)(0x5A8F5987)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork -I.\src\CMSIS --c99 -I D:\Keil\ARM\RV31\INC -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\ST\STM32F10x -o ".\obj\motor.o" --omf_browse ".\obj\motor.crf" --depend ".\obj\motor.d")
+I (src\Devices\motor.h)(0x5A8F5994)
+F (.\src\Devices\IMU.c)(0x5A8F67B3)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork -I.\src\CMSIS --c99 -I D:\Keil\ARM\RV31\INC -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\ST\STM32F10x -o ".\obj\imu.o" --omf_browse ".\obj\imu.crf" --depend ".\obj\imu.d")
+I (src\Devices\IMU.h)(0x5A8FE8F6)
+I (D:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x50F9A7A0)
+F (.\src\Bluetooth\Command\CommandParser.c)(0x5A8FFBB6)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork -I.\src\CMSIS --c99 -I D:\Keil\ARM\RV31\INC -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\ST\STM32F10x -o ".\obj\commandparser.o" --omf_browse ".\obj\commandparser.crf" --depend ".\obj\commandparser.d")
+I (src\Bluetooth\Command\CommandParser.h)(0x5A8FFC37)
+I (D:\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x50F9A7A0)
+I (D:\Keil\ARM\ARMCC\bin\..\include\string.h)(0x50F9A7A0)
+F (.\src\Bluetooth\Command\CommandPacker.c)(0x5A8FFBCD)(-c --cpu Cortex-M3 -D__EVAL -g -O0 --apcs=interwork -I.\src\CMSIS --c99 -I D:\Keil\ARM\RV31\INC -I D:\Keil\ARM\CMSIS\Include -I D:\Keil\ARM\Inc\ST\STM32F10x -o ".\obj\commandpacker.o" --omf_browse ".\obj\commandpacker.crf" --depend ".\obj\commandpacker.d")
+I (src\Bluetooth\Command\CommandPacker.h)(0x5A8FFDE4)

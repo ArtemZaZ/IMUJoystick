@@ -7,3 +7,9 @@
 .\obj\main.o: src\CMSIS/system_stm32f10x.h
 .\obj\main.o: src\Filters/MajvikFilter.h
 .\obj\main.o: D:\Keil\ARM\ARMCC\bin\..\include\math.h
+.\obj\main.o: src\Bluetooth/Command/CommandParser.h
+.\obj\main.o: D:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\obj\main.o: src\Devices/devices.h
+.\obj\main.o: src\Devices/IMU.h
+.\obj\main.o: src\Devices/RegisterMaps/MPU6050RM.h
+.\obj\main.o: src\Devices/motor.h
