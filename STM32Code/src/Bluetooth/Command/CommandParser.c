@@ -2,10 +2,10 @@
 
 static RecCommand commandDefiner(char *str)          // определитель приходящих комманд
 {
-	if(!strncmp(str, "START", 5))	return START;
-	if(!strncmp(str, "STOP", 4))	return STOP;
-	if(!strncmp(str, "VIBRATE", 7))	return VIBRATE;
-	return ERR;	
+	if(!strncmp(str, "START", 5))	return RSTART;
+	if(!strncmp(str, "STOP", 4))	return RSTOP;
+	if(!strncmp(str, "VIBRATE", 7))	return RVIBRATE;
+	return RERR;	
 }
 
 static uint8_t convertSymbolToNumber(char sym)			// перевод символа(шестнадцатиричного(Только верхний регистр)), в число
@@ -52,9 +52,9 @@ RecData parsing(char* str, uint8_t size)
 		if(str[tempSize-1] == '>')	break;
 		tempSize--;
 	}
-	if((size == 0)||(tempSize == 0)||(tempSize > MAXMESSAGELEN))					// если нет хоть какой-нибудь скобки или сообщение слишком длинное - вернуть ошибку
+	if((size == 0)||(tempSize == 0)||(tempSize > MAX_RECMESSAGE_LEN))					// если нет хоть какой-нибудь скобки или сообщение слишком длинное - вернуть ошибку
 	{
-		ret.command = ERR;
+		ret.command = RERR;
 		return ret;
 	}	
 	str++; 	                                  // избавляемся от скобочки(первой)

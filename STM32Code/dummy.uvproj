@@ -444,7 +444,12 @@
             <File>
               <FileName>CommandParser.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\Bluetooth\CommandParser.c</FilePath>
+              <FilePath>.\src\Bluetooth\Command\CommandParser.c</FilePath>
+            </File>
+            <File>
+              <FileName>CommandPacker.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Bluetooth\Command\CommandPacker.c</FilePath>
             </File>
           </Files>
         </Group>

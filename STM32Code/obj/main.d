@@ -9,7 +9,9 @@
 .\obj\main.o: D:\Keil\ARM\ARMCC\bin\..\include\math.h
 .\obj\main.o: src\Bluetooth/Command/CommandParser.h
 .\obj\main.o: D:\Keil\ARM\ARMCC\bin\..\include\string.h
+.\obj\main.o: src\Bluetooth/Command/CommandPacker.h
 .\obj\main.o: src\Devices/devices.h
 .\obj\main.o: src\Devices/IMU.h
-.\obj\main.o: src\Devices/RegisterMaps/MPU6050RM.h
+.\obj\main.o: src\Devices/RegisterMaps/ADXL345RM.h
+.\obj\main.o: src\Devices/RegisterMaps/ITG3205RM.h
 .\obj\main.o: src\Devices/motor.h

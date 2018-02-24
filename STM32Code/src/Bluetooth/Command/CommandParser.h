@@ -4,19 +4,19 @@
 #include <stdint.h>
 #include <string.h>
 
-#define MAXMESSAGELEN 16   // максимальная длина сообщения
+#define MAX_RECMESSAGE_LEN 14   // максимальная длина сообщения
 typedef enum enumRecCommand   // приходящие комманды
 {
-	START,
-	STOP,
-	VIBRATE,                 // ФОРМАТ КОММАНДЫ: <COMMAND DATA>: <VIBRATE 001A>
-	ERR
+	RSTART,
+	RSTOP,
+	RVIBRATE,                 // ФОРМАТ КОММАНДЫ: <COMMAND DATA>: <VIBRATE 001A>
+	RERR
 } RecCommand;
 
 typedef struct           // структура приходящих данных
 {
 	RecCommand command;
-	int16_t data;
+	uint16_t data;
 } RecData;
 
 typedef enum enumFormat{

@@ -425,6 +425,28 @@
         </Group>
         <Group>
           <GroupName>Devices</GroupName>
+          <Files>
+            <File>
+              <FileName>motor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Devices\motor.c</FilePath>
+            </File>
+            <File>
+              <FileName>IMU.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Devices\IMU.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Bluetooth</GroupName>
+          <Files>
+            <File>
+              <FileName>CommandParser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Bluetooth\CommandParser.c</FilePath>
+            </File>
+          </Files>
         </Group>
       </Groups>
     </Target>
