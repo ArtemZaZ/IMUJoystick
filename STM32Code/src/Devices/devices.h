@@ -3,16 +3,23 @@
 #define DEVICES_H_
 
 /* конфигурация IMU*/
-#if defined(MPU6050) || defined(GY85)     
-#define IMU       
-#include "IMU.h"  
+#if defined(MPU6050) || defined(GY85)    
+	#if defined(MPU6050) && defined(GY85)
+		#error "Too many IMU selected"
+	#endif	
+	#define IMU       
+	#include "IMU.h"  
+#else
+	#warning "No IMU selected"
 #endif
 /* Конец конфигурации IMU */
 
 
 /* конфигурация мотора */
 #ifdef MOTOR 
-#include "motor.h"
+	#include "motor.h"
+#else 
+	#warning "No motor selected"
 #endif
 /* Конец конфигурации мотора */
 
