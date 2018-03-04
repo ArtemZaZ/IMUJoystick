@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 
+
 #ifdef MPU6050
 	#include "RegisterMaps/MPU6050RM.h"
 	#define MPU6050_A_SENSETIVE		16384.f    	// Пока так, потом сделать проверку из регистра

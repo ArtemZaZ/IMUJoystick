@@ -1,20 +1,45 @@
 #include "IMU.h"
 #include "stm32l4xx.h"
 
-void I2CInit(void)	// настройка по диаграмме на странице 1022
+void I2CInit(void)	// настройка по диаграмме на странице 1022 и таблице на странице 1046. Настройка I2C1
 {
-	RCC -> APB1RSTR1 |= RCC_APB1RSTR1_I2C1RST; // делаем ресет шины I2C1
+	RCC -> AHB2ENR |= RCC_AHB2ENR_GPIOBEN; // разрешаем тактирование на порт B
+	//RCC -> APB1RSTR1 |= RCC_APB1RSTR1_I2C1RST; // делаем ресет шины I2C1
 	RCC -> APB1ENR1 |= RCC_APB1ENR1_I2C1EN;	// разрешаем тактирование I2C1
+
+	/* насройка SCL линии */
+	GPIOB -> AFR[1] &= ~(0xFU << 24); // Очищаем AFSEL6
+	GPIOB -> AFR[1] |= (0x4U << 24); //Записываем значение 4(табл. стр 55(datasheet) PB6 - I2C_SCL - AF4) в поле альтернативных ф-ий AFRL
+	GPIOB -> MODER &= ~(0x3U << 12); // Очищаем MODE6
+	GPIOB -> MODER |= (0x2U << 12);	// Включаем режим Alternate function mode
+	GPIOB -> OSPEEDR |= (0x3U << 12); // very high speed (мб поменьше надо)
+	GPIOB -> OTYPER |= (1 << 6); // режим Open-drain
+	GPIOB -> PUPDR &= ~(0x3 << 12); // очищаем значение PUPD6
+	GPIOB -> PUPDR |= (1 << 12); // устанавливаем режим pull-up
+	
+	/* насройка SDA линии */
+	GPIOB -> AFR[1] &= ~(0xFU << 28); // Очищаем AFSEL7
+	GPIOB -> AFR[1] |= (0x4U << 28); //Записываем значение 4(табл. стр 55(datasheet) PB7 - I2C_SDA - AF4) в поле альтернативных ф-ий AFRL
+	GPIOB -> MODER &= ~(0x3U << 14); // Очищаем MODE7
+	GPIOB -> MODER |= (0x2U << 14);	// Включаем режим Alternate function mode
+	GPIOB -> OSPEEDR |= (0x3U << 14); // very high speed (мб поменьше надо)
+	GPIOB -> OTYPER |= (1 << 7); // режим Open-drain
+	GPIOB -> PUPDR &= ~(0x3 << 14); // очищаем значение PUPD7
+	GPIOB -> PUPDR |= (1 << 14); // устанавливаем режим pull-up
+	
+	/* * * * */
 	I2C1 -> CR1 &= ~I2C_CR1_PE; // выключаем линии SDA и SCL
 	I2C1 -> CR1 &= ~I2C_CR1_ANFOFF;	// включаем аналоговый фильтр
-	I2C1 -> CR1 &= ~((uint32_t)0xF << 8);	// включаем дискретный фильтр
-	I2C1 -> CR1 |= (1<<8);	// на время 1*Ti2cclc
+	I2C1 -> CR1 &= ~(0xFU << 8);	// включаем дискретный фильтр
+	I2C1 -> CR1 |= (1 << 8);	// на время 1*Ti2cclc
 	I2C1 -> TIMINGR &= ~I2C_TIMINGR_PRESC; // очищаем prescaler
-	I2C1 -> TIMINGR |= ((uint32_t)0xA << 28); // устанавливаем prescaler значение 10 (100кГ)
-	
-	I2C1 -> TIMINGR &= ~I2C_TIMINGR_SCLDEL; // попробовать с обнуленным полем, тогда задержка должна быть в 1 такт i2c
+	I2C1 -> TIMINGR |= (1 << 28); // устанавливаем prescaler значение 1 (100кГ) при 8 мГц  тактирования
+	I2C1 -> TIMINGR |= 0x13U; // устанавливаем SCLL
+	I2C1 -> TIMINGR |= (0xFU << 8); // устанавливаем SCLH
+	I2C1 -> TIMINGR &= ~I2C_TIMINGR_SCLDEL; // обнуляем
+	I2C1 -> TIMINGR |= (0x4U << 20); // устанавливаем значение
 	I2C1 -> TIMINGR &= ~I2C_TIMINGR_SDADEL; // обнуляем
-	I2C1 -> TIMINGR |= (1<<16);		// задержка в 1 такт i2c
+	I2C1 -> TIMINGR |= (0x2U << 16);		// задержка в 2 такта i2c
 	
 	I2C1 -> CR1 |= I2C_CR1_PE; // включаем I2C
 }
