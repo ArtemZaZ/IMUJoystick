@@ -27,11 +27,20 @@ void I2CInit(void)	// настройка по диаграмме на стран
 	GPIOB -> PUPDR &= ~(0x3 << 14); // очищаем значение PUPD7
 	GPIOB -> PUPDR |= (1 << 14); // устанавливаем режим pull-up
 	
-	/* * * * */
+	/* Настройка прерываний */
+	NVIC_SetPriority(I2C1_ER_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 1)); // устанавливаем для прерывания I2C1_ER_IRQn группу 0, подгруппу 1(как я понимаю устанавливаем через упаковщик, чтоб не произошло конфликтов между группами)
+	NVIC_EnableIRQ(I2C1_ER_IRQn); // разрешаем прерывание 
+	NVIC_SetPriority(I2C1_EV_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), 0, 2)); // устанавливаем для прерывания I2C1_EV_IRQn группу 0, подгруппу 2(как я понимаю устанавливаем через упаковщик, чтоб не произошло конфликтов между группами)
+	NVIC_EnableIRQ(I2C1_EV_IRQn); // разрешаем прерывание
+
+  /* Настройка I2C */		
 	I2C1 -> CR1 &= ~I2C_CR1_PE; // выключаем линии SDA и SCL
-	I2C1 -> CR1 &= ~I2C_CR1_ANFOFF;	// включаем аналоговый фильтр
-	I2C1 -> CR1 &= ~(0xFU << 8);	// включаем дискретный фильтр
-	I2C1 -> CR1 |= (1 << 8);	// на время 1*Ti2cclc
+	I2C1 -> CR2 |= I2C_CR2_AUTOEND; // включаем генерацию сигнала стоп, когда все данные переданы
+	I2C1 -> CR1 |= I2C_CR1_NOSTRETCH;	// выключаем растяжение часов(не знаю зачем, но так написано в даташите)
+	
+	I2C1 -> CR1 &= ~I2C_CR1_ANFOFF;	// включаем аналоговый фильтр ... пока так
+	I2C1 -> CR1 &= ~(0xFU << 8);	// включаем дискретный фильтр ... пока так
+	I2C1 -> CR1 |= (1 << 8);	// на время 1*Ti2cclc ... пока так
 	I2C1 -> TIMINGR &= ~I2C_TIMINGR_PRESC; // очищаем prescaler
 	I2C1 -> TIMINGR |= (1 << 28); // устанавливаем prescaler значение 1 (100кГ) при 8 мГц  тактирования
 	I2C1 -> TIMINGR |= 0x13U; // устанавливаем SCLL
@@ -44,16 +53,26 @@ void I2CInit(void)	// настройка по диаграмме на стран
 	I2C1 -> CR1 |= I2C_CR1_PE; // включаем I2C
 }
 
-void Transmit(uint8_t slaveAddr, uint8_t* data, uint32_t size) // построено по диаграмме на странице 1039
+/* запись до 255 байт */
+void Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size) // построено по диаграмме на странице 1039
 {
+	MODIFY_REG(I2C1 -> CR2, (I2C_CR2_SADD | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_AUTOEND | I2C_CR2_START | I2C_CR2_STOP), \
+	(slaveAddr << 1) | (size << 16) | I2C_CR2_AUTOEND | I2C_CR2_START);
+	/*
 	I2C1 -> CR2 &= ~I2C_CR2_NBYTES;	// обнуляем количество байт, которые нужно отправить
 	I2C1 -> CR2 |= (size << 16); // записываем их в регистр
 	I2C1 -> CR2 &= ~I2C_CR2_SADD;	// обнуляем адрес slave
 	I2C1 -> CR2 |= (slaveAddr << 1); // записываем адрес slave в 1-7 биты
 	I2C1 -> CR2 |= I2C_CR2_START;	// формируем сигнал СТАРТ
+	*/
+	
+	/* разрешаем следующие прерывания */
+	I2C1 -> CR1 |= I2C_CR1_ERRIE | I2C_CR1_TCIE | I2C_CR1_STOPIE | I2C_CR1_NACKIE | I2C_CR1_TXIE;
+	/*
 	do
 	{
 		uint32_t temp = 0;
+		if((I2C1 -> ISR) & I2C_ISR_NACKF) break;
 		while(!((I2C1 -> ISR) & I2C_ISR_NACKF))	
 		{
 			if((I2C1 -> ISR) & I2C_ISR_TXIS)
@@ -64,8 +83,20 @@ void Transmit(uint8_t slaveAddr, uint8_t* data, uint32_t size) // построе
 		}
 	} while(((I2C1 -> ISR) & I2C_ISR_TC));
 	I2C1 -> CR2 |= I2C_CR2_STOP;	// формируем сигнал СТОП
+	*/
 }
 
+void I2C1_EV_IRQHandler(void)
+{
+	if((I2C1 -> ISR) & I2C_ICR_NACKCF) // если событие NACKF
+	{
+		I2C1 -> ICR |= I2C_ICR_NACKCF; //очищаем флаг NACKF в регистре ISR
+		if((I2C1 -> ISR) & I2C_ISR_TXIS) I2C1 -> TXDR &= ~I2C_TXDR_TXDATA;	// очищаем TXDATA в регистре TXDR
+		if(!((I2C1 -> ISR) & I2C_ISR_TXE)) I2C1 -> ISR |= I2C_ISR_TXE; // Из даташита: This bit can be written to ‘1’ by software in order to flush the transmit data register I2C_TXDR(возможно, тогда не нужно делать предыдущую операцию).
+	}
+	
+	
+}
 
 
 void IMUInitialize(void)

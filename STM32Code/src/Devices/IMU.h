@@ -25,7 +25,7 @@ void IMUInitialize(void);
 void readIMUData(int32_t* buf);
 
 void I2CInit(void);
-void Transmit(uint8_t slaveAddr, uint8_t* data, uint32_t size);
+void Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size);
 
 
 #endif /* IMU_H_ */
