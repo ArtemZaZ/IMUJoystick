@@ -31,7 +31,7 @@ int main(void)
 	//GPIOB -> PUPDR |= (1<<6);
 	I2CInit();
 	
-	Transmit((uint8_t)0x010101, (uint8_t*)temp, 4);
+	Transmit((uint8_t)0x44, (uint8_t*)temp, 4);
 	
 	//convertNumberToString((uint8_t*)temp, 0xA1CD);
 	while(1)

@@ -56,8 +56,10 @@ void I2CInit(void)	// настройка по диаграмме на стран
 /* запись до 255 байт */
 void Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size) // построено по диаграмме на странице 1039
 {
-	MODIFY_REG(I2C1 -> CR2, (I2C_CR2_SADD | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_AUTOEND | I2C_CR2_START | I2C_CR2_STOP), \
-	(slaveAddr << 1) | (size << 16) | I2C_CR2_AUTOEND | I2C_CR2_START);
+	TX_counter = data;	// ставим указаель на начало передаваемых данных
+	TX_size = size;	// указываем размер данных
+	MODIFY_REG(I2C1 -> CR2, (I2C_CR2_SADD | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_RD_WRN | I2C_CR2_AUTOEND | I2C_CR2_START | I2C_CR2_STOP), \
+	(slaveAddr << 1) | (size << 16) | I2C_CR2_START);
 	/*
 	I2C1 -> CR2 &= ~I2C_CR2_NBYTES;	// обнуляем количество байт, которые нужно отправить
 	I2C1 -> CR2 |= (size << 16); // записываем их в регистр
@@ -68,6 +70,8 @@ void Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size) // постро�
 	
 	/* разрешаем следующие прерывания */
 	I2C1 -> CR1 |= I2C_CR1_ERRIE | I2C_CR1_TCIE | I2C_CR1_STOPIE | I2C_CR1_NACKIE | I2C_CR1_TXIE;
+
+
 	/*
 	do
 	{
@@ -86,16 +90,40 @@ void Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size) // постро�
 	*/
 }
 
+void Receive(uint32_t slaveAddr, uint8_t* buf, uint32_t size) // прием данных
+{
+	RX_counter = buf;
+	RX_size = size;
+	MODIFY_REG(I2C1 -> CR2, (I2C_CR2_SADD | I2C_CR2_NBYTES | I2C_CR2_RELOAD | I2C_CR2_RD_WRN | I2C_CR2_AUTOEND | I2C_CR2_START | I2C_CR2_STOP), \
+	(slaveAddr << 1) | I2C_CR2_RD_WRN  | (size << 16) | I2C_CR2_START);
+	I2C1 -> CR1 |= I2C_CR1_ERRIE | I2C_CR1_TCIE | I2C_CR1_STOPIE | I2C_CR1_NACKIE | I2C_CR1_RXIE | I2C_CR1_TXIE;
+}
+
+
 void I2C1_EV_IRQHandler(void)
 {
-	if((I2C1 -> ISR) & I2C_ICR_NACKCF) // если событие NACKF
+	if((I2C1 -> ISR) & I2C_ISR_NACKF) // если событие NACKF
 	{
 		I2C1 -> ICR |= I2C_ICR_NACKCF; //очищаем флаг NACKF в регистре ISR
 		if((I2C1 -> ISR) & I2C_ISR_TXIS) I2C1 -> TXDR &= ~I2C_TXDR_TXDATA;	// очищаем TXDATA в регистре TXDR
 		if(!((I2C1 -> ISR) & I2C_ISR_TXE)) I2C1 -> ISR |= I2C_ISR_TXE; // Из даташита: This bit can be written to ‘1’ by software in order to flush the transmit data register I2C_TXDR(возможно, тогда не нужно делать предыдущую операцию).
 	}
-	
-	
+	else if((I2C1 -> ISR) & I2C_ISR_TXIS)	// если событие TXI(готовность записи)
+	{
+		I2C1 -> TXDR |= *(TX_counter++);	// записываем первый байт из буффера передачи в регистр отправки данных, сдвигаем указатель на 1 байт
+		TX_size--;	// уменьшаемм размер буффера
+	}
+	else if((I2C1 -> ISR) & I2C_ISR_TC) // если данные отправлены
+	{
+		I2C1 -> CR2 |= I2C_CR2_STOP;	// формируем сигнал СТОП
+		//TX_counter = TX_buf;	// возвращаем указатель на начальный элемент массива
+	}	
+	else if((I2C1 -> ISR) & I2C_ISR_RXNE)	// если регистр данных готов к чтению
+	{
+		*RX_counter = I2C1 -> RXDR;
+		RX_counter++;
+		RX_size++;
+	}
 }
 
 
@@ -116,7 +144,7 @@ void readIMUData(int32_t* data)
 	data[0] = (int32_t)(rawdata[0] << 8 | rawdata[1])/MPU6050_A_SENSETIVE;
   data[1] = (int32_t)(rawdata[2] << 8 | rawdata[3])/MPU6050_A_SENSETIVE;
   data[2] = (int32_t)(rawdata[4] << 8 | rawdata[5])/MPU6050_A_SENSETIVE;
-  data[3] = (int32_t)(rawdata[8] << 8 | rawdata[9])/MPU6050_G_SENSETIVE + 	goffx;
+  data[3] = (int32_t)(rawdata[8] << 8 | rawdata[9])/MPU6050_G_SENSETIVE + goffx;
   data[4] = (int32_t)(rawdata[10] << 8 | rawdata[11])/MPU6050_G_SENSETIVE + goffy;
   data[5] = (int32_t)(rawdata[12] << 8 | rawdata[13])/MPU6050_G_SENSETIVE + goffz;
 #elif defined(GY85)
