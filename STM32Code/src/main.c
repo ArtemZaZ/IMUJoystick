@@ -8,36 +8,93 @@
 #define MOTOR
 #include "Devices/devices.h"
 
-float yaw, pitch, roll;
-volatile char* a;
-volatile uint8_t temp[20] = {1,0,0,1};
-RecData b;
-SendData c;
-volatile char* data0 = "   <START 0001>123456";
-volatile char* data1 = "  <STOP 0004>  ";
-volatile char* data3 = "  <VIBRATE 0010>   ";
+enum {
+	FSM_STOP,	// Джойстик не работает - начальное состояние конечной машины
+	FSM_REINIT, // Переинициализация Джойстика
+	FSM_START, 	// Джойстик ничинает работать - нормальный режим
+	FSM_WAIT,	// Ожидание 
+	FSM_GET_IMU_DATA,	// Чтение данных с I2C и фильтрация
+	FSM_FILTRATION_BUTTON, // Фильтрация кнопок 
+	FSM_READ_UART, // Чтение данных с UART
+	FSM_ACTION,	// Сделать какое-нибудь действие
+	FSM_WRITE_UART	// Упаковка данных для передачи по UART и отправка по UART
+}	State;
+
+
+
+void FSM(void)
+{
+	switch(State)
+	{
+		case FSM_STOP:
+			State = FSM_READ_UART;	// TODO: Пока не придет сигнал START с UART	переходим к чтению	 	
+			return;
+		
+		case FSM_REINIT:
+			if(!0)	// TODO: Дополнительные возможности переинициализации
+			{
+				
+			}
+			State = FSM_START;
+			return;
+			
+		case FSM_START:
+			if(!0)	// TODO: Еще что-нибудь
+			{
+				
+			}
+			State = FSM_GET_IMU_DATA;
+			return;
+			
+		case FSM_WAIT:
+			while(!0) // TODO: Сделать ожидание
+			{
+				
+			}
+			State = FSM_START; // TODO: Сделвть переход куда нужно
+			return;
+		
+		case FSM_GET_IMU_DATA:
+			// TODO: Получение данных с I2C и их фильтрация
+			if(!0) State = FSM_READ_UART; // TODO: переход к чтению данных с UART, если еще прошло недостаточно времени для отправки новых данных
+			else State = FSM_WRITE_UART;
+			return;
+			
+		case FSM_FILTRATION_BUTTON:
+			// TODO: Фильтрация кнопок
+			if(!0) // TODO: Если нажата какая-то кнопка
+			{
+				// TODO: Записываем все что хотим отправить в UART
+				State = FSM_WRITE_UART;	// TODO: Отправляем в UART
+			}
+			else State = FSM_ACTION;
+			return;
+			
+		case FSM_READ_UART:
+			// TODO: Читаем данные с UART
+			if(!0) State = FSM_STOP; // TODO: Если пришел сигнал STOP
+			else if(!0) State = FSM_REINIT; // TODO: Если пришел сигнал START
+			else if(!0)	State = FSM_ACTION;	// TODO: Если пришел сигнал действия
+			else  State = FSM_FILTRATION_BUTTON; // TODO: Если ничего из этого
+			return;
+		
+		case FSM_ACTION:
+			// TODO: Действия
+			State = FSM_GET_IMU_DATA;
+			return;
+		
+		case FSM_WRITE_UART:
+			// TODO: Читаем данные
+			State = FSM_READ_UART;
+			return;
+	}		
+}
+
 int main(void)       		   
-{											
-	MajvikFilter(1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 0.01f);
-	getEulerAngle(&yaw, &pitch, &roll);
-  
-	b = parsing((char*)data3, strlen((const char*)data3));
-	c = packing(SSTART, 0xA1CD);
-	//RCC -> AHB2ENR |= (1<<1);	// Даем питание на порт B
-	//GPIOB -> MODER &= ~(1<<7);
-	//GPIOB -> MODER |= (1<<6);	// устанавливаем режим - выход
-	//GPIOB -> OTYPER &= (1<<3); //устанавливаем режим выхода push-pull
-	//GPIOB -> PUPDR &= ~(1<<7);
-	//GPIOB -> PUPDR |= (1<<6);
-	I2CInit();
-	
-	Transmit((uint8_t)0x44, (uint8_t*)temp, 4);
-	
-	//convertNumberToString((uint8_t*)temp, 0xA1CD);
+{								
+	// TODO: инициализация переферии
 	while(1)
 	{
-		;		
+		FSM();	
 	}
-	
-
 }
