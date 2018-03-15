@@ -130,15 +130,80 @@ void I2C1_EV_IRQHandler(void)
 
 void I2CInit(void)
 {
+	RCC -> AHB2ENR |= RCC_AHB2ENR_GPIOBEN; // разрешаем тактирование на порт B
+	//RCC -> APB1RSTR1 |= RCC_APB1RSTR1_I2C1RST; // делаем ресет шины I2C1
+	RCC -> APB1ENR1 |= RCC_APB1ENR1_I2C1EN;	// разрешаем тактирование I2C1
+
+	// насройка SCL линии 
+	GPIOB -> AFR[1] &= ~(0xFU << 24); // Очищаем AFSEL6
+	GPIOB -> AFR[1] |= (0x4U << 24); //Записываем значение 4(табл. стр 55(datasheet) PB6 - I2C_SCL - AF4) в поле альтернативных ф-ий AFRL
+	GPIOB -> MODER &= ~(0x3U << 12); // Очищаем MODE6
+	GPIOB -> MODER |= (0x2U << 12);	// Включаем режим Alternate function mode
+	GPIOB -> OSPEEDR |= (0x3U << 12); // very high speed (мб поменьше надо)
+	GPIOB -> OTYPER |= (1 << 6); // режим Open-drain
+	GPIOB -> PUPDR &= ~(0x3 << 12); // очищаем значение PUPD6
+	GPIOB -> PUPDR |= (1 << 12); // устанавливаем режим pull-up
 	
+	// насройка SDA линии 
+	GPIOB -> AFR[1] &= ~(0xFU << 28); // Очищаем AFSEL7
+	GPIOB -> AFR[1] |= (0x4U << 28); //Записываем значение 4(табл. стр 55(datasheet) PB7 - I2C_SDA - AF4) в поле альтернативных ф-ий AFRL
+	GPIOB -> MODER &= ~(0x3U << 14); // Очищаем MODE7
+	GPIOB -> MODER |= (0x2U << 14);	// Включаем режим Alternate function mode
+	GPIOB -> OSPEEDR |= (0x3U << 14); // very high speed (мб поменьше надо)
+	GPIOB -> OTYPER |= (1 << 7); // режим Open-drain
+	GPIOB -> PUPDR &= ~(0x3 << 14); // очищаем значение PUPD7
+	GPIOB -> PUPDR |= (1 << 14); // устанавливаем режим pull-up
+	
+	LL_I2C_Disable(I2Cx);	// отключаем I2C
+	LL_I2C_SetMode(I2Cx, LL_I2C_MODE_I2C);	// режим I2C - не SMBus
+	LL_I2C_SetTiming(I2Cx, I2Cx_TIMING);	 // Устанавливаем всякие временные параметры
+	LL_I2C_Enable(I2Cx);	// включаем I2C
+}
+
+uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size)
+{
+	LL_I2C_SetTransferSize(I2Cx, size);
+	LL_I2C_SetTransferRequest(I2Cx, LL_I2C_REQUEST_WRITE);
+	LL_I2C_SetSlaveAddr(I2Cx, slaveAddr);
+	
+	LL_I2C_GenerateStartCondition(I2Cx);	// Сигнал Старт
+	do 
+	{
+		if(LL_I2C_IsActiveFlag_NACK(I2Cx)) // если активен флаг Nack(отправка не удалась)
+		{
+			LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп
+			LL_I2C_ClearFlag_NACK(I2Cx); // очищаем флаг Nack
+			LL_I2C_ClearFlag_TXE(I2Cx); // очищаем регистр данных
+			return 0; // возвращаем, что отправка не удалась
+		}
+		if(LL_I2C_IsActiveFlag_TXE(I2Cx)) // если активен флаг TXE(регистр данных пуст и готов для записи в него данных) 
+		{
+			LL_I2C_TransmitData8(I2Cx, *(data++));	// записать байт данных
+			size--;
+		}
+	} while(!size); // пока не закончатся данные
+	
+	LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп
+	return 1;
+}
+
+uint8_t Reciev(uint32_t slaveAddr, uint8_t* buf, uint32_t size)
+{
+		
 }
 
 void IMUInitialize(void)
 {
+	I2CInit();
 #ifdef MPU6050
 	// TODO: когда придет плата  инициализация MPU6050
 #elif defined(GY85)
-	// TODO: когда придет плата  инициализация GY85
+	// Инициализация акселерометра
+	while(Transmit(ADXL345_ADDR, (uint8_t*){ ADXL345_POWER_CTL, 0x08 }, 2)); // Записываем в регистр ADXL345_POWER_CTL значение 8
+	while(Transmit(ADXL345_ADDR, (uint8_t*){ ADXL345_DATA_FORMAT, 0x01 }, 2)); // записывае в регистр ADXL345_DATA_FORMAT значение 1
+	// Инициализация гироскопа
+	while(Transmit(ITG3205_ADDR, (uint8_t*){ ITG3205_PWR_MGM, 0x00 }, 2)); // Записываем в регистр ITG3205_PWR_MGM значение 0
+	while(Transmit(ITG3205_ADDR, (uint8_t*){ ITG3205_DLPF_FS, 0x1E }, 2)); // Записываем в регистр ITG3205_DLPF_FS значение 0x1E
 #endif	
 }
 
@@ -164,5 +229,4 @@ void readIMUData(int32_t* data)
   data[1] = (int32_t)((buff[2] << 8) | buff[3])/GY85_G_SENSETIVE + goffy;
   data[2] = (int32_t)((buff[4] << 8) | buff[5])/GY85_G_SENSETIVE + goffz;
 #endif
-
 }

@@ -3,8 +3,8 @@
 #include "Bluetooth/Command/CommandParser.h"
 #include "Bluetooth/Command/CommandPacker.h"
 /* следующие определения определяют, какая конигурация будет у проекта */
-#define MPU6050
-//#define GY85
+//#define MPU6050
+#define GY85
 #define MOTOR
 #include "Devices/devices.h"
 
@@ -91,7 +91,8 @@ void FSM(void)
 }
 
 int main(void)       		   
-{								
+{	
+	IMUInitialize();	
 	// TODO: инициализация переферии
 	while(1)
 	{
