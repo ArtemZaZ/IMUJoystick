@@ -2,10 +2,12 @@
 #include "Filters/MajvikFilter.h"
 #include "Bluetooth/Command/CommandParser.h"
 #include "Bluetooth/Command/CommandPacker.h"
-/* следующие определения определяют, какая конигурация будет у проекта */
-//#define MPU6050
-#define GY85
-#define MOTOR
+/* следующие определения определяют, какая конфигурация будет у проекта */
+// MPU6050
+// GY85
+// MOTOR
+// BUTTONS
+/* ставятся в настройках проекта */
 #include "Devices/devices.h"
 
 enum {
@@ -47,7 +49,7 @@ void FSM(void)
 			return;
 			
 		case FSM_WAIT:
-			while(!0) // TODO: Сделать ожидание
+			while(!1) // TODO: Сделать ожидание
 			{
 				
 			}
@@ -90,10 +92,12 @@ void FSM(void)
 	}		
 }
 
+
 int main(void)       		   
 {	
 	IMUInitialize();	
 	// TODO: инициализация переферии
+	
 	while(1)
 	{
 		FSM();	

@@ -1,10 +1,13 @@
 --cpu=Cortex-M4.fp --branchpatch=sdcomp-29491-629360
 ".\objects\main.o"
 ".\objects\majvikfilter.o"
+".\objects\hlpfilters.o"
 ".\objects\imu.o"
 ".\objects\motor.o"
+".\objects\buttons.o"
 ".\objects\commandparser.o"
 ".\objects\commandpacker.o"
+".\objects\bluetooth.o"
 ".\objects\stm32l4xx_ll_adc.o"
 ".\objects\stm32l4xx_ll_comp.o"
 ".\objects\stm32l4xx_ll_crc.o"

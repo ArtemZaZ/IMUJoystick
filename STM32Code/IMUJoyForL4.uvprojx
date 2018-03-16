@@ -334,7 +334,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>GY85, MOTOR</Define>
               <Undefine></Undefine>
               <IncludePath>.\src</IncludePath>
             </VariousControls>
@@ -395,6 +395,11 @@
               <FileType>1</FileType>
               <FilePath>.\src\Filters\MajvikFilter.c</FilePath>
             </File>
+            <File>
+              <FileName>HLPFilters.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Filters\HLPFilters.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -410,6 +415,11 @@
               <FileType>1</FileType>
               <FilePath>.\src\Devices\motor.c</FilePath>
             </File>
+            <File>
+              <FileName>Buttons.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Devices\Buttons.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -424,6 +434,11 @@
               <FileName>CommandPacker.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\Bluetooth\Command\CommandPacker.c</FilePath>
+            </File>
+            <File>
+              <FileName>Bluetooth.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Bluetooth\Bluetooth.c</FilePath>
             </File>
           </Files>
         </Group>

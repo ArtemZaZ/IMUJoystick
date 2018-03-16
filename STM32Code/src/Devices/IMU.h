@@ -1,22 +1,12 @@
 #ifndef IMU_H_
 #define IMU_H_
 #include <stdint.h>
+#include "stm32l4xx.h"
 #include "LL/stm32l4xx_ll_i2c.h"
 #include "LL/stm32l4xx_ll_gpio.h"
 
 #define I2Cx	I2C1	//  будем работать с I2C1
 #define I2Cx_TIMING	0x10420F13U	// см. предыдущие коммиты, где я это все ручками настравал
-
-#define MAX_LEN_TX_BUF 255U
-#define MAX_LEN_RX_BUF 255U
-
-static uint8_t TX_buf[MAX_LEN_TX_BUF];	// буффер передачи
-static uint32_t TX_size; // размер записываемого массива
-static uint8_t* TX_counter = TX_buf;	// указатель на текущий элемент в массиве
-static uint8_t RX_buf[MAX_LEN_RX_BUF];	// буффер приема
-static uint32_t RX_size; // размер читаемого массива
-static uint8_t* RX_counter = RX_buf;  // указатель на текущий элемент в массиве
-
 
 #ifdef MPU6050
 	#include "RegisterMaps/MPU6050RM.h"
@@ -38,9 +28,9 @@ static float goffz = 0.f;
 void IMUInitialize(void);
 void readIMUData(int32_t* buf);
 
-void I2CInit(void);
-uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size);
-uint8_t Receive(uint32_t slaveAddr, uint8_t* buf, uint32_t size);
+static void I2CInit(void);
+static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size);
+static uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size);
 
 
 #endif /* IMU_H_ */
