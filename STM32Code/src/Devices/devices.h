@@ -26,6 +26,7 @@
 /* конфигурация кнопок */
 #if defined(FIRST_BUTTON) || defined(SECOND_BUTTON) || defined(THIRD_BUTTON)
 	#include "Buttons.h"
+	#define BUTTONS
 #else
 	#warning "No Buttons selected"
 #endif

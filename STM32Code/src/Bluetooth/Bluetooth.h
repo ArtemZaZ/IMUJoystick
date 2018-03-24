@@ -16,6 +16,6 @@ static uint8_t* UART_RX_BufferCounter = UART_RX_Buffer;	// каретка
 
 void BluetoothInitialize(void);	// инициализация Bluetooth
 void sendMsg(SendData sd);	// добавляет сообщение в конец массива
-RecData recvMsg(void);	// берет данные из начала массива 
+void recvMsg(RecData* recDataBuf, uint8_t* size);	// возвращает массив пришедших комманд с данными
 
 #endif /* BLUETOOTH_H_ */

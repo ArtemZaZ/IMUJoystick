@@ -105,11 +105,16 @@ void FSM(void)
 
 int main(void)       		   
 {	
+#ifdef IMU
 	IMUInitialize();	
+#endif
+#ifdef MOTOR
 	motorInitialize();
-	ButtonsInitialize();	
-	BluetoothInitialize();
-	
+#endif
+#ifdef BUTTONS
+	ButtonsInitialize();
+#endif	
+	BluetoothInitialize();	
 	while(1)
 	{
 		FSM();	
