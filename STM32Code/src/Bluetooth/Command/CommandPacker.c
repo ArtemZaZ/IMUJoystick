@@ -24,7 +24,7 @@ SendData packing(SendCommand command, uint16_t data)
 		case SSTART:
 			strcpy((char*)(send.message + 1), "START ");
 			convertNumberToString(send.message + 7, data);	// записываем сразу в структуру без доп переменных, !!! еси что-то менять, нужно менять и смещение	
-      send.message[11] = (uint8_t)'>';
+			send.message[11] = (uint8_t)'>';
 			send.size = 12;
 			break;
 		
