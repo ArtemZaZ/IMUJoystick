@@ -24,7 +24,7 @@
 /* Конец конфигурации мотора */
 
 /* конфигурация кнопок */
-#ifdef BUTTONS
+#if defined(FIRST_BUTTON) || defined(SECOND_BUTTON) || defined(THIRD_BUTTON)
 	#include "Buttons.h"
 #else
 	#warning "No Buttons selected"

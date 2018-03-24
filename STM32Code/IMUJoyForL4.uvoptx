@@ -146,14 +146,70 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>temp[20]</ItemText>
+          <ItemText>buttons[0]</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>m</ItemText>
+          <ItemText>buttons[1]</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>buttons[2]</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>buttonList[10]</ItemText>
+        </Ww>
+        <Ww>
+          <count>4</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>temp</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>but</ItemText>
         </Ww>
       </WatchWindow1>
+      <WatchWindow2>
+        <Ww>
+          <count>0</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>Ftemp</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>Stemp</ItemText>
+        </Ww>
+      </WatchWindow2>
+      <MemoryWindow1>
+        <Mm>
+          <WinNumber>1</WinNumber>
+          <SubType>0</SubType>
+          <ItemText>buttonList</ItemText>
+          <AccSizeX>0</AccSizeX>
+        </Mm>
+      </MemoryWindow1>
+      <MemoryWindow2>
+        <Mm>
+          <WinNumber>2</WinNumber>
+          <SubType>0</SubType>
+          <ItemText>buttons</ItemText>
+          <AccSizeX>0</AccSizeX>
+        </Mm>
+      </MemoryWindow2>
+      <MemoryWindow3>
+        <Mm>
+          <WinNumber>3</WinNumber>
+          <SubType>0</SubType>
+          <ItemText>oldFilteredVal</ItemText>
+          <AccSizeX>0</AccSizeX>
+        </Mm>
+      </MemoryWindow3>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -199,19 +255,29 @@
       <LogicAnalyzers>
         <Wi>
           <IntNumber>0</IntNumber>
-          <FirstString>(((GPIO_TypeDef *) ((((uint32_t)0x40000000U) + 0x08000000U) + 0x0400U))-&gt;IDR) &amp; (1&lt;&lt;6)</FirstString>
-          <SecondString>0000800000000000000000000000E0FFFFFFEF41010000000000000000000000000000002828284750494F5F54797065446566202A29202828282875696E7433325F7429307834303030303030305529202B20307830383030303030305529202B203078303430305529292D3E4944522920262028313C3C36290000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000001000000000000000000E03F1B000000000000000000000000000000000000000C060008</SecondString>
+          <FirstString>`Ftemp</FirstString>
+          <SecondString>FF00000000000000000000000000000000E06F40010000000000000000000000000000004674656D700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000001000000BBD493F1DBA5CE3F130000000000000000000000000000000000000054050008</SecondString>
         </Wi>
         <Wi>
           <IntNumber>1</IntNumber>
-          <FirstString>(((GPIO_TypeDef *) ((((uint32_t)0x40000000U) + 0x08000000U) + 0x0400U))-&gt;IDR) &amp; (1&lt;&lt;7)</FirstString>
-          <SecondString>0000000000000000000000000000E0FFFFFFEF41010000000000000000000000000000002828284750494F5F54797065446566202A29202828282875696E7433325F7429307834303030303030305529202B20307830383030303030305529202B203078303430305529292D3E4944522920262028313C3C37290000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000002000000000000000000E03F1B000000000000000000000000000000000000000C060008</SecondString>
+          <FirstString>`Stemp</FirstString>
+          <SecondString>0080000000000000000000000000000000E06F40010000000000000000000000000000005374656D700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000002000000BBD493F1DBA5CE3F130000000000000000000000000000000000000054050008</SecondString>
+        </Wi>
+        <Wi>
+          <IntNumber>2</IntNumber>
+          <FirstString>`Ttemp</FirstString>
+          <SecondString>0000800000000000000000000000000000E06F40010000000000000000000000000000005474656D700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000003000000BBD493F1DBA5CE3F130000000000000000000000000000000000000054050008</SecondString>
+        </Wi>
+        <Wi>
+          <IntNumber>3</IntNumber>
+          <FirstString>`temp</FirstString>
+          <SecondString>0000000000000000000000000000000000E06F400100000000000000000000000000000074656D70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004100000004000000E740A2153607D23F130000000000000000000000000000000000000054050008</SecondString>
         </Wi>
       </LogicAnalyzers>
       <SystemViewers>
         <Entry>
-          <Name>System Viewer\GPIOB</Name>
-          <WinId>35905</WinId>
+          <Name>System Viewer\GPIOA</Name>
+          <WinId>35904</WinId>
         </Entry>
       </SystemViewers>
       <DebugDescription>
@@ -353,7 +419,7 @@
       <GroupNumber>4</GroupNumber>
       <FileNumber>9</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\Bluetooth\Bluetooth.c</PathWithFileName>

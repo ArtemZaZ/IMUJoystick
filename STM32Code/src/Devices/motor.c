@@ -23,7 +23,7 @@ void vibrate(void)
 	isVibrate = 0x1;
 }
 
-void update(float dt)	
+void updateMotor(float dt)	
 {
 	time += dt;
 	if(VIBRO_TIME < time)	// если время прошедшее с начала вибрации больше нужного времени

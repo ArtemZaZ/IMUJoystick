@@ -26,5 +26,5 @@ static volatile float time = 0.f; // время прошедшее с начал
 
 void motorInitialize(void);   // Ф-ия инициализации мотора
 void vibrate(void);	// установка флага вибрации
-void update(float dt);	// обновляет состояние мотора // dt в секундах
+void updateMotor(float dt);	// обновляет состояние мотора // dt в секундах
 #endif /* MOTOR_H_ */

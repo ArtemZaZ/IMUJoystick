@@ -11,6 +11,7 @@
 .\objects\main.o: src\Bluetooth/Command/CommandParser.h
 .\objects\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\main.o: src\Bluetooth/Command/CommandPacker.h
+.\objects\main.o: src\Bluetooth/Bluetooth.h
 .\objects\main.o: src\Devices/devices.h
 .\objects\main.o: src\Devices/IMU.h
 .\objects\main.o: .\src\LL/stm32l4xx_ll_i2c.h
@@ -18,3 +19,5 @@
 .\objects\main.o: src\Devices/RegisterMaps/ADXL345RM.h
 .\objects\main.o: src\Devices/RegisterMaps/ITG3205RM.h
 .\objects\main.o: src\Devices/motor.h
+.\objects\main.o: src\Devices/Buttons.h
+.\objects\main.o: .\src\Filters/HLPFilters.h

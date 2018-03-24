@@ -2,11 +2,14 @@
 #include "Filters/MajvikFilter.h"
 #include "Bluetooth/Command/CommandParser.h"
 #include "Bluetooth/Command/CommandPacker.h"
+#include "Bluetooth/Bluetooth.h"
 /* следующие определения определяют, какая конфигурация будет у проекта */
 // MPU6050
 // GY85
 // MOTOR
-// BUTTONS
+// FIRST_BUTTON
+// SECOND_BUTTON
+// THIRD_BUTTON
 /* ставятся в настройках проекта */
 #include "Devices/devices.h"
 
@@ -16,6 +19,7 @@ enum {
 	FSM_START, 	// Джойстик ничинает работать - нормальный режим
 	FSM_WAIT,	// Ожидание 
 	FSM_GET_IMU_DATA,	// Чтение данных с I2C и фильтрация
+	FSM_UPDATE, // если нужно что-то обновить
 	FSM_FILTRATION_BUTTON, // Фильтрация кнопок 
 	FSM_READ_UART, // Чтение данных с UART
 	FSM_ACTION,	// Сделать какое-нибудь действие
@@ -61,6 +65,11 @@ void FSM(void)
 			if(!0) State = FSM_READ_UART; // TODO: переход к чтению данных с UART, если еще прошло недостаточно времени для отправки новых данных
 			else State = FSM_WRITE_UART;
 			return;
+		
+		case FSM_UPDATE:
+			// TODO: Оюновление данных
+			State = FSM_FILTRATION_BUTTON;
+			return;
 			
 		case FSM_FILTRATION_BUTTON:
 			// TODO: Фильтрация кнопок
@@ -93,10 +102,13 @@ void FSM(void)
 }
 
 
+
 int main(void)       		   
 {	
 	IMUInitialize();	
-	// TODO: инициализация переферии
+	motorInitialize();
+	ButtonsInitialize();	
+	BluetoothInitialize();
 	
 	while(1)
 	{
