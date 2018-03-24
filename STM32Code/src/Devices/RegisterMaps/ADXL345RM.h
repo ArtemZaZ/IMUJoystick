@@ -2,7 +2,7 @@
 #ifndef ADXL345RM_H_
 #define ADXL345RM_H_
 
-#define ADXL345_ADDR						0x53
+#define ADXL345_ADDR            0x53
 /* ADXL345 registers */
 #define ADXL345_DEVID           0x00
 /* registers 0x01 to 0x1C are reserved, do not access */

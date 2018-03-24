@@ -2,9 +2,9 @@
 #ifndef ITG3205RM_H_
 #define ITG3205RM_H_
 
-#define ITG3205_ADDR					0x68
+#define ITG3205_ADDR          0x68
 /* ITG3205 registers */
-#define ITG3205_DEVID					0x00
+#define ITG3205_DEVID         0x00
 #define ITG3205_SMPLRT_DIV    0x15
 #define ITG3205_DLPF_FS       0x16
 #define ITG3205_INT_CFG       0x17
