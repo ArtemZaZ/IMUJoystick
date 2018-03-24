@@ -23,7 +23,7 @@ void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, fl
 		ay = ay*norm;
 		az = az*norm;
 
-		temp1 = qx*qx + qy*qy;												//magic variable
+		temp1 = qx*qx + qy*qy;		//magic variable
 		temp2 = qz*qz + qw*qw - 1.f + 2.f*temp1 + az;
 		
 		qHatDotw = 4.f*qw*temp1 + 2.f*(qy*ax - qx*ay);	// проверить
@@ -32,7 +32,7 @@ void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, fl
 		qHatDotz = 4.f*qz*temp1 - 2.f*(qx*ax + qy*ay);
 		
 		norm = fastInvSqrt(qHatDotw*qHatDotw + qHatDotx*qHatDotx + qHatDoty*qHatDoty + qHatDotz*qHatDotz);
-    qHatDotw *= norm;
+		qHatDotw *= norm;
 		qHatDotx *= norm;
 		qHatDoty *= norm;
 		qHatDotz *= norm;
