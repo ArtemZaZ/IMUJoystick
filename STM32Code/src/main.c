@@ -102,7 +102,6 @@ void FSM(void)
 }
 
 
-
 int main(void)       		   
 {	
 #ifdef IMU
