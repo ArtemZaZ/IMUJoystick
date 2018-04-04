@@ -29,4 +29,6 @@ static inline uint8_t PushPress(Button* but);	// определение нажа
 void ButtonsInitialize(void);		// инициализация кнопок
 void checkAndFiltrateButtons(Button* buttons, uint8_t* size);		// возвращает массив кнопок изменивших положение и их количество
 
+static void UART_Initialize(void);  // инициализация uart
+
 #endif /* BUTTONS_H_ */

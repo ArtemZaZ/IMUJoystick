@@ -101,9 +101,18 @@ void FSM(void)
 	}		
 }
 
+void delay(uint32_t t) 
+{
+  for(uint32_t i = 0; i < t; i++);
+}
+
+#include "Bluetooth/Command/CommandPacker.h"
+#include "Bluetooth/Command/CommandParser.h"
+
+int32_t rawData[7];
 
 int main(void)       		   
-{	
+{  
 #ifdef IMU
 	IMUInitialize();	
 #endif
@@ -113,9 +122,13 @@ int main(void)
 #ifdef BUTTONS
 	ButtonsInitialize();
 #endif	
-	BluetoothInitialize();	
+	//BluetoothInitialize();	
+  
 	while(1)
 	{
-		FSM();	
+		//FSM();	
+    //sendMsg((SendData){"message\n", 8});
+    //while(!BTransmit());
+    readIMUData(rawData);
 	}
 }

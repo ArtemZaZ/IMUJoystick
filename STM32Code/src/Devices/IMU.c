@@ -8,8 +8,8 @@ static void I2CInit(void)
 	RCC -> APB1ENR1 |= RCC_APB1ENR1_I2C1EN;	// разрешаем тактирование I2C1
 
 	// насройка SCL линии 
-	GPIOB -> AFR[1] &= ~(0xFU << 24); // Очищаем AFSEL6
-	GPIOB -> AFR[1] |= (0x4U << 24); //Записываем значение 4(табл. стр 55(datasheet) PB6 - I2C_SCL - AF4) в поле альтернативных ф-ий AFRL
+	GPIOB -> AFR[0] &= ~(0xFU << 24); // Очищаем AFSEL6
+	GPIOB -> AFR[0] |= (0x4U << 24); //Записываем значение 4(табл. стр 55(datasheet) PB6 - I2C_SCL - AF4) в поле альтернативных ф-ий AFRL
 	GPIOB -> MODER &= ~(0x3U << 12); // Очищаем MODE6
 	GPIOB -> MODER |= (0x2U << 12);	// Включаем режим Alternate function mode
 	GPIOB -> OSPEEDR |= (0x3U << 12); // very high speed (мб поменьше надо)
@@ -18,8 +18,8 @@ static void I2CInit(void)
 	GPIOB -> PUPDR |= (1 << 12); // устанавливаем режим pull-up
 	
 	// насройка SDA линии 
-	GPIOB -> AFR[1] &= ~(0xFU << 28); // Очищаем AFSEL7
-	GPIOB -> AFR[1] |= (0x4U << 28); //Записываем значение 4(табл. стр 55(datasheet) PB7 - I2C_SDA - AF4) в поле альтернативных ф-ий AFRL
+	GPIOB -> AFR[0] &= ~(0xFU << 28); // Очищаем AFSEL7
+	GPIOB -> AFR[0] |= (0x4U << 28); //Записываем значение 4(табл. стр 55(datasheet) PB7 - I2C_SDA - AF4) в поле альтернативных ф-ий AFRL
 	GPIOB -> MODER &= ~(0x3U << 14); // Очищаем MODE7
 	GPIOB -> MODER |= (0x2U << 14);	// Включаем режим Alternate function mode
 	GPIOB -> OSPEEDR |= (0x3U << 14); // very high speed (мб поменьше надо)
@@ -63,7 +63,7 @@ static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size)
 
 static uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size)
 {	
-	while(Transmit(slaveAddr, (uint8_t*)(&regAddr), 1)); // передаем адресс регистра
+	while(!Transmit(slaveAddr, (uint8_t*)(&regAddr), 1)); // передаем адресс регистра
 	LL_I2C_SetTransferSize(I2Cx, size); // размер, который нужно принять
 	LL_I2C_SetTransferRequest(I2Cx, LL_I2C_REQUEST_READ); // указываем, что будем читать
 	LL_I2C_SetSlaveAddr(I2Cx, slaveAddr); // указываем адресс ведомого
@@ -98,18 +98,18 @@ void IMUInitialize(void)
 	// Инициализация акселерометра
 	tempBuf[0] = ADXL345_POWER_CTL;
 	tempBuf[1] = 0x08;
-	while(Transmit(ADXL345_ADDR, tempBuf, 2)); // Записываем в регистр ADXL345_POWER_CTL значение 8
+	while(!Transmit(ADXL345_ADDR, tempBuf, 2)); // Записываем в регистр ADXL345_POWER_CTL значение 8
 	tempBuf[0] = ADXL345_DATA_FORMAT;
 	tempBuf[1] = 0x01;
-	while(Transmit(ADXL345_ADDR, tempBuf, 2)); // записывае в регистр ADXL345_DATA_FORMAT значение 1
+	while(!Transmit(ADXL345_ADDR, tempBuf, 2)); // записывае в регистр ADXL345_DATA_FORMAT значение 1
 	
 	// Инициализация гироскопа
 	tempBuf[0] = ITG3205_PWR_MGM;
 	tempBuf[1] = 0x00;
-	while(Transmit(ITG3205_ADDR, tempBuf, 2)); // Записываем в регистр ITG3205_PWR_MGM значение 0
+	while(!Transmit(ITG3205_ADDR, tempBuf, 2)); // Записываем в регистр ITG3205_PWR_MGM значение 0
 	tempBuf[0] = ITG3205_DLPF_FS;
 	tempBuf[1] = 0x1E;
-	while(Transmit(ITG3205_ADDR, tempBuf, 2)); // Записываем в регистр ITG3205_DLPF_FS значение 0x1E
+	while(!Transmit(ITG3205_ADDR, tempBuf, 2)); // Записываем в регистр ITG3205_DLPF_FS значение 0x1E
 #endif	
 }
 
@@ -126,12 +126,12 @@ void readIMUData(int32_t* data)
   data[5] = (int32_t)(rawdata[12] << 8 | rawdata[13])/MPU6050_G_SENSETIVE + goffz;
 #elif defined(GY85)
   uint8_t rawData[6];
-  while(Receive(ADXL345_ADDR, ADXL345_DATAX0, rawData, 6));
+  while(!Receive(ADXL345_ADDR, ADXL345_DATAX0, rawData, 6));
   data[0] = (int32_t)((rawData[1] << 8) | rawData[0])/GY85_A_SENSETIVE;
   data[1] = (int32_t)((rawData[3] << 8) | rawData[2])/GY85_A_SENSETIVE;
   data[2] = (int32_t)((rawData[5] << 8) | rawData[4])/GY85_A_SENSETIVE;  
   
-  while(Receive(ITG3205_ADDR, ITG3205_GYRO_XOUT_H, rawData, 6));
+  while(!Receive(ITG3205_ADDR, ITG3205_GYRO_XOUT_H, rawData, 6));
   data[3] = (int32_t)((rawData[0] << 8) | rawData[1])/GY85_G_SENSETIVE + goffx;
   data[4] = (int32_t)((rawData[2] << 8) | rawData[3])/GY85_G_SENSETIVE + goffy;
   data[5] = (int32_t)((rawData[4] << 8) | rawData[5])/GY85_G_SENSETIVE + goffz;

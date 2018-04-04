@@ -6,7 +6,7 @@
 #include "LL/stm32l4xx_ll_gpio.h"
 
 #define I2Cx	I2C1	//  будем работать с I2C1
-#define I2Cx_TIMING	0x10420F13U	// см. предыдущие коммиты, где я это все ручками настравал
+#define I2Cx_TIMING	0x20420F13U	// см. предыдущие коммиты, где я это все ручками настравал
 
 #ifdef MPU6050
 	#include "RegisterMaps/MPU6050RM.h"
