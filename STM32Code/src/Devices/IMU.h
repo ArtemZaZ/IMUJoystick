@@ -6,7 +6,8 @@
 #include "LL/stm32l4xx_ll_gpio.h"
 
 #define I2Cx	I2C1	//  будем работать с I2C1
-#define I2Cx_TIMING	0x20420F13U	// см. предыдущие коммиты, где я это все ручками настравал
+#define I2Cx_TIMING	0x420F13U	// см. предыдущие коммиты, где я это все ручками настравал
+
 
 #ifdef MPU6050
 	#include "RegisterMaps/MPU6050RM.h"
@@ -25,10 +26,11 @@ static float goffx = 0.f; // TODO: пока статичная, сделать �
 static float goffy = 0.f;
 static float goffz = 0.f;
 
-void IMUInitialize(void);
-void readIMUData(int32_t* buf);
+void IMUInitialize(void);   
+void readIMUData(float* buf);
 
 static void I2CInit(void);
+static uint8_t TransmitWithoutStop(uint32_t slaveAddr, uint8_t* data, uint32_t size);  // ф-ия отправки данных без отправки стопа(для приема)
 static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size);
 static uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size);
 

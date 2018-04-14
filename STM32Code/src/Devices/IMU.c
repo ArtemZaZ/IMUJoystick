@@ -34,12 +34,13 @@ static void I2CInit(void)
 	LL_I2C_Enable(I2Cx);	// включаем I2C
 }
 
-static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size)
+static uint8_t TransmitWithoutStop(uint32_t slaveAddr, uint8_t* data, uint32_t size)  // ф-ия отправки данных без отправки стопа(для приема)
 {
 	LL_I2C_SetTransferSize(I2Cx, size);	// размер, который нужно отправить
 	LL_I2C_SetTransferRequest(I2Cx, LL_I2C_REQUEST_WRITE);	// указываем, что будем отправлять
 	LL_I2C_SetSlaveAddr(I2Cx, slaveAddr);	// указываем адресс ведомого
-	
+  LL_I2C_ClearFlag_NACK(I2Cx); // очищаем флаг Nack
+	LL_I2C_ClearFlag_TXE(I2Cx); // очищаем регистр данных
 	LL_I2C_GenerateStartCondition(I2Cx);	// Сигнал Старт
 	do 
 	{
@@ -56,14 +57,20 @@ static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size)
 			size--;
 		}
 	} while(!size); // пока не закончатся данные
-	
-	LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп
+
 	return 1;	// отправка успешна
+}
+
+static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size)
+{
+  uint8_t ret = TransmitWithoutStop(slaveAddr, data, size);  	
+	LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп  
+  return ret;
 }
 
 static uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size)
 {	
-	while(!Transmit(slaveAddr, (uint8_t*)(&regAddr), 1)); // передаем адресс регистра
+	while(!TransmitWithoutStop(slaveAddr, (uint8_t*)(&regAddr), 1)); // передаем адресс регистра
 	LL_I2C_SetTransferSize(I2Cx, size); // размер, который нужно принять
 	LL_I2C_SetTransferRequest(I2Cx, LL_I2C_REQUEST_READ); // указываем, что будем читать
 	LL_I2C_SetSlaveAddr(I2Cx, slaveAddr); // указываем адресс ведомого
@@ -113,27 +120,27 @@ void IMUInitialize(void)
 #endif	
 }
 
-void readIMUData(int32_t* data)
+void readIMUData(float* data)
 {	 
 #ifdef MPU6050
   uint8_t rawData[14];
   // TODO: когда придет плата  чтение данных с MPU6050
-  data[0] = (int32_t)(rawdata[0] << 8 | rawdata[1])/MPU6050_A_SENSETIVE;
-  data[1] = (int32_t)(rawdata[2] << 8 | rawdata[3])/MPU6050_A_SENSETIVE;
-  data[2] = (int32_t)(rawdata[4] << 8 | rawdata[5])/MPU6050_A_SENSETIVE;
-  data[3] = (int32_t)(rawdata[8] << 8 | rawdata[9])/MPU6050_G_SENSETIVE + goffx;
-  data[4] = (int32_t)(rawdata[10] << 8 | rawdata[11])/MPU6050_G_SENSETIVE + goffy;
-  data[5] = (int32_t)(rawdata[12] << 8 | rawdata[13])/MPU6050_G_SENSETIVE + goffz;
+  data[0] = (float)((int32_t)(rawdata[0] << 8 | rawdata[1]))/MPU6050_A_SENSETIVE;
+  data[1] = (float)((int32_t)(rawdata[2] << 8 | rawdata[3]))/MPU6050_A_SENSETIVE;
+  data[2] = (float)((int32_t)(rawdata[4] << 8 | rawdata[5]))/MPU6050_A_SENSETIVE;
+  data[3] = (float)((int32_t)(rawdata[8] << 8 | rawdata[9]))/MPU6050_G_SENSETIVE + goffx;
+  data[4] = (float)((int32_t)(rawdata[10] << 8 | rawdata[11]))/MPU6050_G_SENSETIVE + goffy;
+  data[5] = (float)((int32_t)(rawdata[12] << 8 | rawdata[13]))/MPU6050_G_SENSETIVE + goffz;
 #elif defined(GY85)
   uint8_t rawData[6];
   while(!Receive(ADXL345_ADDR, ADXL345_DATAX0, rawData, 6));
-  data[0] = (int32_t)((rawData[1] << 8) | rawData[0])/GY85_A_SENSETIVE;
-  data[1] = (int32_t)((rawData[3] << 8) | rawData[2])/GY85_A_SENSETIVE;
-  data[2] = (int32_t)((rawData[5] << 8) | rawData[4])/GY85_A_SENSETIVE;  
+  data[0] = (float)((int32_t)((rawData[1] << 8) | rawData[0]))/GY85_A_SENSETIVE;
+  data[1] = (float)((int32_t)((rawData[3] << 8) | rawData[2]))/GY85_A_SENSETIVE;
+  data[2] = (float)((int32_t)((rawData[5] << 8) | rawData[4]))/GY85_A_SENSETIVE;  
   
   while(!Receive(ITG3205_ADDR, ITG3205_GYRO_XOUT_H, rawData, 6));
-  data[3] = (int32_t)((rawData[0] << 8) | rawData[1])/GY85_G_SENSETIVE + goffx;
-  data[4] = (int32_t)((rawData[2] << 8) | rawData[3])/GY85_G_SENSETIVE + goffy;
-  data[5] = (int32_t)((rawData[4] << 8) | rawData[5])/GY85_G_SENSETIVE + goffz;
+  data[3] = (float)((int32_t)((rawData[0] << 8) | rawData[1]))/GY85_G_SENSETIVE + goffx;
+  data[4] = (float)((int32_t)((rawData[2] << 8) | rawData[3]))/GY85_G_SENSETIVE + goffy;
+  data[5] = (float)((int32_t)((rawData[4] << 8) | rawData[5]))/GY85_G_SENSETIVE + goffz;
 #endif
 }

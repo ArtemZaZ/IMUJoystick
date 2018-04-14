@@ -334,7 +334,7 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>GY85</Define>
+              <Define>GY85, FIRST_BUTTON, MOTOR</Define>
               <Undefine></Undefine>
               <IncludePath>.\src</IncludePath>
             </VariousControls>
@@ -554,6 +554,26 @@
               <FileName>stm32l4xx_ll_utils.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\LL\stm32l4xx_ll_utils.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Logic</GroupName>
+          <Files>
+            <File>
+              <FileName>logic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Logic\logic.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Timer</GroupName>
+          <Files>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\Timer\timer.c</FilePath>
             </File>
           </Files>
         </Group>

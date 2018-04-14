@@ -76,7 +76,7 @@ static void UART_Initialize(void)
   LL_USART_Enable(UARTx); // включаем UART 
 }
 
-uint8_t BTransmit(void)
+static uint8_t BTransmit(void)
 {
   uint32_t tempSize = 0;
   do
@@ -98,5 +98,18 @@ uint8_t BTransmit(void)
 
 static uint8_t BReceive(void)
 {
-  
+  uint32_t tempSize = 0;
+  do
+  {
+    if(tempSize > MAX_UART_RX_BUFFER_LEN)
+    {
+      return 0;
+    }
+    if(LL_USART_IsActiveFlag_RXNE(UARTx))
+    {
+      *UART_RX_BufferCounter = LL_USART_ReceiveData8(UARTx);
+      UART_RX_BufferCounter++;
+    }    
+  } while(LL_USART_IsActiveFlag_TC(UARTx)); // пока передача не завершена
+  return 1;  
 }

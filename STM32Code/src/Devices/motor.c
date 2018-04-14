@@ -32,5 +32,5 @@ void updateMotor(float dt)
 		time = 0.f;
 	}
 	GPIO_PORT_MOTOR -> ODR |= (isVibrate << PIN_MOTOR); // включаем или выключаем мотор
-	GPIO_PORT_MOTOR -> ODR &= ~(!isVibrate << PIN_MOTOR);
+	GPIO_PORT_MOTOR -> ODR &= ~((!isVibrate) << PIN_MOTOR);
 }
