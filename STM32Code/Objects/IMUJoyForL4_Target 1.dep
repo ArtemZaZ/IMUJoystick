@@ -1,165 +1,0 @@
-Dependencies for Project 'IMUJoyForL4', Target 'Target 1': (DO NOT MODIFY !)
-F (.\src\main.c)(0x5AD8D901)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l4xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l432xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h)(0x59A024C6)
-I (src\Filters/MajvikFilter.h)(0x5AD8D8B7)
-I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x588BC994)
-I (src\Bluetooth/Command/CommandParser.h)(0x5AB6E0EE)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588BC994)
-I (src\Bluetooth/Command/CommandPacker.h)(0x5AB6DFE1)
-I (src\Bluetooth/Bluetooth.h)(0x5AD8D5B0)
-I (.\src\LL/stm32l4xx_ll_usart.h)(0x5A3CDB77)
-I (src\Logic/logic.h)(0x5AD8D947)
-I (.\src\Devices/devices.h)(0x5AB6CBED)
-I (.\src\Devices/IMU.h)(0x5AD8A020)
-I (.\src\LL/stm32l4xx_ll_i2c.h)(0x5A3CDB77)
-I (.\src\LL/stm32l4xx_ll_gpio.h)(0x5A3CDB77)
-I (.\src\Devices/RegisterMaps/ADXL345RM.h)(0x5AB6E232)
-I (.\src\Devices/RegisterMaps/ITG3205RM.h)(0x5AB6E255)
-I (.\src\Devices/motor.h)(0x5AD8D750)
-I (.\src\Devices/Buttons.h)(0x5ACF53E1)
-I (.\src\Filters/HLPFilters.h)(0x5AB6D92A)
-I (.\src\Timer/timer.h)(0x5AD8D7F0)
-F (.\src\Filters\MajvikFilter.c)(0x5AD8D963)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\majvikfilter.o --omf_browse .\objects\majvikfilter.crf --depend .\objects\majvikfilter.d)
-I (src\Filters\MajvikFilter.h)(0x5AD8D8B7)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x588BC994)
-F (.\src\Filters\HLPFilters.c)(0x5ABD4082)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\hlpfilters.o --omf_browse .\objects\hlpfilters.crf --depend .\objects\hlpfilters.d)
-I (src\Filters\HLPFilters.h)(0x5AB6D92A)
-F (.\src\Devices\IMU.c)(0x5AD8A18C)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\imu.o --omf_browse .\objects\imu.crf --depend .\objects\imu.d)
-I (src\Devices\IMU.h)(0x5AD8A020)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l4xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l432xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h)(0x59A024C6)
-I (.\src\LL/stm32l4xx_ll_i2c.h)(0x5A3CDB77)
-I (.\src\LL/stm32l4xx_ll_gpio.h)(0x5A3CDB77)
-I (src\Devices\RegisterMaps/ADXL345RM.h)(0x5AB6E232)
-I (src\Devices\RegisterMaps/ITG3205RM.h)(0x5AB6E255)
-F (.\src\Devices\motor.c)(0x5AD8D7A3)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\motor.o --omf_browse .\objects\motor.crf --depend .\objects\motor.d)
-I (src\Devices\motor.h)(0x5AD8D750)
-I (.\src\LL/stm32l4xx_ll_gpio.h)(0x5A3CDB77)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l4xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l432xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h)(0x59A024C6)
-F (.\src\Devices\Buttons.c)(0x5ABB5494)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\buttons.o --omf_browse .\objects\buttons.crf --depend .\objects\buttons.d)
-I (src\Devices\Buttons.h)(0x5ACF53E1)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l432xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h)(0x59A024C6)
-I (.\src\Filters/HLPFilters.h)(0x5AB6D92A)
-I (.\src\Bluetooth/Command/CommandPacker.h)(0x5AB6DFE1)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588BC994)
-F (.\src\Bluetooth\Command\CommandParser.c)(0x5AB6E0AF)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\commandparser.o --omf_browse .\objects\commandparser.crf --depend .\objects\commandparser.d)
-I (src\Bluetooth\Command\CommandParser.h)(0x5AB6E0EE)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588BC994)
-F (.\src\Bluetooth\Command\CommandPacker.c)(0x5AB6DFFA)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\commandpacker.o --omf_browse .\objects\commandpacker.crf --depend .\objects\commandpacker.d)
-I (src\Bluetooth\Command\CommandPacker.h)(0x5AB6DFE1)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588BC994)
-F (.\src\Bluetooth\Bluetooth.c)(0x5AD8D4FF)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\bluetooth.o --omf_browse .\objects\bluetooth.crf --depend .\objects\bluetooth.d)
-I (src\Bluetooth\Bluetooth.h)(0x5AD8D5B0)
-I (src\Bluetooth\Command/CommandPacker.h)(0x5AB6DFE1)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588BC994)
-I (src\Bluetooth\Command/CommandParser.h)(0x5AB6E0EE)
-I (.\src\LL/stm32l4xx_ll_usart.h)(0x5A3CDB77)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l4xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l432xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h)(0x59A024C6)
-F (.\src\LL\stm32l4xx_ll_adc.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_adc.o --omf_browse .\objects\stm32l4xx_ll_adc.crf --depend .\objects\stm32l4xx_ll_adc.d)
-F (.\src\LL\stm32l4xx_ll_comp.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_comp.o --omf_browse .\objects\stm32l4xx_ll_comp.crf --depend .\objects\stm32l4xx_ll_comp.d)
-F (.\src\LL\stm32l4xx_ll_crc.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_crc.o --omf_browse .\objects\stm32l4xx_ll_crc.crf --depend .\objects\stm32l4xx_ll_crc.d)
-F (.\src\LL\stm32l4xx_ll_crs.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_crs.o --omf_browse .\objects\stm32l4xx_ll_crs.crf --depend .\objects\stm32l4xx_ll_crs.d)
-F (.\src\LL\stm32l4xx_ll_dac.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_dac.o --omf_browse .\objects\stm32l4xx_ll_dac.crf --depend .\objects\stm32l4xx_ll_dac.d)
-F (.\src\LL\stm32l4xx_ll_dma.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_dma.o --omf_browse .\objects\stm32l4xx_ll_dma.crf --depend .\objects\stm32l4xx_ll_dma.d)
-F (.\src\LL\stm32l4xx_ll_dma2d.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_dma2d.o --omf_browse .\objects\stm32l4xx_ll_dma2d.crf --depend .\objects\stm32l4xx_ll_dma2d.d)
-F (.\src\LL\stm32l4xx_ll_exti.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_exti.o --omf_browse .\objects\stm32l4xx_ll_exti.crf --depend .\objects\stm32l4xx_ll_exti.d)
-F (.\src\LL\stm32l4xx_ll_gpio.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_gpio.o --omf_browse .\objects\stm32l4xx_ll_gpio.crf --depend .\objects\stm32l4xx_ll_gpio.d)
-F (.\src\LL\stm32l4xx_ll_i2c.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_i2c.o --omf_browse .\objects\stm32l4xx_ll_i2c.crf --depend .\objects\stm32l4xx_ll_i2c.d)
-F (.\src\LL\stm32l4xx_ll_lptim.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_lptim.o --omf_browse .\objects\stm32l4xx_ll_lptim.crf --depend .\objects\stm32l4xx_ll_lptim.d)
-F (.\src\LL\stm32l4xx_ll_lpuart.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_lpuart.o --omf_browse .\objects\stm32l4xx_ll_lpuart.crf --depend .\objects\stm32l4xx_ll_lpuart.d)
-F (.\src\LL\stm32l4xx_ll_opamp.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_opamp.o --omf_browse .\objects\stm32l4xx_ll_opamp.crf --depend .\objects\stm32l4xx_ll_opamp.d)
-F (.\src\LL\stm32l4xx_ll_pwr.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_pwr.o --omf_browse .\objects\stm32l4xx_ll_pwr.crf --depend .\objects\stm32l4xx_ll_pwr.d)
-F (.\src\LL\stm32l4xx_ll_rcc.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_rcc.o --omf_browse .\objects\stm32l4xx_ll_rcc.crf --depend .\objects\stm32l4xx_ll_rcc.d)
-F (.\src\LL\stm32l4xx_ll_rng.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_rng.o --omf_browse .\objects\stm32l4xx_ll_rng.crf --depend .\objects\stm32l4xx_ll_rng.d)
-F (.\src\LL\stm32l4xx_ll_rtc.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_rtc.o --omf_browse .\objects\stm32l4xx_ll_rtc.crf --depend .\objects\stm32l4xx_ll_rtc.d)
-F (.\src\LL\stm32l4xx_ll_spi.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_spi.o --omf_browse .\objects\stm32l4xx_ll_spi.crf --depend .\objects\stm32l4xx_ll_spi.d)
-F (.\src\LL\stm32l4xx_ll_swpmi.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_swpmi.o --omf_browse .\objects\stm32l4xx_ll_swpmi.crf --depend .\objects\stm32l4xx_ll_swpmi.d)
-F (.\src\LL\stm32l4xx_ll_tim.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_tim.o --omf_browse .\objects\stm32l4xx_ll_tim.crf --depend .\objects\stm32l4xx_ll_tim.d)
-F (.\src\LL\stm32l4xx_ll_usart.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_usart.o --omf_browse .\objects\stm32l4xx_ll_usart.crf --depend .\objects\stm32l4xx_ll_usart.d)
-F (.\src\LL\stm32l4xx_ll_utils.c)(0x5A3CDB77)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\stm32l4xx_ll_utils.o --omf_browse .\objects\stm32l4xx_ll_utils.crf --depend .\objects\stm32l4xx_ll_utils.d)
-I (src\LL\stm32l4xx_ll_utils.h)(0x5A3CDB77)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l4xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l432xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h)(0x59A024C6)
-I (src\LL\stm32l4xx_ll_rcc.h)(0x5A3CDB77)
-I (src\LL\stm32l4xx_ll_system.h)(0x5A3CDB77)
-I (src\LL\stm32l4xx_ll_pwr.h)(0x5A3CDB77)
-F (.\src\Logic\logic.c)(0x5AD8D9B1)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\logic.o --omf_browse .\objects\logic.crf --depend .\objects\logic.d)
-I (src\Logic\logic.h)(0x5AD8D947)
-I (.\src\Bluetooth/Bluetooth.h)(0x5AD8D5B0)
-I (.\src\Bluetooth/Command/CommandPacker.h)(0x5AB6DFE1)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x588BC994)
-I (.\src\Bluetooth/Command/CommandParser.h)(0x5AB6E0EE)
-I (.\src\LL/stm32l4xx_ll_usart.h)(0x5A3CDB77)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l4xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l432xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h)(0x59A024C6)
-I (.\src\Filters/MajvikFilter.h)(0x5AD8D8B7)
-I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x588BC994)
-I (.\src\Devices/devices.h)(0x5AB6CBED)
-I (.\src\Devices/IMU.h)(0x5AD8A020)
-I (.\src\LL/stm32l4xx_ll_i2c.h)(0x5A3CDB77)
-I (.\src\LL/stm32l4xx_ll_gpio.h)(0x5A3CDB77)
-I (.\src\Devices/RegisterMaps/ADXL345RM.h)(0x5AB6E232)
-I (.\src\Devices/RegisterMaps/ITG3205RM.h)(0x5AB6E255)
-I (.\src\Devices/motor.h)(0x5AD8D750)
-I (.\src\Devices/Buttons.h)(0x5ACF53E1)
-I (.\src\Filters/HLPFilters.h)(0x5AB6D92A)
-I (.\src\Timer/timer.h)(0x5AD8D7F0)
-F (.\src\Timer\timer.c)(0x5AD8D823)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\timer.o --omf_browse .\objects\timer.crf --depend .\objects\timer.d)
-I (src\Timer\timer.h)(0x5AD8D7F0)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l4xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l432xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h)(0x59A024C6)
-F (RTE\Device\STM32L432KCUx\startup_stm32l432xx.s)(0x59A024C6)(--cpu Cortex-M4.fp --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include--pd "__UVISION_VERSION SETA 524" --pd "_RTE_ SETA 1" --pd "STM32L432xx SETA 1"--list .\listings\startup_stm32l432xx.lst --xref -o .\objects\startup_stm32l432xx.o --depend .\objects\startup_stm32l432xx.d)
-F (RTE\Device\STM32L432KCUx\system_stm32l4xx.c)(0x5A97011E)(--c99 -c --cpu Cortex-M4.fp -D__EVAL -g -O0 --apcs=interwork --split_sections -I .\src-I.\RTE\_Target_1-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include-D__UVISION_VERSION="524" -D_RTE_ -DSTM32L432xx -DGY85 -DFIRST_BUTTON -DMOTOR-o .\objects\system_stm32l4xx_1.o --omf_browse .\objects\system_stm32l4xx_1.crf --depend .\objects\system_stm32l4xx_1.d)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l4xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\stm32l432xx.h)(0x59A024C6)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\core_cm4.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x588BC994)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_compiler.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.1\CMSIS\Include\cmsis_armcc.h)(0x58988FDA)
-I (C:\Keil_v5\ARM\PACK\Keil\STM32L4xx_DFP\2.0.0\Drivers\CMSIS\Device\ST\STM32L4xx\Include\system_stm32l4xx.h)(0x59A024C6)
