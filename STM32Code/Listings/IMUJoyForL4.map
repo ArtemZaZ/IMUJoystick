@@ -4,14 +4,21 @@ Component: ARM Compiler 5.06 update 5 (build 528) Tool: armlink [4d35e2]
 
 Section Cross References
 
+    main.o(i.main) refers to imu.o(i.IMUInitialize) for IMUInitialize
+    main.o(i.main) refers to imu.o(i.readIMUData) for readIMUData
+    main.o(i.main) refers to main.o(.bss) for rawData
+    main.o(i.main) refers to main.o(.data) for temp
     majvikfilter.o(i.MajvikFilter) refers to majvikfilter.o(i.fastInvSqrt) for fastInvSqrt
     majvikfilter.o(i.MajvikFilter) refers to majvikfilter.o(.data) for qx
     majvikfilter.o(i.getEulerAngle) refers to atan2f.o(i.__hardfp_atan2f) for __hardfp_atan2f
     majvikfilter.o(i.getEulerAngle) refers to asinf.o(i.__hardfp_asinf) for __hardfp_asinf
     majvikfilter.o(i.getEulerAngle) refers to majvikfilter.o(.data) for qx
+    majvikfilter.o(i.resetMajvikFilter) refers to majvikfilter.o(.data) for qw
+    imu.o(i.I2CInit) refers to imu.o(i.I2CInitDelay) for I2CInitDelay
     imu.o(i.IMUInitialize) refers to imu.o(i.I2CInit) for I2CInit
     imu.o(i.IMUInitialize) refers to imu.o(i.Transmit) for Transmit
     imu.o(i.Receive) refers to imu.o(i.TransmitWithoutStop) for TransmitWithoutStop
+    imu.o(i.Receive) refers to imu.o(i.I2CInitDelay) for I2CInitDelay
     imu.o(i.Receive) refers to imu.o(i.LL_I2C_SetTransferSize) for LL_I2C_SetTransferSize
     imu.o(i.Receive) refers to imu.o(i.LL_I2C_SetTransferRequest) for LL_I2C_SetTransferRequest
     imu.o(i.Receive) refers to imu.o(i.LL_I2C_SetSlaveAddr) for LL_I2C_SetSlaveAddr
@@ -28,9 +35,10 @@ Section Cross References
     imu.o(i.TransmitWithoutStop) refers to imu.o(i.LL_I2C_GenerateStartCondition) for LL_I2C_GenerateStartCondition
     imu.o(i.TransmitWithoutStop) refers to imu.o(i.LL_I2C_IsActiveFlag_NACK) for LL_I2C_IsActiveFlag_NACK
     imu.o(i.TransmitWithoutStop) refers to imu.o(i.LL_I2C_GenerateStopCondition) for LL_I2C_GenerateStopCondition
+    imu.o(i.TransmitWithoutStop) refers to imu.o(i.I2CInitDelay) for I2CInitDelay
     imu.o(i.readIMUData) refers to imu.o(i.Receive) for Receive
-    imu.o(i.readIMUData) refers to imu.o(.data) for goffx
-    motor.o(i.updateMotor) refers to motor.o(.data) for time
+    motor.o(i.motorReInitialize) refers to motor.o(.data) for isVibrate
+    motor.o(i.updateMotor) refers to motor.o(.data) for isVibrate
     motor.o(i.vibrate) refers to motor.o(.data) for isVibrate
     buttons.o(i.ButtonsInitialize) refers to buttons.o(.bss) for buttonList
     buttons.o(i.ButtonsInitialize) refers to buttons.o(.data) for butCounter
@@ -46,6 +54,7 @@ Section Cross References
     commandpacker.o(i.packing) refers to strcpy.o(.text) for strcpy
     commandpacker.o(i.packing) refers to commandpacker.o(i.convertNumberToString) for convertNumberToString
     commandpacker.o(i.packing) refers to rt_memcpy_v6.o(.text) for __aeabi_memcpy
+    bluetooth.o(i.BReceive) refers to bluetooth.o(i.LL_USART_IsActiveFlag_RXNE) for LL_USART_IsActiveFlag_RXNE
     bluetooth.o(i.BReceive) refers to bluetooth.o(.data) for UART_RX_BufferCounter
     bluetooth.o(i.BTransmit) refers to bluetooth.o(i.BluetoothReInitialize) for BluetoothReInitialize
     bluetooth.o(i.BTransmit) refers to bluetooth.o(.data) for UART_TX_BufferCounter
@@ -83,37 +92,65 @@ Section Cross References
     stm32l4xx_ll_utils.o(i.UTILS_EnablePLLAndSwitchSystem) refers to system_stm32l4xx_1.o(.data) for SystemCoreClock
     stm32l4xx_ll_utils.o(i.UTILS_PLL_IsBusy) refers to stm32l4xx_ll_utils.o(i.LL_RCC_PLL_IsReady) for LL_RCC_PLL_IsReady
     logic.o(i.FSM) refers to logic.o(i.setFlag_jWF) for setFlag_jWF
+    logic.o(i.FSM) refers to logic.o(i.reInitAll) for reInitAll
     logic.o(i.FSM) refers to logic.o(i.sendSTART) for sendSTART
-    logic.o(i.FSM) refers to logic.o(i.UpdateIMUData) for UpdateIMUData
+    logic.o(i.FSM) refers to logic.o(i.updateIMUData) for updateIMUData
     logic.o(i.FSM) refers to logic.o(i.isActiveFlag_tTSIMUDF) for isActiveFlag_tTSIMUDF
-    logic.o(i.FSM) refers to logic.o(i.UpdateActions) for UpdateActions
-    logic.o(i.FSM) refers to logic.o(i.FiltrationAndSendChangedButtons) for FiltrationAndSendChangedButtons
+    logic.o(i.FSM) refers to logic.o(i.sendIMUData) for sendIMUData
+    logic.o(i.FSM) refers to logic.o(i.updateActions) for updateActions
+    logic.o(i.FSM) refers to logic.o(i.filtrationAndSendChangedButtons) for filtrationAndSendChangedButtons
     logic.o(i.FSM) refers to logic.o(i.isActiveFlag_bPF) for isActiveFlag_bPF
-    logic.o(i.FSM) refers to logic.o(i.isActiveFlag_rSTOPF) for isActiveFlag_rSTOPF
-    logic.o(i.FSM) refers to logic.o(i.isActiveFlag_jWF) for isActiveFlag_jWF
+    logic.o(i.FSM) refers to bluetooth.o(i.BReceive) for BReceive
+    logic.o(i.FSM) refers to logic.o(i.readMessages) for readMessages
     logic.o(i.FSM) refers to logic.o(i.isActiveFlag_rSTARTF) for isActiveFlag_rSTARTF
+    logic.o(i.FSM) refers to logic.o(i.isActiveFlag_jWF) for isActiveFlag_jWF
+    logic.o(i.FSM) refers to logic.o(i.isActiveFlag_rSTOPF) for isActiveFlag_rSTOPF
+    logic.o(i.FSM) refers to logic.o(i.sendSTOP) for sendSTOP
     logic.o(i.FSM) refers to logic.o(i.isActiveFlag_rACTIONF) for isActiveFlag_rACTIONF
+    logic.o(i.FSM) refers to logic.o(i.act) for act
+    logic.o(i.FSM) refers to bluetooth.o(i.BTransmit) for BTransmit
     logic.o(i.FSM) refers to logic.o(.data) for State
-    logic.o(i.FiltrationAndSendChangedButtons) refers to buttons.o(i.checkAndFiltrateButtons) for checkAndFiltrateButtons
-    logic.o(i.FiltrationAndSendChangedButtons) refers to commandpacker.o(i.packing) for packing
-    logic.o(i.FiltrationAndSendChangedButtons) refers to bluetooth.o(i.sendMsg) for sendMsg
-    logic.o(i.FiltrationAndSendChangedButtons) refers to logic.o(i.setFlag_bPF) for setFlag_bPF
-    logic.o(i.FiltrationAndSendChangedButtons) refers to logic.o(.bss) for buttons
     logic.o(i.InitializeAll) refers to imu.o(i.IMUInitialize) for IMUInitialize
     logic.o(i.InitializeAll) refers to motor.o(i.motorInitialize) for motorInitialize
     logic.o(i.InitializeAll) refers to buttons.o(i.ButtonsInitialize) for ButtonsInitialize
     logic.o(i.InitializeAll) refers to bluetooth.o(i.BluetoothInitialize) for BluetoothInitialize
-    logic.o(i.UpdateActions) refers to motor.o(i.updateMotor) for updateMotor
-    logic.o(i.UpdateIMUData) refers to logic.o(i.setFlag_tTSIMUDF) for setFlag_tTSIMUDF
-    logic.o(i.UpdateIMUData) refers to imu.o(i.readIMUData) for readIMUData
-    logic.o(i.UpdateIMUData) refers to majvikfilter.o(i.MajvikFilter) for MajvikFilter
-    logic.o(i.UpdateIMUData) refers to logic.o(.data) for OldSendIMUDataTime
+    logic.o(i.InitializeAll) refers to timer.o(i.timerInitialize) for timerInitialize
+    logic.o(i.act) refers to motor.o(i.vibrate) for vibrate
+    logic.o(i.act) refers to logic.o(.bss) for actions
+    logic.o(i.act) refers to logic.o(.data) for actionsAmount
+    logic.o(i.filtrationAndSendChangedButtons) refers to buttons.o(i.checkAndFiltrateButtons) for checkAndFiltrateButtons
+    logic.o(i.filtrationAndSendChangedButtons) refers to commandpacker.o(i.packing) for packing
+    logic.o(i.filtrationAndSendChangedButtons) refers to bluetooth.o(i.sendMsg) for sendMsg
+    logic.o(i.filtrationAndSendChangedButtons) refers to logic.o(i.setFlag_bPF) for setFlag_bPF
+    logic.o(i.filtrationAndSendChangedButtons) refers to logic.o(.bss) for buttons
+    logic.o(i.isActiveFlag_bPF) refers to logic.o(i.setFlag_bPF) for setFlag_bPF
     logic.o(i.isActiveFlag_bPF) refers to logic.o(.data) for buttonPressedFlag
     logic.o(i.isActiveFlag_jWF) refers to logic.o(.data) for joystickWorkFlag
+    logic.o(i.isActiveFlag_rACTIONF) refers to logic.o(i.setFlag_rACTIONF) for setFlag_rACTIONF
     logic.o(i.isActiveFlag_rACTIONF) refers to logic.o(.data) for recieveACTIONFlag
+    logic.o(i.isActiveFlag_rSTARTF) refers to logic.o(i.setFlag_rSTARTF) for setFlag_rSTARTF
     logic.o(i.isActiveFlag_rSTARTF) refers to logic.o(.data) for recieveSTARTFlag
+    logic.o(i.isActiveFlag_rSTOPF) refers to logic.o(i.setFlag_rSTOPF) for setFlag_rSTOPF
     logic.o(i.isActiveFlag_rSTOPF) refers to logic.o(.data) for recieveSTOPFlag
     logic.o(i.isActiveFlag_tTSIMUDF) refers to logic.o(.data) for timeToSendIMUDataFlag
+    logic.o(i.reInitAll) refers to bluetooth.o(i.BluetoothReInitialize) for BluetoothReInitialize
+    logic.o(i.reInitAll) refers to motor.o(i.motorReInitialize) for motorReInitialize
+    logic.o(i.reInitAll) refers to timer.o(i.timerReInitialize) for timerReInitialize
+    logic.o(i.reInitAll) refers to majvikfilter.o(i.resetMajvikFilter) for resetMajvikFilter
+    logic.o(i.reInitAll) refers to logic.o(i.setFlag_bPF) for setFlag_bPF
+    logic.o(i.reInitAll) refers to logic.o(i.setFlag_tTSIMUDF) for setFlag_tTSIMUDF
+    logic.o(i.reInitAll) refers to logic.o(i.setFlag_rSTOPF) for setFlag_rSTOPF
+    logic.o(i.reInitAll) refers to logic.o(i.setFlag_rSTARTF) for setFlag_rSTARTF
+    logic.o(i.reInitAll) refers to logic.o(i.setFlag_rACTIONF) for setFlag_rACTIONF
+    logic.o(i.reInitAll) refers to logic.o(.data) for OldSendIMUDataTime
+    logic.o(i.readMessages) refers to bluetooth.o(i.recvMsg) for recvMsg
+    logic.o(i.readMessages) refers to logic.o(i.setFlag_rSTARTF) for setFlag_rSTARTF
+    logic.o(i.readMessages) refers to logic.o(i.setFlag_rSTOPF) for setFlag_rSTOPF
+    logic.o(i.readMessages) refers to logic.o(i.setFlag_rACTIONF) for setFlag_rACTIONF
+    logic.o(i.readMessages) refers to logic.o(.data) for actionsAmount
+    logic.o(i.readMessages) refers to logic.o(.bss) for messages
+    logic.o(i.sendERROR) refers to commandpacker.o(i.packing) for packing
+    logic.o(i.sendERROR) refers to bluetooth.o(i.sendMsg) for sendMsg
     logic.o(i.sendIMUData) refers to majvikfilter.o(i.getEulerAngle) for getEulerAngle
     logic.o(i.sendIMUData) refers to commandpacker.o(i.packing) for packing
     logic.o(i.sendIMUData) refers to bluetooth.o(i.sendMsg) for sendMsg
@@ -129,10 +166,16 @@ Section Cross References
     logic.o(i.setFlag_rSTARTF) refers to logic.o(.data) for recieveSTARTFlag
     logic.o(i.setFlag_rSTOPF) refers to logic.o(.data) for recieveSTOPFlag
     logic.o(i.setFlag_tTSIMUDF) refers to logic.o(.data) for timeToSendIMUDataFlag
+    logic.o(i.updateActions) refers to motor.o(i.updateMotor) for updateMotor
+    logic.o(i.updateIMUData) refers to logic.o(i.setFlag_tTSIMUDF) for setFlag_tTSIMUDF
+    logic.o(i.updateIMUData) refers to imu.o(i.readIMUData) for readIMUData
+    logic.o(i.updateIMUData) refers to majvikfilter.o(i.MajvikFilter) for MajvikFilter
+    logic.o(i.updateIMUData) refers to logic.o(.data) for OldSendIMUDataTime
     timer.o(i.TIM2_IRQHandler) refers to timer.o(.data) for allTime
     timer.o(i.getAllTime) refers to timer.o(.data) for allTime
     timer.o(i.getAllTime) refers to system_stm32l4xx_1.o(.data) for SystemCoreClock
     timer.o(i.timerInitialize) refers to system_stm32l4xx_1.o(.data) for SystemCoreClock
+    timer.o(i.timerReInitialize) refers to timer.o(.data) for allTime
     startup_stm32l432xx.o(STACK) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
     startup_stm32l432xx.o(HEAP) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
     startup_stm32l432xx.o(RESET) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
@@ -309,38 +352,25 @@ Removing Unused input sections from the image.
     Removing main.o(.rev16_text), (4 bytes).
     Removing main.o(.revsh_text), (4 bytes).
     Removing main.o(.rrx_text), (6 bytes).
-    Removing main.o(.bss), (672 bytes).
-    Removing main.o(.data), (59 bytes).
     Removing majvikfilter.o(i.MajvikFilter), (884 bytes).
     Removing majvikfilter.o(i.fastInvSqrt), (52 bytes).
     Removing majvikfilter.o(i.getEulerAngle), (300 bytes).
+    Removing majvikfilter.o(i.resetMajvikFilter), (64 bytes).
     Removing majvikfilter.o(.data), (16 bytes).
     Removing hlpfilters.o(i.HPFilterIterator), (26 bytes).
     Removing hlpfilters.o(i.LPFilterIterator), (34 bytes).
     Removing imu.o(.rev16_text), (4 bytes).
     Removing imu.o(.revsh_text), (4 bytes).
     Removing imu.o(.rrx_text), (6 bytes).
-    Removing imu.o(i.I2CInit), (312 bytes).
-    Removing imu.o(i.IMUInitialize), (120 bytes).
-    Removing imu.o(i.LL_I2C_ClearFlag_NACK), (10 bytes).
-    Removing imu.o(i.LL_I2C_GenerateStartCondition), (10 bytes).
-    Removing imu.o(i.LL_I2C_GenerateStopCondition), (10 bytes).
-    Removing imu.o(i.LL_I2C_IsActiveFlag_NACK), (10 bytes).
-    Removing imu.o(i.LL_I2C_SetSlaveAddr), (12 bytes).
-    Removing imu.o(i.LL_I2C_SetTransferRequest), (12 bytes).
-    Removing imu.o(i.LL_I2C_SetTransferSize), (14 bytes).
-    Removing imu.o(i.Receive), (128 bytes).
-    Removing imu.o(i.Transmit), (40 bytes).
-    Removing imu.o(i.TransmitWithoutStop), (128 bytes).
-    Removing imu.o(i.readIMUData), (284 bytes).
     Removing imu.o(.data), (12 bytes).
     Removing motor.o(.rev16_text), (4 bytes).
     Removing motor.o(.revsh_text), (4 bytes).
     Removing motor.o(.rrx_text), (6 bytes).
     Removing motor.o(i.motorInitialize), (84 bytes).
-    Removing motor.o(i.updateMotor), (108 bytes).
-    Removing motor.o(i.vibrate), (12 bytes).
-    Removing motor.o(.data), (8 bytes).
+    Removing motor.o(i.motorReInitialize), (60 bytes).
+    Removing motor.o(i.updateMotor), (136 bytes).
+    Removing motor.o(i.vibrate), (32 bytes).
+    Removing motor.o(.data), (12 bytes).
     Removing buttons.o(.rev16_text), (4 bytes).
     Removing buttons.o(.revsh_text), (4 bytes).
     Removing buttons.o(.rrx_text), (6 bytes).
@@ -358,10 +388,11 @@ Removing Unused input sections from the image.
     Removing bluetooth.o(.rev16_text), (4 bytes).
     Removing bluetooth.o(.revsh_text), (4 bytes).
     Removing bluetooth.o(.rrx_text), (6 bytes).
-    Removing bluetooth.o(i.BReceive), (76 bytes).
+    Removing bluetooth.o(i.BReceive), (80 bytes).
     Removing bluetooth.o(i.BTransmit), (76 bytes).
     Removing bluetooth.o(i.BluetoothInitialize), (12 bytes).
     Removing bluetooth.o(i.BluetoothReInitialize), (40 bytes).
+    Removing bluetooth.o(i.LL_USART_IsActiveFlag_RXNE), (10 bytes).
     Removing bluetooth.o(i.UART_Initialize), (344 bytes).
     Removing bluetooth.o(i.recvMsg), (112 bytes).
     Removing bluetooth.o(i.sendMsg), (20 bytes).
@@ -389,17 +420,19 @@ Removing Unused input sections from the image.
     Removing logic.o(.rev16_text), (4 bytes).
     Removing logic.o(.revsh_text), (4 bytes).
     Removing logic.o(.rrx_text), (6 bytes).
-    Removing logic.o(i.FSM), (232 bytes).
-    Removing logic.o(i.FiltrationAndSendChangedButtons), (100 bytes).
-    Removing logic.o(i.InitializeAll), (20 bytes).
-    Removing logic.o(i.UpdateActions), (24 bytes).
-    Removing logic.o(i.UpdateIMUData), (128 bytes).
-    Removing logic.o(i.isActiveFlag_bPF), (12 bytes).
+    Removing logic.o(i.FSM), (276 bytes).
+    Removing logic.o(i.InitializeAll), (24 bytes).
+    Removing logic.o(i.act), (68 bytes).
+    Removing logic.o(i.filtrationAndSendChangedButtons), (92 bytes).
+    Removing logic.o(i.isActiveFlag_bPF), (20 bytes).
     Removing logic.o(i.isActiveFlag_jWF), (12 bytes).
-    Removing logic.o(i.isActiveFlag_rACTIONF), (12 bytes).
-    Removing logic.o(i.isActiveFlag_rSTARTF), (12 bytes).
-    Removing logic.o(i.isActiveFlag_rSTOPF), (12 bytes).
+    Removing logic.o(i.isActiveFlag_rACTIONF), (20 bytes).
+    Removing logic.o(i.isActiveFlag_rSTARTF), (20 bytes).
+    Removing logic.o(i.isActiveFlag_rSTOPF), (20 bytes).
     Removing logic.o(i.isActiveFlag_tTSIMUDF), (12 bytes).
+    Removing logic.o(i.reInitAll), (80 bytes).
+    Removing logic.o(i.readMessages), (124 bytes).
+    Removing logic.o(i.sendERROR), (22 bytes).
     Removing logic.o(i.sendIMUData), (172 bytes).
     Removing logic.o(i.sendSTART), (22 bytes).
     Removing logic.o(i.sendSTOP), (22 bytes).
@@ -409,13 +442,16 @@ Removing Unused input sections from the image.
     Removing logic.o(i.setFlag_rSTARTF), (12 bytes).
     Removing logic.o(i.setFlag_rSTOPF), (12 bytes).
     Removing logic.o(i.setFlag_tTSIMUDF), (12 bytes).
-    Removing logic.o(.bss), (672 bytes).
-    Removing logic.o(.data), (59 bytes).
+    Removing logic.o(i.updateActions), (24 bytes).
+    Removing logic.o(i.updateIMUData), (208 bytes).
+    Removing logic.o(.bss), (856 bytes).
+    Removing logic.o(.data), (71 bytes).
     Removing timer.o(.rev16_text), (4 bytes).
     Removing timer.o(.revsh_text), (4 bytes).
     Removing timer.o(.rrx_text), (6 bytes).
     Removing timer.o(i.getAllTime), (40 bytes).
     Removing timer.o(i.timerInitialize), (116 bytes).
+    Removing timer.o(i.timerReInitialize), (12 bytes).
     Removing system_stm32l4xx_1.o(.rev16_text), (4 bytes).
     Removing system_stm32l4xx_1.o(.revsh_text), (4 bytes).
     Removing system_stm32l4xx_1.o(.rrx_text), (6 bytes).
@@ -423,7 +459,7 @@ Removing Unused input sections from the image.
     Removing system_stm32l4xx_1.o(.constdata), (72 bytes).
     Removing system_stm32l4xx_1.o(.data), (4 bytes).
 
-116 unused section(s) (total 9239 bytes) removed from the image.
+109 unused section(s) (total 8262 bytes) removed from the image.
 
 ==============================================================================
 
@@ -433,33 +469,33 @@ Image Symbol Table
 
     Symbol Name                              Value     Ov Type        Size  Object(Section)
 
+    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit1.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit2.o ABSOLUTE
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit3.o ABSOLUTE
-    ../clib/angel/boardlib.s                 0x00000000   Number         0  boardshut.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_copy.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry4.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry4.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
-    ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_errno_addr_intlibspace.o ABSOLUTE
+    ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_errno_addr.o ABSOLUTE
     ../clib/angel/scatter.s                  0x00000000   Number         0  __scatter.o ABSOLUTE
     ../clib/angel/startup.s                  0x00000000   Number         0  __main.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  sys_stackheap_outer.o ABSOLUTE
+    ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
-    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_wrch.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
+    ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_wrch.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
+    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
+    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  _get_argv_nomalloc.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
     ../clib/fenv.c                           0x00000000   Number         0  _rserrno.o ABSOLUTE
     ../clib/heapalloc.c                      0x00000000   Number         0  hrguard.o ABSOLUTE
     ../clib/heapaux.c                        0x00000000   Number         0  heapauxi.o ABSOLUTE
@@ -474,30 +510,30 @@ Image Symbol Table
     ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
     ../clib/signal.s                         0x00000000   Number         0  defsig.o ABSOLUTE
     ../clib/stdlib.c                         0x00000000   Number         0  exit.o ABSOLUTE
-    ../clib/string.c                         0x00000000   Number         0  strncat.o ABSOLUTE
     ../clib/string.c                         0x00000000   Number         0  strcpy.o ABSOLUTE
     ../clib/string.c                         0x00000000   Number         0  strncmp.o ABSOLUTE
-    ../clib/string.c                         0x00000000   Number         0  strtok.o ABSOLUTE
-    ../clib/string.c                         0x00000000   Number         0  strcspn.o ABSOLUTE
     ../clib/string.c                         0x00000000   Number         0  strtok_int.o ABSOLUTE
+    ../clib/string.c                         0x00000000   Number         0  strtok.o ABSOLUTE
+    ../clib/string.c                         0x00000000   Number         0  strncat.o ABSOLUTE
+    ../clib/string.c                         0x00000000   Number         0  strcspn.o ABSOLUTE
     ../clib/string.c                         0x00000000   Number         0  strspn.o ABSOLUTE
     ../fplib/fpinit.s                        0x00000000   Number         0  fpinit.o ABSOLUTE
     ../fplib/usenofp.s                       0x00000000   Number         0  usenofp.o ABSOLUTE
     ../mathlib/asinf.c                       0x00000000   Number         0  asinf.o ABSOLUTE
     ../mathlib/asinf.c                       0x00000000   Number         0  asinf_x.o ABSOLUTE
-    ../mathlib/atan2f.c                      0x00000000   Number         0  atan2f.o ABSOLUTE
     ../mathlib/atan2f.c                      0x00000000   Number         0  atan2f_x.o ABSOLUTE
+    ../mathlib/atan2f.c                      0x00000000   Number         0  atan2f.o ABSOLUTE
     ../mathlib/fpclassifyf.c                 0x00000000   Number         0  fpclassifyf.o ABSOLUTE
     ../mathlib/funder.c                      0x00000000   Number         0  funder.o ABSOLUTE
     ../mathlib/sqrtf.c                       0x00000000   Number         0  sqrtf_x.o ABSOLUTE
@@ -602,19 +638,76 @@ Image Symbol Table
     .text                                    0x080002d8   Section        0  sys_exit.o(.text)
     .text                                    0x080002e4   Section        2  use_no_semi.o(.text)
     .text                                    0x080002e6   Section        0  indicate_semi.o(.text)
-    i.SystemInit                             0x080002e8   Section        0  system_stm32l4xx_1.o(i.SystemInit)
-    i.TIM2_IRQHandler                        0x08000338   Section        0  timer.o(i.TIM2_IRQHandler)
-    i.main                                   0x08000348   Section        0  main.o(i.main)
-    x$fpl$fpinit                             0x0800034c   Section       10  fpinit.o(x$fpl$fpinit)
-    $v0                                      0x0800034c   Number         0  fpinit.o(x$fpl$fpinit)
-    .data                                    0x20000000   Section        4  timer.o(.data)
-    allTime                                  0x20000000   Data           4  timer.o(.data)
-    .bss                                     0x20000004   Section       96  libspace.o(.bss)
-    HEAP                                     0x20000068   Section      512  startup_stm32l432xx.o(HEAP)
-    Heap_Mem                                 0x20000068   Data         512  startup_stm32l432xx.o(HEAP)
-    STACK                                    0x20000268   Section     1024  startup_stm32l432xx.o(STACK)
-    Stack_Mem                                0x20000268   Data        1024  startup_stm32l432xx.o(STACK)
-    __initial_sp                             0x20000668   Data           0  startup_stm32l432xx.o(STACK)
+    i.I2CInit                                0x080002e8   Section        0  imu.o(i.I2CInit)
+    I2CInit                                  0x080002e9   Thumb Code   308  imu.o(i.I2CInit)
+    i.I2CInitDelay                           0x0800042c   Section        0  imu.o(i.I2CInitDelay)
+    I2CInitDelay                             0x0800042d   Thumb Code    12  imu.o(i.I2CInitDelay)
+    i.IMUInitialize                          0x08000438   Section        0  imu.o(i.IMUInitialize)
+    i.LL_I2C_ClearFlag_NACK                  0x080004b0   Section        0  imu.o(i.LL_I2C_ClearFlag_NACK)
+    LL_I2C_ClearFlag_NACK                    0x080004b1   Thumb Code    10  imu.o(i.LL_I2C_ClearFlag_NACK)
+    i.LL_I2C_GenerateStartCondition          0x080004ba   Section        0  imu.o(i.LL_I2C_GenerateStartCondition)
+    LL_I2C_GenerateStartCondition            0x080004bb   Thumb Code    10  imu.o(i.LL_I2C_GenerateStartCondition)
+    i.LL_I2C_GenerateStopCondition           0x080004c4   Section        0  imu.o(i.LL_I2C_GenerateStopCondition)
+    LL_I2C_GenerateStopCondition             0x080004c5   Thumb Code    10  imu.o(i.LL_I2C_GenerateStopCondition)
+    i.LL_I2C_IsActiveFlag_NACK               0x080004ce   Section        0  imu.o(i.LL_I2C_IsActiveFlag_NACK)
+    LL_I2C_IsActiveFlag_NACK                 0x080004cf   Thumb Code    10  imu.o(i.LL_I2C_IsActiveFlag_NACK)
+    i.LL_I2C_SetSlaveAddr                    0x080004d8   Section        0  imu.o(i.LL_I2C_SetSlaveAddr)
+    LL_I2C_SetSlaveAddr                      0x080004d9   Thumb Code    12  imu.o(i.LL_I2C_SetSlaveAddr)
+    i.LL_I2C_SetTransferRequest              0x080004e4   Section        0  imu.o(i.LL_I2C_SetTransferRequest)
+    LL_I2C_SetTransferRequest                0x080004e5   Thumb Code    12  imu.o(i.LL_I2C_SetTransferRequest)
+    i.LL_I2C_SetTransferSize                 0x080004f0   Section        0  imu.o(i.LL_I2C_SetTransferSize)
+    LL_I2C_SetTransferSize                   0x080004f1   Thumb Code    14  imu.o(i.LL_I2C_SetTransferSize)
+    i.Receive                                0x08000500   Section        0  imu.o(i.Receive)
+    Receive                                  0x08000501   Thumb Code   144  imu.o(i.Receive)
+    i.SystemInit                             0x08000594   Section        0  system_stm32l4xx_1.o(i.SystemInit)
+    i.TIM2_IRQHandler                        0x080005e4   Section        0  timer.o(i.TIM2_IRQHandler)
+    i.Transmit                               0x080005f4   Section        0  imu.o(i.Transmit)
+    Transmit                                 0x080005f5   Thumb Code    34  imu.o(i.Transmit)
+    i.TransmitWithoutStop                    0x0800061c   Section        0  imu.o(i.TransmitWithoutStop)
+    TransmitWithoutStop                      0x0800061d   Thumb Code   134  imu.o(i.TransmitWithoutStop)
+    i.main                                   0x080006a8   Section        0  main.o(i.main)
+    i.readIMUData                            0x080006c8   Section        0  imu.o(i.readIMUData)
+    x$fpl$fpinit                             0x08000746   Section       10  fpinit.o(x$fpl$fpinit)
+    $v0                                      0x08000746   Number         0  fpinit.o(x$fpl$fpinit)
+    .data                                    0x20000000   Section       73  main.o(.data)
+    qw                                       0x20000000   Data           4  main.o(.data)
+    qx                                       0x20000004   Data           4  main.o(.data)
+    qy                                       0x20000008   Data           4  main.o(.data)
+    qz                                       0x2000000c   Data           4  main.o(.data)
+    UART_TX_BufferCounter                    0x20000010   Data           4  main.o(.data)
+    UART_RX_BufferCounter                    0x20000014   Data           4  main.o(.data)
+    goffx                                    0x20000018   Data           4  main.o(.data)
+    goffy                                    0x2000001c   Data           4  main.o(.data)
+    goffz                                    0x20000020   Data           4  main.o(.data)
+    isVibrate                                0x20000024   Data           1  main.o(.data)
+    vibroTime                                0x20000028   Data           4  main.o(.data)
+    time                                     0x2000002c   Data           4  main.o(.data)
+    butCounter                               0x20000030   Data           1  main.o(.data)
+    allTime                                  0x20000034   Data           4  main.o(.data)
+    actionsAmount                            0x20000038   Data           1  main.o(.data)
+    OldSendIMUDataTime                       0x2000003c   Data           4  main.o(.data)
+    joystickWorkFlag                         0x20000040   Data           1  main.o(.data)
+    buttonPressedFlag                        0x20000041   Data           1  main.o(.data)
+    timeToSendIMUDataFlag                    0x20000042   Data           1  main.o(.data)
+    recieveSTOPFlag                          0x20000043   Data           1  main.o(.data)
+    recieveSTARTFlag                         0x20000044   Data           1  main.o(.data)
+    recieveACTIONFlag                        0x20000045   Data           1  main.o(.data)
+    State                                    0x20000046   Data           1  main.o(.data)
+    .data                                    0x2000004c   Section        4  timer.o(.data)
+    allTime                                  0x2000004c   Data           4  timer.o(.data)
+    .bss                                     0x20000050   Section      884  main.o(.bss)
+    UART_TX_Buffer                           0x20000050   Data         255  main.o(.bss)
+    UART_RX_Buffer                           0x2000014f   Data         255  main.o(.bss)
+    buttonList                               0x20000250   Data          80  main.o(.bss)
+    buttons                                  0x200002a0   Data          80  main.o(.bss)
+    messages                                 0x200002f0   Data          92  main.o(.bss)
+    actions                                  0x2000034c   Data          92  main.o(.bss)
+    .bss                                     0x200003c4   Section       96  libspace.o(.bss)
+    HEAP                                     0x20000428   Section      512  startup_stm32l432xx.o(HEAP)
+    Heap_Mem                                 0x20000428   Data         512  startup_stm32l432xx.o(HEAP)
+    STACK                                    0x20000628   Section     1024  startup_stm32l432xx.o(STACK)
+    Stack_Mem                                0x20000628   Data        1024  startup_stm32l432xx.o(STACK)
+    __initial_sp                             0x20000a28   Data           0  startup_stm32l432xx.o(STACK)
 
     Global Symbols
 
@@ -783,16 +876,20 @@ Image Symbol Table
     __I$use$semihosting                      0x080002e5   Thumb Code     0  use_no_semi.o(.text)
     __use_no_semihosting_swi                 0x080002e5   Thumb Code     2  use_no_semi.o(.text)
     __semihosting_library_function           0x080002e7   Thumb Code     0  indicate_semi.o(.text)
-    SystemInit                               0x080002e9   Thumb Code    68  system_stm32l4xx_1.o(i.SystemInit)
-    TIM2_IRQHandler                          0x08000339   Thumb Code    12  timer.o(i.TIM2_IRQHandler)
-    main                                     0x08000349   Thumb Code     4  main.o(i.main)
-    _fp_init                                 0x0800034d   Thumb Code    10  fpinit.o(x$fpl$fpinit)
-    __fplib_config_fpu_vfp                   0x08000355   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    __fplib_config_pureend_doubles           0x08000355   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    Region$$Table$$Base                      0x08000358   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08000378   Number         0  anon$$obj.o(Region$$Table)
-    __libspace_start                         0x20000004   Data          96  libspace.o(.bss)
-    __temporary_stack_top$libspace           0x20000064   Data           0  libspace.o(.bss)
+    IMUInitialize                            0x08000439   Thumb Code   120  imu.o(i.IMUInitialize)
+    SystemInit                               0x08000595   Thumb Code    68  system_stm32l4xx_1.o(i.SystemInit)
+    TIM2_IRQHandler                          0x080005e5   Thumb Code    12  timer.o(i.TIM2_IRQHandler)
+    main                                     0x080006a9   Thumb Code    22  main.o(i.main)
+    readIMUData                              0x080006c9   Thumb Code   126  imu.o(i.readIMUData)
+    _fp_init                                 0x08000747   Thumb Code    10  fpinit.o(x$fpl$fpinit)
+    __fplib_config_fpu_vfp                   0x0800074f   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    __fplib_config_pureend_doubles           0x0800074f   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    Region$$Table$$Base                      0x08000750   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08000770   Number         0  anon$$obj.o(Region$$Table)
+    temp                                     0x20000047   Data           2  main.o(.data)
+    rawData                                  0x200003a8   Data          28  main.o(.bss)
+    __libspace_start                         0x200003c4   Data          96  libspace.o(.bss)
+    __temporary_stack_top$libspace           0x20000424   Data           0  libspace.o(.bss)
 
 
 
@@ -802,93 +899,110 @@ Memory Map of the image
 
   Image Entry point : 0x0800022d
 
-  Load Region LR_1 (Base: 0x08000000, Size: 0x0000037c, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x08000000, Size: 0x000007c0, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00000378, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00000770, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x08000000   0x08000000   0x0000018c   Data   RO          843    RESET               startup_stm32l432xx.o
-    0x0800018c   0x0800018c   0x00000008   Code   RO          900  * !!!main             c_w.l(__main.o)
-    0x08000194   0x08000194   0x00000034   Code   RO         1125    !!!scatter          c_w.l(__scatter.o)
-    0x080001c8   0x080001c8   0x0000001a   Code   RO         1127    !!handler_copy      c_w.l(__scatter_copy.o)
+    0x08000000   0x08000000   0x0000018c   Data   RO          901    RESET               startup_stm32l432xx.o
+    0x0800018c   0x0800018c   0x00000008   Code   RO          958  * !!!main             c_w.l(__main.o)
+    0x08000194   0x08000194   0x00000034   Code   RO         1183    !!!scatter          c_w.l(__scatter.o)
+    0x080001c8   0x080001c8   0x0000001a   Code   RO         1185    !!handler_copy      c_w.l(__scatter_copy.o)
     0x080001e2   0x080001e2   0x00000002   PAD
-    0x080001e4   0x080001e4   0x0000001c   Code   RO         1129    !!handler_zi        c_w.l(__scatter_zi.o)
-    0x08000200   0x08000200   0x00000002   Code   RO          998    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
-    0x08000202   0x08000202   0x00000004   Code   RO         1001    .ARM.Collect$$libinit$$00000001  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1004    .ARM.Collect$$libinit$$00000004  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1007    .ARM.Collect$$libinit$$0000000A  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1009    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1011    .ARM.Collect$$libinit$$0000000E  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1014    .ARM.Collect$$libinit$$00000011  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1016    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1018    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1020    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1022    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1024    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1026    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1028    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1030    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1032    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1034    .ARM.Collect$$libinit$$00000025  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1038    .ARM.Collect$$libinit$$0000002C  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1040    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1042    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000000   Code   RO         1044    .ARM.Collect$$libinit$$00000032  c_w.l(libinit2.o)
-    0x08000206   0x08000206   0x00000002   Code   RO         1045    .ARM.Collect$$libinit$$00000033  c_w.l(libinit2.o)
-    0x08000208   0x08000208   0x00000002   Code   RO         1065    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
-    0x0800020a   0x0800020a   0x00000000   Code   RO         1078    .ARM.Collect$$libshutdown$$00000002  c_w.l(libshutdown2.o)
-    0x0800020a   0x0800020a   0x00000000   Code   RO         1080    .ARM.Collect$$libshutdown$$00000004  c_w.l(libshutdown2.o)
-    0x0800020a   0x0800020a   0x00000000   Code   RO         1083    .ARM.Collect$$libshutdown$$00000007  c_w.l(libshutdown2.o)
-    0x0800020a   0x0800020a   0x00000000   Code   RO         1086    .ARM.Collect$$libshutdown$$0000000A  c_w.l(libshutdown2.o)
-    0x0800020a   0x0800020a   0x00000000   Code   RO         1088    .ARM.Collect$$libshutdown$$0000000C  c_w.l(libshutdown2.o)
-    0x0800020a   0x0800020a   0x00000000   Code   RO         1091    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
-    0x0800020a   0x0800020a   0x00000002   Code   RO         1092    .ARM.Collect$$libshutdown$$00000010  c_w.l(libshutdown2.o)
-    0x0800020c   0x0800020c   0x00000000   Code   RO          926    .ARM.Collect$$rtentry$$00000000  c_w.l(__rtentry.o)
-    0x0800020c   0x0800020c   0x00000000   Code   RO          963    .ARM.Collect$$rtentry$$00000002  c_w.l(__rtentry2.o)
-    0x0800020c   0x0800020c   0x00000006   Code   RO          975    .ARM.Collect$$rtentry$$00000004  c_w.l(__rtentry4.o)
-    0x08000212   0x08000212   0x00000000   Code   RO          965    .ARM.Collect$$rtentry$$00000009  c_w.l(__rtentry2.o)
-    0x08000212   0x08000212   0x00000004   Code   RO          966    .ARM.Collect$$rtentry$$0000000A  c_w.l(__rtentry2.o)
-    0x08000216   0x08000216   0x00000000   Code   RO          968    .ARM.Collect$$rtentry$$0000000C  c_w.l(__rtentry2.o)
-    0x08000216   0x08000216   0x00000008   Code   RO          969    .ARM.Collect$$rtentry$$0000000D  c_w.l(__rtentry2.o)
-    0x0800021e   0x0800021e   0x00000002   Code   RO          999    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
-    0x08000220   0x08000220   0x00000000   Code   RO         1047    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
-    0x08000220   0x08000220   0x00000004   Code   RO         1048    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
-    0x08000224   0x08000224   0x00000006   Code   RO         1049    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
+    0x080001e4   0x080001e4   0x0000001c   Code   RO         1187    !!handler_zi        c_w.l(__scatter_zi.o)
+    0x08000200   0x08000200   0x00000002   Code   RO         1056    .ARM.Collect$$libinit$$00000000  c_w.l(libinit.o)
+    0x08000202   0x08000202   0x00000004   Code   RO         1059    .ARM.Collect$$libinit$$00000001  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1062    .ARM.Collect$$libinit$$00000004  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1065    .ARM.Collect$$libinit$$0000000A  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1067    .ARM.Collect$$libinit$$0000000C  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1069    .ARM.Collect$$libinit$$0000000E  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1072    .ARM.Collect$$libinit$$00000011  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1074    .ARM.Collect$$libinit$$00000013  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1076    .ARM.Collect$$libinit$$00000015  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1078    .ARM.Collect$$libinit$$00000017  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1080    .ARM.Collect$$libinit$$00000019  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1082    .ARM.Collect$$libinit$$0000001B  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1084    .ARM.Collect$$libinit$$0000001D  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1086    .ARM.Collect$$libinit$$0000001F  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1088    .ARM.Collect$$libinit$$00000021  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1090    .ARM.Collect$$libinit$$00000023  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1092    .ARM.Collect$$libinit$$00000025  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1096    .ARM.Collect$$libinit$$0000002C  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1098    .ARM.Collect$$libinit$$0000002E  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1100    .ARM.Collect$$libinit$$00000030  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000000   Code   RO         1102    .ARM.Collect$$libinit$$00000032  c_w.l(libinit2.o)
+    0x08000206   0x08000206   0x00000002   Code   RO         1103    .ARM.Collect$$libinit$$00000033  c_w.l(libinit2.o)
+    0x08000208   0x08000208   0x00000002   Code   RO         1123    .ARM.Collect$$libshutdown$$00000000  c_w.l(libshutdown.o)
+    0x0800020a   0x0800020a   0x00000000   Code   RO         1136    .ARM.Collect$$libshutdown$$00000002  c_w.l(libshutdown2.o)
+    0x0800020a   0x0800020a   0x00000000   Code   RO         1138    .ARM.Collect$$libshutdown$$00000004  c_w.l(libshutdown2.o)
+    0x0800020a   0x0800020a   0x00000000   Code   RO         1141    .ARM.Collect$$libshutdown$$00000007  c_w.l(libshutdown2.o)
+    0x0800020a   0x0800020a   0x00000000   Code   RO         1144    .ARM.Collect$$libshutdown$$0000000A  c_w.l(libshutdown2.o)
+    0x0800020a   0x0800020a   0x00000000   Code   RO         1146    .ARM.Collect$$libshutdown$$0000000C  c_w.l(libshutdown2.o)
+    0x0800020a   0x0800020a   0x00000000   Code   RO         1149    .ARM.Collect$$libshutdown$$0000000F  c_w.l(libshutdown2.o)
+    0x0800020a   0x0800020a   0x00000002   Code   RO         1150    .ARM.Collect$$libshutdown$$00000010  c_w.l(libshutdown2.o)
+    0x0800020c   0x0800020c   0x00000000   Code   RO          984    .ARM.Collect$$rtentry$$00000000  c_w.l(__rtentry.o)
+    0x0800020c   0x0800020c   0x00000000   Code   RO         1021    .ARM.Collect$$rtentry$$00000002  c_w.l(__rtentry2.o)
+    0x0800020c   0x0800020c   0x00000006   Code   RO         1033    .ARM.Collect$$rtentry$$00000004  c_w.l(__rtentry4.o)
+    0x08000212   0x08000212   0x00000000   Code   RO         1023    .ARM.Collect$$rtentry$$00000009  c_w.l(__rtentry2.o)
+    0x08000212   0x08000212   0x00000004   Code   RO         1024    .ARM.Collect$$rtentry$$0000000A  c_w.l(__rtentry2.o)
+    0x08000216   0x08000216   0x00000000   Code   RO         1026    .ARM.Collect$$rtentry$$0000000C  c_w.l(__rtentry2.o)
+    0x08000216   0x08000216   0x00000008   Code   RO         1027    .ARM.Collect$$rtentry$$0000000D  c_w.l(__rtentry2.o)
+    0x0800021e   0x0800021e   0x00000002   Code   RO         1057    .ARM.Collect$$rtexit$$00000000  c_w.l(rtexit.o)
+    0x08000220   0x08000220   0x00000000   Code   RO         1105    .ARM.Collect$$rtexit$$00000002  c_w.l(rtexit2.o)
+    0x08000220   0x08000220   0x00000004   Code   RO         1106    .ARM.Collect$$rtexit$$00000003  c_w.l(rtexit2.o)
+    0x08000224   0x08000224   0x00000006   Code   RO         1107    .ARM.Collect$$rtexit$$00000004  c_w.l(rtexit2.o)
     0x0800022a   0x0800022a   0x00000002   PAD
-    0x0800022c   0x0800022c   0x00000040   Code   RO          844  * .text               startup_stm32l432xx.o
-    0x0800026c   0x0800026c   0x00000006   Code   RO          898    .text               c_w.l(heapauxi.o)
+    0x0800022c   0x0800022c   0x00000040   Code   RO          902  * .text               startup_stm32l432xx.o
+    0x0800026c   0x0800026c   0x00000006   Code   RO          956    .text               c_w.l(heapauxi.o)
     0x08000272   0x08000272   0x00000002   PAD
-    0x08000274   0x08000274   0x00000008   Code   RO          986    .text               c_w.l(libspace.o)
-    0x0800027c   0x0800027c   0x0000004a   Code   RO          989    .text               c_w.l(sys_stackheap_outer.o)
-    0x080002c6   0x080002c6   0x00000012   Code   RO          991    .text               c_w.l(exit.o)
-    0x080002d8   0x080002d8   0x0000000c   Code   RO         1057    .text               c_w.l(sys_exit.o)
-    0x080002e4   0x080002e4   0x00000002   Code   RO         1068    .text               c_w.l(use_no_semi.o)
-    0x080002e6   0x080002e6   0x00000000   Code   RO         1070    .text               c_w.l(indicate_semi.o)
+    0x08000274   0x08000274   0x00000008   Code   RO         1044    .text               c_w.l(libspace.o)
+    0x0800027c   0x0800027c   0x0000004a   Code   RO         1047    .text               c_w.l(sys_stackheap_outer.o)
+    0x080002c6   0x080002c6   0x00000012   Code   RO         1049    .text               c_w.l(exit.o)
+    0x080002d8   0x080002d8   0x0000000c   Code   RO         1115    .text               c_w.l(sys_exit.o)
+    0x080002e4   0x080002e4   0x00000002   Code   RO         1126    .text               c_w.l(use_no_semi.o)
+    0x080002e6   0x080002e6   0x00000000   Code   RO         1128    .text               c_w.l(indicate_semi.o)
     0x080002e6   0x080002e6   0x00000002   PAD
-    0x080002e8   0x080002e8   0x00000050   Code   RO          852    i.SystemInit        system_stm32l4xx_1.o
-    0x08000338   0x08000338   0x00000010   Code   RO          799    i.TIM2_IRQHandler   timer.o
-    0x08000348   0x08000348   0x00000004   Code   RO            4    i.main              main.o
-    0x0800034c   0x0800034c   0x0000000a   Code   RO         1055    x$fpl$fpinit        fz_wm.l(fpinit.o)
-    0x08000356   0x08000356   0x00000002   PAD
-    0x08000358   0x08000358   0x00000020   Data   RO         1123    Region$$Table       anon$$obj.o
+    0x080002e8   0x080002e8   0x00000144   Code   RO          168    i.I2CInit           imu.o
+    0x0800042c   0x0800042c   0x0000000c   Code   RO          169    i.I2CInitDelay      imu.o
+    0x08000438   0x08000438   0x00000078   Code   RO          170    i.IMUInitialize     imu.o
+    0x080004b0   0x080004b0   0x0000000a   Code   RO          171    i.LL_I2C_ClearFlag_NACK  imu.o
+    0x080004ba   0x080004ba   0x0000000a   Code   RO          172    i.LL_I2C_GenerateStartCondition  imu.o
+    0x080004c4   0x080004c4   0x0000000a   Code   RO          173    i.LL_I2C_GenerateStopCondition  imu.o
+    0x080004ce   0x080004ce   0x0000000a   Code   RO          174    i.LL_I2C_IsActiveFlag_NACK  imu.o
+    0x080004d8   0x080004d8   0x0000000c   Code   RO          175    i.LL_I2C_SetSlaveAddr  imu.o
+    0x080004e4   0x080004e4   0x0000000c   Code   RO          176    i.LL_I2C_SetTransferRequest  imu.o
+    0x080004f0   0x080004f0   0x0000000e   Code   RO          177    i.LL_I2C_SetTransferSize  imu.o
+    0x080004fe   0x080004fe   0x00000002   PAD
+    0x08000500   0x08000500   0x00000094   Code   RO          178    i.Receive           imu.o
+    0x08000594   0x08000594   0x00000050   Code   RO          910    i.SystemInit        system_stm32l4xx_1.o
+    0x080005e4   0x080005e4   0x00000010   Code   RO          851    i.TIM2_IRQHandler   timer.o
+    0x080005f4   0x080005f4   0x00000028   Code   RO          179    i.Transmit          imu.o
+    0x0800061c   0x0800061c   0x0000008c   Code   RO          180    i.TransmitWithoutStop  imu.o
+    0x080006a8   0x080006a8   0x00000020   Code   RO            4    i.main              main.o
+    0x080006c8   0x080006c8   0x0000007e   Code   RO          181    i.readIMUData       imu.o
+    0x08000746   0x08000746   0x0000000a   Code   RO         1113    x$fpl$fpinit        fz_wm.l(fpinit.o)
+    0x08000750   0x08000750   0x00000020   Data   RO         1181    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x08000378, Size: 0x00000004, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x08000770, Size: 0x00000050, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08000378   0x00000004   Data   RW          802    .data               timer.o
+    0x20000000   0x08000770   0x00000049   Data   RW            6    .data               main.o
+    0x20000049   0x080007b9   0x00000003   PAD
+    0x2000004c   0x080007bc   0x00000004   Data   RW          855    .data               timer.o
 
 
-    Execution Region ER_ZI (Exec base: 0x20000004, Load base: 0x0800037c, Size: 0x00000664, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000050, Load base: 0x080007c0, Size: 0x000009d8, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000004        -       0x00000060   Zero   RW          987    .bss                c_w.l(libspace.o)
-    0x20000064   0x0800037c   0x00000004   PAD
-    0x20000068        -       0x00000200   Zero   RW          842    HEAP                startup_stm32l432xx.o
-    0x20000268        -       0x00000400   Zero   RW          841    STACK               startup_stm32l432xx.o
+    0x20000050        -       0x00000374   Zero   RW            5    .bss                main.o
+    0x200003c4        -       0x00000060   Zero   RW         1045    .bss                c_w.l(libspace.o)
+    0x20000424   0x080007c0   0x00000004   PAD
+    0x20000428        -       0x00000200   Zero   RW          900    HEAP                startup_stm32l432xx.o
+    0x20000628        -       0x00000400   Zero   RW          899    STACK               startup_stm32l432xx.o
 
 
 ==============================================================================
@@ -898,15 +1012,16 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-         4          0          0          0          0       4987   main.o
+       988         32          0          0          0      20642   imu.o
+        32         10          0         73        884     511214   main.o
         64         26        396          0       1536        872   startup_stm32l432xx.o
         80         12          0          0          0        537   system_stm32l4xx_1.o
         16          4          0          4          0       1030   timer.o
 
     ----------------------------------------------------------------------
-       164         42        428          4       1536       7426   Object Totals
+      1182         84        428         80       2420     534295   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-         0          0          0          0          0          0   (incl. Padding)
+         2          0          0          3          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -935,8 +1050,8 @@ Image component sizes
         10          0          0          0          0        116   fpinit.o
 
     ----------------------------------------------------------------------
-       296         16          0          0        100        700   Library Totals
-        10          0          0          0          4          0   (incl. Padding)
+       294         16          0          0        100        700   Library Totals
+         8          0          0          0          4          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -946,7 +1061,7 @@ Image component sizes
         10          0          0          0          0        116   fz_wm.l
 
     ----------------------------------------------------------------------
-       296         16          0          0        100        700   Library Totals
+       294         16          0          0        100        700   Library Totals
 
     ----------------------------------------------------------------------
 
@@ -955,15 +1070,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-       460         58        428          4       1636       7870   Grand Totals
-       460         58        428          4       1636       7870   ELF Image Totals
-       460         58        428          4          0          0   ROM Totals
+      1476        100        428         80       2520     533339   Grand Totals
+      1476        100        428         80       2520     533339   ELF Image Totals
+      1476        100        428         80          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                  888 (   0.87kB)
-    Total RW  Size (RW Data + ZI Data)              1640 (   1.60kB)
-    Total ROM Size (Code + RO Data + RW Data)        892 (   0.87kB)
+    Total RO  Size (Code + RO Data)                 1904 (   1.86kB)
+    Total RW  Size (RW Data + ZI Data)              2600 (   2.54kB)
+    Total ROM Size (Code + RO Data + RW Data)       1984 (   1.94kB)
 
 ==============================================================================
 

@@ -61,3 +61,11 @@ void getEulerAngle(float* yaw, float* pitch, float* roll)
 	*pitch = asinf(2.f*(qx*qz - qw*qy));
 	*roll = atan2f(2.f*(qw*qx + qy*qz), qz*qz - qy*qy - qx*qx + qw*qw);
 }
+
+void resetMajvikFilter(void)
+{
+  qw = 1.f;
+  qx = 0.f;
+  qy = 0.f;
+  qz = 0.f;
+}

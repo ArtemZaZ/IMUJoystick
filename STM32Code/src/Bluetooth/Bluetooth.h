@@ -16,12 +16,11 @@ static uint8_t* UART_RX_BufferCounter;	// каретка
 
 #define UARTx USART1
 
-
 void BluetoothInitialize(void);	// инициализация Bluetooth
 void BluetoothReInitialize(void); // реинициализация Bluetooth
 void sendMsg(SendData sd);	// добавляет сообщение в конец массива
 void recvMsg(RecData* recDataBuf, uint8_t* size);	// возвращает массив пришедших комманд с данными
 static void UART_Initialize(void);
-static uint8_t BTransmit(void);
-static uint8_t BReceive(void);
+uint8_t BTransmit(void);
+uint8_t BReceive(void);
 #endif /* BLUETOOTH_H_ */

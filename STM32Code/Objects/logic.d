@@ -23,3 +23,4 @@
 .\objects\logic.o: .\src\Devices/motor.h
 .\objects\logic.o: .\src\Devices/Buttons.h
 .\objects\logic.o: .\src\Filters/HLPFilters.h
+.\objects\logic.o: .\src\Timer/timer.h

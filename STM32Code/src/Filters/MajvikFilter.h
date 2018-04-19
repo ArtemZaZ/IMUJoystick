@@ -15,5 +15,6 @@ static volatile float qz = 0.f;     	//
 static inline float fastInvSqrt(float x);		// ф-ия извлечения быстрого обратного корня
 void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, float time);	// Фильтр Маджвика
 void getEulerAngle(float* yaw, float* pitch, float* roll);  // получение углов Эйлера из квартерниона
+void resetMajvikFilter(void);
 #endif /* MAJVIKFILER_H_ */
 

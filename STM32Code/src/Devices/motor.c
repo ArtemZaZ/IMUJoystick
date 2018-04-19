@@ -18,19 +18,32 @@ void motorInitialize(void)
 	GPIO_PORT_MOTOR -> PUPDR |= (0x1 << PIN_MOTOR*2); // pull-up
 }
 
-void vibrate(void)
+void motorReInitialize(void)
+{
+  isVibrate = 0x0;
+  time = 0.f;
+  vibroTime = 0.f;
+  GPIO_PORT_MOTOR -> ODR &= ~(1 << PIN_MOTOR);
+}
+
+void vibrate(float time)
 {
 	isVibrate = 0x1;
+  vibroTime += time;  // время вибрации добавляется к предыдущему
 }
 
 void updateMotor(float dt)	
 {
-	time += dt;
-	if(VIBRO_TIME < time) // если время прошедшее с начала вибрации больше нужного времени
-	{
-		isVibrate = 0x0;
-		time = 0.f;
-	}
-	GPIO_PORT_MOTOR -> ODR |= (isVibrate << PIN_MOTOR); // включаем или выключаем мотор
-	GPIO_PORT_MOTOR -> ODR &= ~((!isVibrate) << PIN_MOTOR);
+  if(isVibrate)
+  {
+    time += dt;
+    if(vibroTime < time) // если время прошедшее с начала вибрации больше нужного времени
+    {
+      isVibrate = 0x0;
+      vibroTime = 0.f;
+      time = 0.f;
+    }
+    GPIO_PORT_MOTOR -> ODR |= (isVibrate << PIN_MOTOR); // включаем или выключаем мотор
+    GPIO_PORT_MOTOR -> ODR &= ~((!isVibrate) << PIN_MOTOR);
+  }
 }

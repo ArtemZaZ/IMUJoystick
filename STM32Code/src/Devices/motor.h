@@ -5,7 +5,8 @@
 
 #define PORT_MOTOR 0xA
 #define PIN_MOTOR 1
-#define VIBRO_TIME 3.f // 3 секунды
+//#define VIBRO_TIME 3.f // 3 секунды
+
 
 #if (PORT_MOTOR == 0xA)
 	#define GPIO_PORT_MOTOR GPIOA
@@ -22,9 +23,11 @@
 #endif
 
 static volatile uint8_t isVibrate = 0x0; // флаг обозначающий должен ли мотор крутиться или нет
+static volatile float vibroTime = 0.f; // время, которое должен вибрировать мотор
 static volatile float time = 0.f; // время прошедшее с начала вибрации
 
 void motorInitialize(void); // Ф-ия инициализации мотора
-void vibrate(void);	// установка флага вибрации
+void motorReInitialize(void); // реинициализация мотора
+void vibrate(float time);	// установка флага вибрации
 void updateMotor(float dt);	// обновляет состояние мотора // dt в секундах
 #endif /* MOTOR_H_ */

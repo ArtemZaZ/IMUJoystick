@@ -11,6 +11,12 @@ void timerInitialize(void)
   TIM2 -> CR1 |= TIM_CR1_CEN; // разрешаем считать
 }
 
+void timerReInitialize(void)
+{
+  allTime = 0.f;
+  // TODO: сброс таймера
+}
+
 void TIM2_IRQHandler(void)
 {
   allTime++;  // увеличиваем счетчик периодов 

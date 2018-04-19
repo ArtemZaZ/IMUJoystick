@@ -23,3 +23,4 @@
 .\objects\main.o: .\src\Devices/motor.h
 .\objects\main.o: .\src\Devices/Buttons.h
 .\objects\main.o: .\src\Filters/HLPFilters.h
+.\objects\main.o: .\src\Timer/timer.h
