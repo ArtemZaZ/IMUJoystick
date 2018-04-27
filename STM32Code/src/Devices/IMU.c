@@ -1,6 +1,6 @@
 #include "IMU.h"
 
-static void I2CInitDelay(void)
+void I2CInitDelay(void)
 {
   for(uint32_t i = 0; i < I2C_INIT_DELAY_TIME; i++);
 }
@@ -23,6 +23,7 @@ static void I2CInit(void)
 	GPIOB -> OTYPER |= (1 << 6); // режим Open-drain
 	GPIOB -> PUPDR &= ~(0x3 << 12); // очищаем значение PUPD6
 	GPIOB -> PUPDR |= (1 << 12); // устанавливаем режим pull-up
+  I2CInitDelay();
 	
 	// насройка SDA линии 
 	GPIOB -> AFR[0] &= ~(0xFU << 28); // Очищаем AFSEL7
@@ -33,6 +34,7 @@ static void I2CInit(void)
 	GPIOB -> OTYPER |= (1 << 7); // режим Open-drain
 	GPIOB -> PUPDR &= ~(0x3 << 14); // очищаем значение PUPD7
 	GPIOB -> PUPDR |= (1 << 14); // устанавливаем режим pull-up
+  I2CInitDelay();
 	
 	LL_I2C_Disable(I2Cx);	// отключаем I2C
 	LL_I2C_SetMode(I2Cx, LL_I2C_MODE_I2C);	// режим I2C - не SMBus
@@ -49,6 +51,7 @@ static uint8_t TransmitWithoutStop(uint32_t slaveAddr, uint8_t* data, uint32_t s
   LL_I2C_ClearFlag_NACK(I2Cx); // очищаем флаг Nack
 	LL_I2C_ClearFlag_TXE(I2Cx); // очищаем регистр данных
 	LL_I2C_GenerateStartCondition(I2Cx);	// Сигнал Старт
+  I2CInitDelay();
 	do 
 	{
 		if(LL_I2C_IsActiveFlag_NACK(I2Cx)) // если активен флаг Nack(отправка не удалась)
@@ -56,14 +59,13 @@ static uint8_t TransmitWithoutStop(uint32_t slaveAddr, uint8_t* data, uint32_t s
 			LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп
       I2CInitDelay();
 			LL_I2C_ClearFlag_NACK(I2Cx); // очищаем флаг Nack
-      I2CInitDelay();
 			LL_I2C_ClearFlag_TXE(I2Cx); // очищаем регистр данных
-      I2CInitDelay();
 			return 0; // возвращаем, что отправка не удалась
 		}
 		if(LL_I2C_IsActiveFlag_TXE(I2Cx)) // если активен флаг TXE(регистр данных пуст и готов для записи в него данных) 
 		{
-			LL_I2C_TransmitData8(I2Cx, *(data++));	// записать байт данных
+			LL_I2C_TransmitData8(I2Cx, *(data));	// записать байт данных
+      data++;
 			size--;
 		}
 	} while(size); // пока не закончатся данные
@@ -75,18 +77,19 @@ static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size)
 {
   uint8_t ret = TransmitWithoutStop(slaveAddr, data, size);  	
 	LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп  
+  I2CInitDelay();
   return ret;
 }
 
-static uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size)
+uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size)
 {	
 	while(!TransmitWithoutStop(slaveAddr, (uint8_t*)(&regAddr), 1)){;} // передаем адресс регистра
-  I2CInitDelay();
 	LL_I2C_SetTransferSize(I2Cx, size); // размер, который нужно принять
 	LL_I2C_SetTransferRequest(I2Cx, LL_I2C_REQUEST_READ); // указываем, что будем читать
 	LL_I2C_SetSlaveAddr(I2Cx, (slaveAddr << 1)); // указываем адресс ведомого
   I2CInitDelay();
 	LL_I2C_GenerateStartCondition(I2Cx);	// Сигнал Старт
+  I2CInitDelay();
 	do
 	{
 		if(LL_I2C_IsActiveFlag_NACK(I2Cx)) // если активен флаг Nack(отправка адреса не удалась, я хз, как это еще проверить - даташит adxl345 чтение множества байт)
@@ -94,7 +97,6 @@ static uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32
 			LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп
       I2CInitDelay();
 			LL_I2C_ClearFlag_NACK(I2Cx); // очищаем флаг Nack
-      I2CInitDelay();
 			return 0; // возвращаем, что отправка не удалась
 		}
 		if(LL_I2C_IsActiveFlag_RXNE(I2Cx))
@@ -106,8 +108,36 @@ static uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32
 	LL_I2C_GenerateStopCondition(I2Cx);
   I2CInitDelay();
 	return 1;
-	
 }
+
+/*
+uint8_t ReceiveWithStartAfterStop(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size)
+{	
+	while(!Transmit(slaveAddr, (uint8_t*)(&regAddr), 1)){;} // передаем адресс регистра
+	LL_I2C_SetTransferSize(I2Cx, size); // размер, который нужно принять
+	LL_I2C_SetTransferRequest(I2Cx, LL_I2C_REQUEST_READ); // указываем, что будем читать
+	LL_I2C_SetSlaveAddr(I2Cx, (slaveAddr << 1)); // указываем адресс ведомого
+	LL_I2C_GenerateStartCondition(I2Cx);	// Сигнал Старт
+  I2CInitDelay();
+	do
+	{
+		if(LL_I2C_IsActiveFlag_NACK(I2Cx)) // если активен флаг Nack(отправка адреса не удалась, я хз, как это еще проверить - даташит adxl345 чтение множества байт)
+		{
+			LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп
+      I2CInitDelay();
+			LL_I2C_ClearFlag_NACK(I2Cx); // очищаем флаг Nack
+			return 0; // возвращаем, что отправка не удалась
+		}
+		if(LL_I2C_IsActiveFlag_RXNE(I2Cx))
+		{
+			*buf++ = LL_I2C_ReceiveData8(I2Cx); // принимаем байт
+			size--;
+		}		
+	} while(size);
+	LL_I2C_GenerateStopCondition(I2Cx);
+	return 1;
+}
+*/
 
 void IMUInitialize(void)
 {
@@ -119,19 +149,29 @@ void IMUInitialize(void)
 	
 	// Инициализация акселерометра
 	tempBuf[0] = ADXL345_POWER_CTL;
+	tempBuf[1] = 0x00;
+	while(!Transmit(ADXL345_ADDR, tempBuf, 3)); // Записываем в регистр ADXL345_POWER_CTL значение 8
+  I2CInitDelay();
+  tempBuf[0] = ADXL345_POWER_CTL;
+	tempBuf[1] = 0x16;
+	while(!Transmit(ADXL345_ADDR, tempBuf, 3)); // Записываем в регистр ADXL345_POWER_CTL значение 8
+  I2CInitDelay();
+  tempBuf[0] = ADXL345_POWER_CTL;
 	tempBuf[1] = 0x08;
-	while(!Transmit(ADXL345_ADDR, tempBuf, 2)); // Записываем в регистр ADXL345_POWER_CTL значение 8
+	while(!Transmit(ADXL345_ADDR, tempBuf, 3)); // Записываем в регистр ADXL345_POWER_CTL значение 8
+  I2CInitDelay();
+  
 	tempBuf[0] = ADXL345_DATA_FORMAT;
 	tempBuf[1] = 0x01;
-	while(!Transmit(ADXL345_ADDR, tempBuf, 2)); // записывае в регистр ADXL345_DATA_FORMAT значение 1
+	while(!Transmit(ADXL345_ADDR, tempBuf, 3)); // записывае в регистр ADXL345_DATA_FORMAT значение 1
 	
 	// Инициализация гироскопа
 	tempBuf[0] = ITG3205_PWR_MGM;
 	tempBuf[1] = 0x00;
-	while(!Transmit(ITG3205_ADDR, tempBuf, 2)); // Записываем в регистр ITG3205_PWR_MGM значение 0
+	while(!Transmit(ITG3205_ADDR, tempBuf, 3)); // Записываем в регистр ITG3205_PWR_MGM значение 0
 	tempBuf[0] = ITG3205_DLPF_FS;
 	tempBuf[1] = 0x1E;
-	while(!Transmit(ITG3205_ADDR, tempBuf, 2)); // Записываем в регистр ITG3205_DLPF_FS значение 0x1E
+	while(!Transmit(ITG3205_ADDR, tempBuf, 3)); // Записываем в регистр ITG3205_DLPF_FS значение 0x1E
 #endif	
 }
 

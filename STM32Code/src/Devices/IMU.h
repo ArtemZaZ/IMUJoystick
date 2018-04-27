@@ -6,9 +6,9 @@
 #include "LL/stm32l4xx_ll_gpio.h"
 
 #define I2Cx	I2C1	//  будем работать с I2C1
-#define I2Cx_TIMING	0x420F13U	// см. предыдущие коммиты, где я это все ручками настравал
-//#define I2Cx_TIMING	0x42C3C7U
-#define I2C_INIT_DELAY_TIME 20 // в попугаях
+#define I2Cx_TIMING	0x00420F13U	// см. предыдущие коммиты, где я это все ручками настравал
+//#define I2Cx_TIMING	0x0042C3C7U
+#define I2C_INIT_DELAY_TIME 100 // в попугаях
 
 #ifdef MPU6050
 	#include "RegisterMaps/MPU6050RM.h"
@@ -32,8 +32,10 @@ void readIMUData(int32_t* buf);
 
 static void I2CInit(void);
 static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size);
-static uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size);
-static void I2CInitDelay(void); // ф-ия задержки инициализации переферии I2C
+static uint8_t TransmitWithoutStop(uint32_t slaveAddr, uint8_t* data, uint32_t size);
+uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size);
+//uint8_t ReceiveWithStartAfterStop(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size);
+void I2CInitDelay(void); // ф-ия задержки инициализации переферии I2C
 
 
 #endif /* IMU_H_ */

@@ -15,19 +15,37 @@
 #include "Devices/devices.h"
 
 int32_t rawData[7];
-volatile uint8_t temp[2];
+uint8_t temp[10];
+RecData data[4];
+uint8_t size;
+float t;
+uint32_t tem = 0;
+Button but[5];
 
 int main(void)       		   
 {  
-  IMUInitialize();
-  
+  ButtonsInitialize();
+  //IMUInitialize();
+  //BluetoothInitialize();
+  //timerInitialize();
+  //recvMsg(data, &size);
 	while(1)
 	{
+    checkAndFiltrateButtons(but, &size);
+    if(size != 0)
+    {
+      tem++;
+    }
+    //t = getAllTime();
+    //tem = get();
 		//FSM();	
     //sendMsg((SendData){"message\n", 8});
     //while(!BTransmit());
-    //while(!Receive(ITG3205_ADDR, 0x00, (uint8_t*)temp, 1));
-    readIMUData(rawData);
-    temp[0] = temp[1];
+    //while(!Receive(ADXL345_ADDR, ADXL345_POWER_CTL, (uint8_t*)&size, 1));
+    //while(!Receive(ITG3205_ADDR, 0x00, (uint8_t*)&size, 1));
+    //readIMUData(rawData);
+    I2CInitDelay();
+    I2CInitDelay();
+    //temp[0] = temp[1];
 	}
 }

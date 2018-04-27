@@ -25,7 +25,6 @@ static Button buttonList[MAX_AMOUNT_BUTTONS];	// массив кнопок
 static uint8_t butCounter = 0;	// общее кол-во кнопок
 
 static inline uint8_t PushPress(Button* but);	// определение нажата ли кнопка по уровню фильрации
-static void UART_Initialize(void);  // инициализация uart
 void ButtonsInitialize(void);		// инициализация кнопок
 void checkAndFiltrateButtons(Button* buttons, uint8_t* size);		// возвращает массив кнопок изменивших положение и их количество
 
