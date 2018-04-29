@@ -175,27 +175,27 @@ void IMUInitialize(void)
 #endif	
 }
 
-void readIMUData(int32_t* data)
+void readIMUData(int16_t* data)
 {	 
 #ifdef MPU6050
   uint8_t rawData[14];
   // TODO: когда придет плата  чтение данных с MPU6050
-  data[0] = (int32_t)(rawdata[0] << 8 | rawdata[1]);
-  data[1] = (int32_t)(rawdata[2] << 8 | rawdata[3]);
-  data[2] = (int32_t)(rawdata[4] << 8 | rawdata[5]);
-  data[3] = (int32_t)(rawdata[8] << 8 | rawdata[9]);
-  data[4] = (int32_t)(rawdata[10] << 8 | rawdata[11]);
-  data[5] = (int32_t)(rawdata[12] << 8 | rawdata[13]);
+  data[0] = (int16_t)(rawdata[0] << 8 | rawdata[1]);
+  data[1] = (int16_t)(rawdata[2] << 8 | rawdata[3]);
+  data[2] = (int16_t)(rawdata[4] << 8 | rawdata[5]);
+  data[3] = (int16_t)(rawdata[8] << 8 | rawdata[9]);
+  data[4] = (int16_t)(rawdata[10] << 8 | rawdata[11]);
+  data[5] = (int16_t)(rawdata[12] << 8 | rawdata[13]);
 #elif defined(GY85)
   uint8_t rawData[6];
   while(!Receive(ADXL345_ADDR, ADXL345_DATAX0, rawData, 6));
-  data[0] = (int32_t)((rawData[1] << 8) | rawData[0]);
-  data[1] = (int32_t)((rawData[3] << 8) | rawData[2]);
-  data[2] = (int32_t)((rawData[5] << 8) | rawData[4]);  
+  data[0] = (int16_t)((rawData[1] << 8) | rawData[0]);
+  data[1] = (int16_t)((rawData[3] << 8) | rawData[2]);
+  data[2] = (int16_t)((rawData[5] << 8) | rawData[4]);  
   
   while(!Receive(ITG3205_ADDR, ITG3205_GYRO_XOUT_H, rawData, 6));
-  data[3] = (int32_t)((rawData[0] << 8) | rawData[1]);
-  data[4] = (int32_t)((rawData[2] << 8) | rawData[3]);
-  data[5] = (int32_t)((rawData[4] << 8) | rawData[5]);
+  data[3] = (int16_t)((rawData[0] << 8) | rawData[1]);
+  data[4] = (int16_t)((rawData[2] << 8) | rawData[3]);
+  data[5] = (int16_t)((rawData[4] << 8) | rawData[5]);
 #endif
 }

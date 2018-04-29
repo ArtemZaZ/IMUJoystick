@@ -23,12 +23,12 @@
 	#define IMUINFO "GY85 IMU sensor"
 #endif  
 
-static float goffx = 0.f; // TODO: пока статичная, сделать калибровку
-static float goffy = 0.f;
-static float goffz = 0.f;
+static float goffx = 7.5f; // TODO: пока статичная, сделать калибровку
+static float goffy = 1.8f;
+static float goffz = 0.27f;
 
 void IMUInitialize(void);   
-void readIMUData(int32_t* buf);
+void readIMUData(int16_t* buf);
 
 static void I2CInit(void);
 static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size);

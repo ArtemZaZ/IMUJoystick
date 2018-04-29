@@ -12,6 +12,7 @@ typedef enum enumSendCommand  // приходящие комманды
 	SSTOP,  // формат: <STOP 0000>
 	SPRD, // Формат: <PRD 001A>  2 байта по 1 байту на ось pitch и roll
 	SBUT, // Формат: <BUT 0101>  2 байта 1й байт - номер кнопки, второй байт - значение
+  SREAD,  // Запрос чтения данных
 	SERR  // Формат: <ERROR 0000>
 } SendCommand;
 

@@ -6,6 +6,7 @@
 
 #define BETA 1.f
 #define PI 3.1415926f;
+#define RAD_TO_DEGREE 180.f / PI
 
 static volatile float qw = 1.f;				// 
 static volatile float qx = 0.f;     	// составляющие действующий квартернион

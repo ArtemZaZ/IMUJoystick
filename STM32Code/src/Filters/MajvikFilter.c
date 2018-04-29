@@ -57,9 +57,9 @@ void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, fl
 
 void getEulerAngle(float* yaw, float* pitch, float* roll)
 {
-	*yaw = atan2f(2.f*(qw*qz + qx*qy), qx*qx + qw*qw - qz*qz - qy*qy);
-	*pitch = asinf(2.f*(qx*qz - qw*qy));
-	*roll = atan2f(2.f*(qw*qx + qy*qz), qz*qz - qy*qy - qx*qx + qw*qw);
+	*yaw = atan2f(2.f*(qw*qz + qx*qy), qx*qx + qw*qw - qz*qz - qy*qy)*RAD_TO_DEGREE;
+	*pitch = asinf(2.f*(qx*qz - qw*qy))*RAD_TO_DEGREE;
+	*roll = atan2f(2.f*(qw*qx + qy*qz), qz*qz - qy*qy - qx*qx + qw*qw)*RAD_TO_DEGREE;
 }
 
 void resetMajvikFilter(void)

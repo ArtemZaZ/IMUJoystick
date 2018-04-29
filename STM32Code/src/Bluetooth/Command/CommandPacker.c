@@ -48,6 +48,13 @@ SendData packing(SendCommand command, uint16_t data)
 			send.message[9] = (uint8_t)'>';
 			send.size = 10;
 			break;
+    
+    case SREAD:
+			strcpy((char*)(send.message + 1), "READ ");
+			convertNumberToString(send.message + 6, data);	// записываем сразу в структуру без доп переменных, !!! еси что-то менять, нужно менять и смещение
+			send.message[10] = (uint8_t)'>';
+			send.size = 11;
+			break;
 		
 		default:
 			strcpy((char*)(send.message + 1), "ERROR ");

@@ -1,89 +1,5 @@
 #include "logic.h"
 
-void FSM(void)
-{
-	switch(State)
-	{
-		case FSM_STOP:
-      setFlag_jWF(0); // ставим флаг, что джойстик не работает
-			State = FSM_READ_UART;	// Пока не придет сигнал START с UART	переходим к чтению
-			return;
-		
-		case FSM_REINIT:      
-			if(!0)	// TODO: Дополнительные возможности переинициализации
-			{
-				reInitAll();
-			}
-			State = FSM_START;
-			return;
-			
-		case FSM_START:
-      sendSTART();  // отправляем сигнал, что джойстик начал работу
-      setFlag_jWF(1); // ставим флаг, что джойстик работает
-			if(!0)	// TODO: Еще что-нибудь
-			{
-				
-			}
-			State = FSM_GET_IMU_DATA;
-			return;
-			
-		case FSM_WAIT:
-			while(!1) // TODO: Сделать ожидание
-			{
-				
-			}
-			State = FSM_START; // TODO: Сделвть переход куда нужно
-			return;
-		
-		case FSM_GET_IMU_DATA:
-			updateIMUData(0.f);
-      if(isActiveFlag_tTSIMUDF())  // если активен флаг, что пора отправлять данные с IMU
-      {
-        sendIMUData();  // отправляем данные с IMU датчика
-        State = FSM_READ_UART; // переход к чтению данных с UART, если еще прошло недостаточно времени для отправки новых данных
-      }
-			else State = FSM_WRITE_UART;
-			return;
-		
-		case FSM_UPDATE:
-			updateActions(0.f);   
-			State = FSM_FILTRATION_BUTTON;
-			return;
-			
-		case FSM_FILTRATION_BUTTON:
-			filtrationAndSendChangedButtons();
-			if(isActiveFlag_bPF()) // Если нажата какая-то кнопка
-			{
-				State = FSM_WRITE_UART;	// Отправляем в UART
-			}
-			else State = FSM_ACTION;
-			return;
-			
-		case FSM_READ_UART:
-      BReceive();
-			readMessages();
-      if(isActiveFlag_rSTARTF() && !isActiveFlag_jWF()) State = FSM_REINIT; // Если пришел сигнал START и не активен флаг работы джойстика
-      else if(isActiveFlag_rSTOPF() || !isActiveFlag_jWF()) // Если пришел сигнал STOP или неактивен флаг работы джойстика
-      {
-        if(isActiveFlag_jWF())  sendSTOP(); // Если джойстик до этого работал - отправить стоп
-        State = FSM_STOP; 
-      }
-      else if(isActiveFlag_rACTIONF())	State = FSM_ACTION;	// Если пришел сигнал действия
-			else  State = FSM_FILTRATION_BUTTON; // Если ничего из этого
-			return;
-		
-		case FSM_ACTION:
-			act();
-			State = FSM_GET_IMU_DATA;
-			return;
-		
-		case FSM_WRITE_UART:
-			BTransmit(); 
-			State = FSM_READ_UART;
-			return;
-	}		
-}
-
 void InitializeAll(void)
 {
 #ifdef IMU
@@ -148,23 +64,23 @@ void updateIMUData(float time)
 #ifdef IMU
   OldSendIMUDataTime += time; // обновляем время прошедшее с предыдущей отправки
   if(OldSendIMUDataTime > IMU_DATA_TIME_SEND) setFlag_tTSIMUDF(1);  // если времени с предыдущей отправки прошло достаточно  
-  int32_t rD[6];
+  int16_t rD[6];
   readIMUData(rD);
   float ax, ay, az, wx, wy, wz;
 #ifdef GY85
   ax = (float)rD[0]/GY85_A_SENSETIVE;
   ay = (float)rD[1]/GY85_A_SENSETIVE;
   az = (float)rD[2]/GY85_A_SENSETIVE;
-  wx = (float)rD[3]/GY85_G_SENSETIVE;
-  wy = (float)rD[4]/GY85_G_SENSETIVE;
-  wz = (float)rD[5]/GY85_G_SENSETIVE;
+  wx = (float)rD[3]/GY85_G_SENSETIVE + goffx;
+  wy = (float)rD[4]/GY85_G_SENSETIVE + goffy;
+  wz = (float)rD[5]/GY85_G_SENSETIVE + goffz;  
 #elif defined(MPU6050)
   ax = (float)rD[0]/MPU6050_A_SENSETIVE;
   ay = (float)rD[1]/MPU6050_A_SENSETIVE;
   az = (float)rD[2]/MPU6050_A_SENSETIVE;
-  wx = (float)rD[3]/MPU6050_G_SENSETIVE;
-  wy = (float)rD[4]/MPU6050_G_SENSETIVE;
-  wz = (float)rD[5]/MPU6050_G_SENSETIVE;  
+  wx = (float)rD[3]/MPU6050_G_SENSETIVE + goffx;
+  wy = (float)rD[4]/MPU6050_G_SENSETIVE + goffy;
+  wz = (float)rD[5]/MPU6050_G_SENSETIVE + goffz;  
 #endif  /* GY85 */
   MajvikFilter(ax, ay, az, wx, wy, wz, time); // обновляем данные  
 #endif  /* IMU */
@@ -211,6 +127,7 @@ void updateActions(float time)
 void sendSTART(void) { sendMsg(packing(SSTART, 0)); }
 void sendSTOP(void) { sendMsg(packing(SSTOP, 0)); }
 void sendERROR(void) { sendMsg(packing(SERR, 0)); }
+void sendREAD(void) {sendMsg(packing(SREAD, 0)); }
 
 uint8_t isActiveFlag_jWF(void) { return joystickWorkFlag; }
 uint8_t isActiveFlag_tTSIMUDF(void) { return timeToSendIMUDataFlag; }

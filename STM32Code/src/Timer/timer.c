@@ -28,14 +28,27 @@ void TIM2_IRQHandler(void)
 
 float getAllTime()
 {
-  return ((float)(allTime*PERIOD + (TIM2 -> CNT)))/FREQ;
+  if((TIM2 -> SR) & 1)  // если таймер не успел 
+  {
+    return ((float)((allTime + 1)*PERIOD + (TIM2 -> CNT)))/FREQ;
+  }
+  else  
+  {
+    return ((float)(allTime*PERIOD + (TIM2 -> CNT)))/FREQ;
+  }
 }
 
-float getDeltaTime()
+float getDeltaTime(Timer* t)
 {
-  float aT = getAllTime();
-  float oT = oldTime;
-  oldTime = aT;
-  return aT - oT;
+  t -> newTime = getAllTime();
+  float temp = t -> oldTime;
+  t -> oldTime = t -> newTime;
+  return t -> newTime - temp;
+}
+
+void resetTimer(Timer *t)
+{
+  t -> oldTime = getAllTime();
+  t -> newTime = t -> oldTime;
 }
 
