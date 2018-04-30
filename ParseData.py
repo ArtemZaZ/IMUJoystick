@@ -11,18 +11,27 @@ class IMUStickParser(threading.Thread):
     def __init__(self, portname, baudrate):
         threading.Thread.__init__(self)
         self.port = serial.Serial(portname, baudrate)  # Открытие порта
-        self.data = []  # распарсенныее данные
+        self.data = ['', '', '']  # распарсенныее данные
         self.Exit = False  # метка выхода из потока
         self.fixMaxMessageLen = 10  # максимальная возможная длина сообщения
         self.eventDict = {  # Словарь событий
             "START": RTCEventMaster.EventBlock("START"),  # событие начала работы
             "STOP": RTCEventMaster.EventBlock("STOP"),  # событие окончания работы
+            "BUT": RTCEventMaster.EventBlock("BUT"),    # событие нажатия/отжатия кнопки
             "PR": RTCEventMaster.EventBlock("PR"),  # события чтения углов
             "ERROR": RTCEventMaster.EventBlock("ERROR")  # событие ошибки чтения углов
         }
+        self.eventMaster = RTCEventMaster.EventMaster()
+        self.eventMaster.append(self.eventDict.get("START"))
+        self.eventMaster.append(self.eventDict.get("STOP"))
+        self.eventMaster.append(self.eventDict.get("ERROR"))
+        self.eventMaster.append(self.eventDict.get("PR"))
+        self.eventMaster.append(self.eventDict.get("BUT"))
+        self.eventMaster.start()
 
     def exit(self):
         self.Exit = True
+        self.eventMaster.exit()
         self.port.close()
 
     def connectFun(self, toEvent, fun):  # ф-ия подключения обработчика события по имени события
@@ -32,7 +41,7 @@ class IMUStickParser(threading.Thread):
 
         def voidFun():  # Все обработчики событий имеют в качестве параметра 1
             # аргумент - список с распарсенными данными
-            fun(self.data)
+            fun(self.data[:])
 
         event.setfun(voidFun)
 
@@ -63,8 +72,14 @@ class IMUStickParser(threading.Thread):
             listbuf = list(map(bytes, mes.split()))  # разделение сообщения на токены и запись их в список
             if listbuf[0] == b"PR":  # Приходящие данные: <комманда, данные, ...>
                 self.data[0] = "PR"  # PR - команда, означающая, что пришли углы
-                self.data[1] = float(listbuf[1])  # pitch
-                self.data[2] = float(listbuf[2])  # roll
+                self.data[1] = int(listbuf[1], 16) >> 8  # pitch
+                self.data[2] = int(listbuf[1], 16) & 0xFF  # roll
+                return
+
+            if listbuf[0] == b"BUT":
+                self.data[0] = "BUT"
+                self.data[1] = int(listbuf[1], 16) >> 8    # номер кнопки
+                self.data[2] = int(listbuf[1], 16) & 0xFF  # положение
                 return
 
             if listbuf[0] == b"START":

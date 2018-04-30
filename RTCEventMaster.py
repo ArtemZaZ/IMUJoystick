@@ -34,7 +34,7 @@ class EventMaster(threading.Thread):
                     self.threads.append(threading.Thread(target=self.eventQueue.pop(0).foo))  # добавить в список
                     #  потоков функцию, принадлежащую первому элементу очереди, при этом удаляя его из очереди
                     self.threads.pop(0).start()  # запустить первый элемент списка потоков, при этом удаляя его
-            time.sleep(0.05)
+            time.sleep(0.001)
 
     def exit(self):  # функция выхода из потока
         self.exit = True

@@ -3,8 +3,10 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import time
 import sys
+import ParseData
 global ang
 ang = [0, 0, 0]
+buttons = [0, 1, 0]
 
 
 def drawGround(size, color, M, N):     # Отрисовка земли
@@ -27,6 +29,49 @@ def drawGround(size, color, M, N):     # Отрисовка земли
         glTranslate((2*size+1), 0.0, (2*size+1)*N)
         j = 0
         i = i+1
+    glPopMatrix()
+
+
+def drawButtons():
+    global buttons
+    size = 0.2
+    glPushMatrix()
+    glTranslatef(-0.4, 0.0, 0.0)
+    if buttons[0]:
+        glColor3f(0.0, 1.0, 0.0)
+    else:
+        glColor3f(1.0, 0.0, 0.0)
+    glBegin(GL_QUADS)
+    glVertex2f(0.0, 0.0)
+    glVertex2f(size, 0.0)
+    glVertex2f(size, size)
+    glVertex2f(0.0, size)
+    glEnd()
+
+    glTranslatef(0.3, 0.0, 0.0)
+    if buttons[1]:
+        glColor3f(0.0, 1.0, 0.0)
+    else:
+        glColor3f(1.0, 0.0, 0.0)
+    glBegin(GL_QUADS)
+    glVertex2f(0.0, 0.0)
+    glVertex2f(size, 0.0)
+    glVertex2f(size, size)
+    glVertex2f(0.0, size)
+    glEnd()
+
+    glTranslatef(0.3, 0.0, 0.0)
+    if buttons[2]:
+        glColor3f(0.0, 1.0, 0.0)
+    else:
+        glColor3f(1.0, 0.0, 0.0)
+    glBegin(GL_QUADS)
+    glVertex2f(0.0, 0.0)
+    glVertex2f(size, 0.0)
+    glVertex2f(size, size)
+    glVertex2f(0.0, size)
+    glEnd()
+
     glPopMatrix()
 
 
@@ -139,7 +184,12 @@ def renderScene():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     # glTranslate(5*5.0, -1.0, 0.0)
     glPushMatrix()
-    glTranslate(1.5, 1.5, -3.0)
+    glTranslatef(0.0, -0.9, -2.0)
+    drawButtons()
+    glPopMatrix()
+
+    glPushMatrix()
+    glTranslate(1.3, 0.7, -3.0)
     glRotatef(-ang[0], 0.0, 1.0, 0.0)
     glRotatef(-ang[1], 1.0, 0.0, 0.0)
     glRotatef(ang[2], 0.0, 0.0, 1.0)
@@ -148,7 +198,7 @@ def renderScene():
 
     glPushMatrix()
     gluLookAt(50.0, 10, -50.0, 50, 10, -60, 0, 1, 0)
-    drawGround(5.0, [0.5, 0.5, 0.5])
+    drawGround(5.0, [0.5, 0.5, 0.5], 20, 20)
     glTranslate(50.0, 10.0, -60.0)
     glRotatef(-ang[0], 0.0, 1.0, 0.0)
     glRotatef(-ang[1], 1.0, 0.0, 0.0)
@@ -168,20 +218,42 @@ def main():
     while True:
         renderScene()
         time.sleep(0.05)
-    #glutMainLoop()
+    glutMainLoop()
 
 
-def read_handler(angle):
+def PRHandler(data):
     global ang
-    ang = angle
+    if data[0] == "PR":
+        ang[1] = data[1]
+        ang[2] = data[2]
 
 
-def start_handler():
-    print("\nI started\n")
+def startHandler(data):
+    print("I started\n")
 
 
-def stop_handler():
-    pass
+def stopHandler(data):
+    print("I stopped\n")
+
+
+def errorHandler(data):
+    print("It's a trap\n")
+
+
+def buttonHandler(data):
+    global buttons
+    if data[0] == "BUT":
+        print(data)
+        buttons[data[1]] = data[2]
+
+
+ISP = ParseData.IMUStickParser("/dev/ttyUSB0", 19200)
+ISP.connectFun("START", startHandler)
+ISP.connectFun("STOP", stopHandler)
+ISP.connectFun("ERROR", errorHandler)
+ISP.connectFun("PR", PRHandler)
+ISP.connectFun("BUT", buttonHandler)
+ISP.start()
 
 
 main()
