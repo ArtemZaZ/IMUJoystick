@@ -18,14 +18,14 @@ class IMUStickParser(threading.Thread):
             "START": RTCEventMaster.EventBlock("START"),  # событие начала работы
             "STOP": RTCEventMaster.EventBlock("STOP"),  # событие окончания работы
             "BUT": RTCEventMaster.EventBlock("BUT"),    # событие нажатия/отжатия кнопки
-            "PR": RTCEventMaster.EventBlock("PR"),  # события чтения углов
+            "PRD": RTCEventMaster.EventBlock("PRD"),  # события чтения углов
             "ERROR": RTCEventMaster.EventBlock("ERROR")  # событие ошибки чтения углов
         }
         self.eventMaster = RTCEventMaster.EventMaster()
         self.eventMaster.append(self.eventDict.get("START"))
         self.eventMaster.append(self.eventDict.get("STOP"))
         self.eventMaster.append(self.eventDict.get("ERROR"))
-        self.eventMaster.append(self.eventDict.get("PR"))
+        self.eventMaster.append(self.eventDict.get("PRD"))
         self.eventMaster.append(self.eventDict.get("BUT"))
         self.eventMaster.start()
 
@@ -70,10 +70,10 @@ class IMUStickParser(threading.Thread):
     def parseMessage(self, mes):
         try:
             listbuf = list(map(bytes, mes.split()))  # разделение сообщения на токены и запись их в список
-            if listbuf[0] == b"PR":  # Приходящие данные: <комманда, данные, ...>
-                self.data[0] = "PR"  # PR - команда, означающая, что пришли углы
-                self.data[1] = int(listbuf[1], 16) >> 8  # pitch
-                self.data[2] = int(listbuf[1], 16) & 0xFF  # roll
+            if listbuf[0] == b"PRD":  # Приходящие данные: <комманда, данные, ...>
+                self.data[0] = "PRD"  # PR - команда, означающая, что пришли углы
+                self.data[1] = float(int(listbuf[1], 16) >> 8)/256*360  # pitch
+                self.data[2] = float(int(listbuf[1], 16) & 0xFF)/256*360  # roll
                 return
 
             if listbuf[0] == b"BUT":

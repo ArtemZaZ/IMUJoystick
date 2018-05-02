@@ -3,10 +3,12 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import time
 import sys
-import ParseData
+import interface
+import threading
 global ang
 ang = [0, 0, 0]
-buttons = [0, 1, 0]
+buttons = [0, 0, 0]
+EXIT = False
 
 
 def drawGround(size, color, M, N):     # Отрисовка земли
@@ -210,22 +212,23 @@ def renderScene():
 
 
 def main():
+    global EXIT
     glutInit(sys.argv)
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA)
     glutInitWindowPosition(100, 100)
     glutInitWindowSize(900, 900)
     glutCreateWindow("OpenGL")
-    while True:
+    while not EXIT:
         renderScene()
         time.sleep(0.05)
-    glutMainLoop()
 
 
 def PRHandler(data):
     global ang
-    if data[0] == "PR":
+    if data[0] == "PRD":
+        print(data[1])
         ang[1] = data[1]
-        ang[2] = data[2]
+        #ang[2] = data[2]
 
 
 def startHandler(data):
@@ -244,16 +247,17 @@ def buttonHandler(data):
     global buttons
     if data[0] == "BUT":
         print(data)
-        buttons[data[1]] = data[2]
+        buttons[data[1]-1] = data[2]
 
 
-ISP = ParseData.IMUStickParser("/dev/ttyUSB0", 19200)
-ISP.connectFun("START", startHandler)
-ISP.connectFun("STOP", stopHandler)
-ISP.connectFun("ERROR", errorHandler)
-ISP.connectFun("PR", PRHandler)
-ISP.connectFun("BUT", buttonHandler)
-ISP.start()
+t = threading.Thread(target=main)
+t.start()
+p = interface.Interface()
+p.ISP.connectFun("START", startHandler)
+p.ISP.connectFun("STOP", stopHandler)
+p.ISP.connectFun("ERROR", errorHandler)
+p.ISP.connectFun("PRD", PRHandler)
+p.ISP.connectFun("BUT", buttonHandler)
+p.start()
 
-
-main()
+EXIT = True
