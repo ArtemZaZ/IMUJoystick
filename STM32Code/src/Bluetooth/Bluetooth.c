@@ -9,13 +9,11 @@ void BluetoothInitialize(void)
 void BluetoothReInitialize(void)
 {
   LL_USART_DisableIT_RXNE(UARTx);
-  //NVIC_DisableIRQ(USART1_IRQn);
   UART_TX_Buffer[0] = (uint8_t)'\0';
 	UART_RX_Buffer[0] = (uint8_t)'\0';
   UART_TX_BufferCounter = UART_TX_Buffer;
   UART_RX_BufferCounter = UART_RX_Buffer;
   LL_USART_EnableIT_RXNE(UARTx);
-  //NVIC_EnableIRQ(USART1_IRQn);
 }
 
 void sendMsg(SendData sd)
@@ -27,7 +25,6 @@ void recvMsg(RecData* recMsgBuf, uint8_t* recMsgBufSize)
 {
   LL_USART_DisableIT_RXNE(UARTx);
   UART_RX_BufferCounter = UART_RX_Buffer;
-  //NVIC_DisableIRQ(USART1_IRQn);
   *recMsgBufSize = 0;
   uint8_t* token;	// временный указатель на строку для парсинга
   uint8_t stateFlag = 0; // флаг вхождения в сообщение
@@ -48,8 +45,8 @@ void recvMsg(RecData* recMsgBuf, uint8_t* recMsgBufSize)
   }
   UART_RX_Buffer[0] = (uint8_t)'\0';	// очищаем буффер
   UART_RX_BufferCounter = UART_RX_Buffer;	// ставим указатель в начало массива
+  setFlag_bRC(0);
   LL_USART_EnableIT_RXNE(UARTx);
-  //NVIC_EnableIRQ(USART1_IRQn);
 }
 
 static void UART_Initialize(void)
@@ -109,12 +106,13 @@ void USART1_IRQHandler(void)
     UART_RX_BufferCounter++;
     *UART_RX_BufferCounter = (uint8_t)'\0';    
   }
+  LL_USART_ClearFlag_ORE(UARTx);
 }
 
 uint8_t BTransmit(void)
 {
   uint32_t tempSize = 0;
-  do
+  while(*UART_TX_BufferCounter != (uint8_t)'\0') // пока есть, что передавать
   {
     if(tempSize > MAX_UART_TX_BUFFER_LEN)   // переполнение
     {
@@ -126,9 +124,8 @@ uint8_t BTransmit(void)
     {
       LL_USART_TransmitData8(UARTx, *(UART_TX_BufferCounter++));  //отправляем байт
       tempSize++;      
-    }
-    
-  } while(*UART_TX_BufferCounter != (uint8_t)'\0'); // пока есть, что передавать
+    }    
+  } 
   UART_TX_BufferCounter = UART_TX_Buffer;
   UART_TX_Buffer[0] = (uint8_t)'\0';
   return 1;

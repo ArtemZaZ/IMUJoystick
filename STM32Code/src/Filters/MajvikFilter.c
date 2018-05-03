@@ -10,7 +10,7 @@ static inline float fastInvSqrt(float x)
 	return x;
 }               
 
-void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, float time)
+void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, float dt)
 {	
 	float norm;	// временная переменная для вычисления нормы
 	float qHatDotw, qHatDotx, qHatDoty, qHatDotz; // составляющие квартерниона компенсации
@@ -42,10 +42,10 @@ void MajvikFilter(float ax, float ay, float az, float wx, float wy, float wz, fl
 		qDotOmegay = 0.5f*(qw*wy - qx*wz + qz*wx);
 		qDotOmegaz = 0.5f*(qw*wz + qx*wy - qy*wx);
 		
-		qw += (qDotOmegaw - BETA*qHatDotw)*time;
-		qx += (qDotOmegax - BETA*qHatDotx)*time;
-		qy += (qDotOmegay - BETA*qHatDoty)*time;
-		qz += (qDotOmegaz - BETA*qHatDotz)*time;
+		qw += (qDotOmegaw - BETA*qHatDotw)*dt;
+		qx += (qDotOmegax - BETA*qHatDotx)*dt;
+		qy += (qDotOmegay - BETA*qHatDoty)*dt;
+		qz += (qDotOmegaz - BETA*qHatDotz)*dt;
 		
 		norm = fastInvSqrt(qw*qw + qx*qx + qy*qy + qz*qz);
 		qw *= norm;

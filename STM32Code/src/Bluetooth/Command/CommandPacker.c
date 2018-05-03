@@ -3,7 +3,7 @@
 static uint8_t convertNumberToSymbol(uint8_t num)    //num only 0..15
 {
 	if(num < 10) return (uint8_t)'0' + num;
-	if(num < 15) return (uint8_t)'A' + num - 10;
+	if(num <= 15) return (uint8_t)'A' + num - 10;
 	return 0;
 }
 

@@ -68,19 +68,19 @@ void updateIMUData(float time)
   readIMUData(rD);
   float ax, ay, az, wx, wy, wz;
 #ifdef GY85
-  ax = (float)rD[0]/GY85_A_SENSETIVE;
-  ay = (float)rD[1]/GY85_A_SENSETIVE;
-  az = (float)rD[2]/GY85_A_SENSETIVE;
-  wx = (float)rD[3]/GY85_G_SENSETIVE + goffx;
-  wy = (float)rD[4]/GY85_G_SENSETIVE + goffy;
-  wz = (float)rD[5]/GY85_G_SENSETIVE + goffz;  
+  ax = rD[0]/GY85_A_SENSETIVE;
+  ay = rD[1]/GY85_A_SENSETIVE;
+  az = rD[2]/GY85_A_SENSETIVE;
+  wx = DEGREE_TO_RAD*(rD[3]/GY85_G_SENSETIVE + goffx);
+  wy = DEGREE_TO_RAD*(rD[4]/GY85_G_SENSETIVE + goffy);
+  wz = DEGREE_TO_RAD*(rD[5]/GY85_G_SENSETIVE + goffz);  
 #elif defined(MPU6050)
-  ax = (float)rD[0]/MPU6050_A_SENSETIVE;
-  ay = (float)rD[1]/MPU6050_A_SENSETIVE;
-  az = (float)rD[2]/MPU6050_A_SENSETIVE;
-  wx = (float)rD[3]/MPU6050_G_SENSETIVE + goffx;
-  wy = (float)rD[4]/MPU6050_G_SENSETIVE + goffy;
-  wz = (float)rD[5]/MPU6050_G_SENSETIVE + goffz;  
+  ax = rD[0]/MPU6050_A_SENSETIVE;
+  ay = rD[1]/MPU6050_A_SENSETIVE;
+  az = rD[2]/MPU6050_A_SENSETIVE;
+  wx = DEGREE_TO_RAD*(rD[3]/MPU6050_G_SENSETIVE + goffx);
+  wy = DEGREE_TO_RAD*(rD[4]/MPU6050_G_SENSETIVE + goffy);
+  wz = DEGREE_TO_RAD*(rD[5]/MPU6050_G_SENSETIVE + goffz);  
 #endif  /* GY85 */
   MajvikFilter(ax, ay, az, wx, wy, wz, time); // обновляем данные  
 #endif  /* IMU */
@@ -93,7 +93,9 @@ void act(void)
     switch(actions[i].command)
     {
       case RVIBRATE:
+#ifdef MOTOR
         vibrate((float)actions[i].data);
+#endif
         break;
       
       default:
@@ -107,8 +109,8 @@ void sendIMUData(void)
 #ifdef IMU
   float yaw, pitch, roll;
   getEulerAngle(&yaw, &pitch, &roll);
-  uint8_t spitch = (uint8_t)((float)(((uint32_t)pitch % 360)/360) * 256); // урезаем углы до целых, делаем множество кольцом, помещаем их в промежуток от 0 до 1(float), потом в промежуток от 0 до 255(float), урезаем до целых
-  uint8_t sroll = (uint8_t)((float)(((uint32_t)roll % 360)/360) * 256);
+  uint8_t spitch = (uint8_t)(int8_t)(float)(((float)((int32_t)pitch % 360)/360.f)*256.f); // урезаем углы до целых, делаем множество кольцом, помещаем их в промежуток от 0 до 1(float), потом в промежуток от 0 до 255(float), урезаем до целых
+  uint8_t sroll = (uint8_t)(int8_t)(float)(((float)((int32_t)roll % 360)/360.f)*256.f);
   uint16_t data = (uint16_t)((spitch << 8) | sroll);
   sendMsg(packing(SPRD, data));
   
@@ -171,7 +173,9 @@ uint8_t isActiveFlag_rVIBRATEF(void)
 void reInitAll(void)
 {
   BluetoothReInitialize();
+#ifdef MOTOR
   motorReInitialize();
+#endif
   timerReInitialize();
   resetMajvikFilter();
   setFlag_bPF(0); // очищаем флаги

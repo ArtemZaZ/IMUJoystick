@@ -104,6 +104,17 @@ uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size
 			*buf++ = LL_I2C_ReceiveData8(I2Cx); // принимаем байт
 			size--;
 		}		
+    else
+    {
+      /*
+      if(LL_I2C_IsActiveFlag_STOP(I2Cx))
+      {
+        LL_I2C_GenerateStopCondition(I2Cx);
+        LL_I2C_ClearFlag_STOP(I2Cx);
+        return 0;
+      }
+      */
+    }
 	} while(size);
 	LL_I2C_GenerateStopCondition(I2Cx);
   I2CInitDelay();

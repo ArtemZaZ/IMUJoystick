@@ -43,7 +43,7 @@ float getDeltaTime(Timer* t)
   t -> newTime = getAllTime();
   float temp = t -> oldTime;
   t -> oldTime = t -> newTime;
-  return t -> newTime - temp;
+  return (t -> newTime) - temp;
 }
 
 void resetTimer(Timer *t)

@@ -14,8 +14,8 @@ void motorInitialize(void)
 	GPIO_PORT_MOTOR -> MODER |= (0x1 << PIN_MOTOR*2); // устанавливаем режим output
 	GPIO_PORT_MOTOR -> OTYPER &= ~(0x1 << PIN_MOTOR); //очищаем OTTYPER - push-pull
 	GPIO_PORT_MOTOR -> OSPEEDR &= ~(0x3 << PIN_MOTOR*2);  // low speed
-	GPIO_PORT_MOTOR -> PUPDR &= ~(0x3 << PIN_MOTOR*2);  // очищаем PUPDR
-	GPIO_PORT_MOTOR -> PUPDR |= (0x1 << PIN_MOTOR*2); // pull-up
+	//GPIO_PORT_MOTOR -> PUPDR &= ~(0x3 << PIN_MOTOR*2);  // очищаем PUPDR
+	//GPIO_PORT_MOTOR -> PUPDR |= (0x1 << PIN_MOTOR*2); // pull-up
 }
 
 void motorReInitialize(void)

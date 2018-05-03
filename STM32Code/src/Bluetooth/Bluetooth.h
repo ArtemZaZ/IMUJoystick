@@ -15,7 +15,7 @@ static volatile uint8_t UART_RX_Buffer[MAX_UART_RX_BUFFER_LEN];
 static volatile uint8_t* UART_TX_BufferCounter;	// каретка
 static volatile uint8_t* UART_RX_BufferCounter;	// каретка
 
-static volatile uint8_t bluetoothReceiveComplete = 1;  // флаг, означающий можно ли читать сообщения
+static volatile uint8_t bluetoothReceiveComplete = 0;  // флаг, означающий можно ли читать сообщения
 
 #define UARTx USART1
 

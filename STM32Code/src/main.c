@@ -1,5 +1,5 @@
 #include "Logic/logic.h"
-#define WAIT_TICKS  1000    // задержка конечного автомата
+#define WAIT_TICKS  10000    // задержка конечного автомата
 /* следующие определения определяют, какая конфигурация будет у проекта */
 // MPU6050
 // GY85
@@ -11,6 +11,7 @@
 
 Timer IMUTimer;
 Timer actionsTimer;
+
 
 static enum {
 	FSM_STOP,	// Джойстик не работает - начальное состояние конечной машины
@@ -39,6 +40,8 @@ void FSM(void)
       reInitAll(); 
       resetTimer(&IMUTimer);
       resetTimer(&actionsTimer);
+      getDeltaTime(&IMUTimer);
+      getDeltaTime(&actionsTimer);
 			State = FSM_START;
 			return;
 			
@@ -50,7 +53,7 @@ void FSM(void)
 			
 		case FSM_WAIT:
 			for(uint32_t i = 0; i < WAIT_TICKS; i++);
-			State = FSM_START; // TODO: Сделвть переход куда нужно
+			State = FSM_GET_IMU_DATA; 
 			return;
 		
 		case FSM_GET_IMU_DATA:      
@@ -58,23 +61,18 @@ void FSM(void)
       if(isActiveFlag_tTSIMUDF())  // если активен флаг, что пора отправлять данные с IMU
       {
         sendIMUData();  // отправляем данные с IMU датчика
-        State = FSM_READ_UART; // переход к чтению данных с UART, если еще прошло недостаточно времени для отправки новых данных
       }
-			else State = FSM_WRITE_UART;
+			State = FSM_FILTRATION_BUTTON;
 			return;
 		
 		case FSM_UPDATE:
 			updateActions(getDeltaTime(&actionsTimer));   
-			State = FSM_FILTRATION_BUTTON;
+			State = FSM_WRITE_UART;
 			return;
 			
 		case FSM_FILTRATION_BUTTON:
 			filtrationAndSendChangedButtons();
-			if(isActiveFlag_bPF()) // Если нажата какая-то кнопка
-			{
-				State = FSM_WRITE_UART;	// Отправляем в UART
-			}
-			else State = FSM_ACTION;
+			State = FSM_UPDATE;
 			return;
 			
 		case FSM_READ_UART:
@@ -82,19 +80,22 @@ void FSM(void)
       {
         readMessages();
       }
-      if(isActiveFlag_rSTARTF() && !isActiveFlag_jWF()) State = FSM_REINIT; // Если пришел сигнал START и не активен флаг работы джойстика
+      if(isActiveFlag_rSTARTF() && !isActiveFlag_jWF())
+      {        
+        State = FSM_REINIT; // Если пришел сигнал START и не активен флаг работы джойстика
+      }
       else if(isActiveFlag_rSTOPF() || !isActiveFlag_jWF()) // Если пришел сигнал STOP или неактивен флаг работы джойстика
       {
         if(isActiveFlag_jWF())  sendSTOP(); // Если джойстик до этого работал - отправить стоп
         State = FSM_STOP; 
       }
       else if(isActiveFlag_rACTIONF())	State = FSM_ACTION;	// Если пришел сигнал действия
-			else  State = FSM_FILTRATION_BUTTON; // Если ничего из этого
+			else  State = FSM_WAIT; // Если ничего из этого
 			return;
 		
 		case FSM_ACTION:
 			act();
-			State = FSM_GET_IMU_DATA;
+			State = FSM_WAIT;
 			return;
 		
 		case FSM_WRITE_UART:
@@ -105,66 +106,11 @@ void FSM(void)
 }
 
 
-int32_t rawData[7];
-uint8_t temp[10];
-RecData data[4];
-uint8_t size;
-float t;
-float tAll;
-uint32_t tem = 0;
-Button but[5];
-RecData recData[10];
-float ax, ay, az, wx, wy, wz;
-float y,p,r;
-
 int main(void)       		   
 {  
-  //ButtonsInitialize();
-  IMUInitialize();
-  //BluetoothInitialize();
-  timerInitialize();
-  resetTimer(&IMUTimer);
-  resetTimer(&IMUTimer);
-  getDeltaTime(&IMUTimer);
-  //recvMsg(data, &size);
+  InitializeAll();
 	while(1)
-	{
-    //checkAndFiltrateButtons(but, &size);
-    //if(size != 0)
-    //{
-    //  tem++;
-    //}
-    t = getDeltaTime(&IMUTimer);
-    
-    
-    updateIMUData(t);
-    getEulerAngle(&y, &p, &r);
-    tAll = getAllTime();
-    //tem = get();
-		//FSM();	
-    //sendMsg((SendData){"message\n", 8});
-    //while(!BTransmit());
-    //while(!Receive(ADXL345_ADDR, ADXL345_POWER_CTL, (uint8_t*)&size, 1));
-    //while(!Receive(ITG3205_ADDR, 0x00, (uint8_t*)&size, 1));
-    //readIMUData(rawData);
-    //sendMsg((SendData){"message", 7});
-    //sendREAD();
-    //BTransmit();
-    //if(!BReceive())
-    //{
-    //  sendERROR();
-    //}    
-    //recvMsg(recData, &size);
-    //if(size != 0)
-    //{
-    //  ;
-    //}
-    for(uint32_t i = 0; i < 50000; i++);
-    //I2CInitDelay();
-    //I2CInitDelay();
-    //I2CInitDelay();
-    //I2CInitDelay();
-    //I2CInitDelay();
-    //temp[0] = temp[1];
+	{ 
+    FSM();
 	}
 }
