@@ -11,21 +11,21 @@
 #define I2C_INIT_DELAY_TIME 100 // в попугаях
 
 #ifdef MPU6050
-	#include "RegisterMaps/MPU6050RM.h"
-	#define MPU6050_A_SENSETIVE		16384.f // Пока так, потом сделать проверку из регистра
-	#define MPU6050_G_SENSETIVE		131.f
-	#define IMUINFO "MPU6050 IMU sensor" 
+  #include "RegisterMaps/MPU6050RM.h"
+  #define MPU6050_A_SENSETIVE		16384.f // Пока так, потом сделать проверку из регистра
+  #define MPU6050_G_SENSETIVE		131.f
+  #define IMUINFO "MPU6050 IMU sensor" 
 #elif defined(GY85)
-	#include "RegisterMaps/ADXL345RM.h"
-	#include "RegisterMaps/ITG3205RM.h"
-	#define GY85_A_SENSETIVE		128.f   // Пока так, потом сделать проверку из регистра
-	#define GY85_G_SENSETIVE		14.375f
-	#define IMUINFO "GY85 IMU sensor"
+  #include "RegisterMaps/ADXL345RM.h"
+  #include "RegisterMaps/ITG3205RM.h"
+  #define GY85_A_SENSETIVE		128.f   // Пока так, потом сделать проверку из регистра
+  #define GY85_G_SENSETIVE		14.375f
+  #define IMUINFO "GY85 IMU sensor"
 #endif  
 
-static float goffx = 7.5f; // TODO: пока статичная, сделать калибровку
-static float goffy = 1.8f;
-static float goffz = 0.27f;
+static float goffx = 7.4101f; // TODO: пока статичная, сделать калибровку
+static float goffy = 1.74f;
+static float goffz = 0.21f;
 
 void IMUInitialize(void);   
 void readIMUData(int16_t* buf);

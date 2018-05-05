@@ -4,10 +4,10 @@
 #include <stdint.h>
 #include <math.h>
 
-#define BETA 0.5f
-#define PI 3.1415926f
-#define RAD_TO_DEGREE (180.f / PI)
-#define DEGREE_TO_RAD (PI / 180.f)
+#define BETA 1.f
+#define PI 3.1415926f;
+#define RAD_TO_DEGREE 180.f / PI
+#define DEGREE_TO_RAD PI / 180.f
 
 static volatile float qw = 1.f;				// 
 static volatile float qx = 0.f;     	// составляющие действующий квартернион
