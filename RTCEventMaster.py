@@ -20,11 +20,11 @@ class EventMaster(threading.Thread):
         threading.Thread.__init__(self)
         self.eventList = []  # список возможных событий, с привязанными ф-ями
         self.eventQueue = []  # очередь выполнения функций событий
-        self.exit = False  # метка выхода из потока
+        self.Exit = False  # метка выхода из потока
         self.threads = []  # список потоков
 
     def run(self):  # функция потока EM
-        while not self.exit:  # пока нет метки выхода из потока
+        while not self.Exit:  # пока нет метки выхода из потока
             for element in self.eventList:  # проход по всем элементам списка событий
                 if element.event.isSet():  # если какое-то из событий произошло
                     self.eventQueue.append(element)  # заполнить очередь этим событием
@@ -34,10 +34,10 @@ class EventMaster(threading.Thread):
                     self.threads.append(threading.Thread(target=self.eventQueue.pop(0).foo))  # добавить в список
                     #  потоков функцию, принадлежащую первому элементу очереди, при этом удаляя его из очереди
                     self.threads.pop(0).start()  # запустить первый элемент списка потоков, при этом удаляя его
-            time.sleep(0.001)
+            time.sleep(0.002)
 
     def exit(self):  # функция выхода из потока
-        self.exit = True
+        self.Exit = True
 
     def append(self, event):  # добавления нового элемента EventBlock в список возможных событий
         self.eventList.append(event)

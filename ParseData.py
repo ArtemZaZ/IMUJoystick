@@ -1,6 +1,8 @@
 import serial
 import RTCEventMaster
 import threading
+import socket
+import time
 
 
 class EventError(Exception):  # Ошибка события
@@ -8,12 +10,21 @@ class EventError(Exception):  # Ошибка события
 
 
 class IMUStickParser(threading.Thread):
-    def __init__(self, portname, baudrate):
+    def __init__(self, address=None, portnumber=None, portname=None, baudrate=None):
         threading.Thread.__init__(self)
-        self.port = serial.Serial(portname, baudrate)  # Открытие порта
+        self.IO = None
+        if portname and baudrate:
+            self.port = serial.Serial(portname, baudrate)  # Открытие порта
+            self.IO = "COM"
+        elif address and portnumber:
+            self.sock = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
+            self.sock.connect((address, portnumber))
+            self.IO = "BLU"
+        else:
+            raise IOError("Не указан источник")
         self.data = ['', '', '']  # распарсенныее данные
         self.Exit = False  # метка выхода из потока
-        self.fixMaxMessageLen = 10  # максимальная возможная длина сообщения
+        self.fixMaxMessageLen = 14  # максимальная возможная длина сообщения
         self.eventDict = {  # Словарь событий
             "START": RTCEventMaster.EventBlock("START"),  # событие начала работы
             "STOP": RTCEventMaster.EventBlock("STOP"),  # событие окончания работы
@@ -32,7 +43,10 @@ class IMUStickParser(threading.Thread):
     def exit(self):
         self.Exit = True
         self.eventMaster.exit()
-        self.port.close()
+        if self.IO == "COM":
+            self.port.close()
+        if self.IO == "BLU":
+            self.sock.close()
 
     def connectFun(self, toEvent, fun):  # ф-ия подключения обработчика события по имени события
         event = self.eventDict.get(toEvent)
@@ -52,20 +66,32 @@ class IMUStickParser(threading.Thread):
                 self.parseMessage(mes)  # распарсить сообщение
                 self.eventDict.get(self.data[0]).push()  # вызвать соответствующий обработчик
 
+    def readByte(self):
+        if self.IO == "COM":
+            return self.port.read()
+        if self.IO == "BLU":
+            return self.sock.recv(1)
+
     def readMessage(self):
         buf = b''  # временный буффер
-        temp = self.port.read()  # читаем побайтово
+        temp = self.readByte()  # читаем побайтово
         while temp != b'<':  # читаем сообщениенаходящееся в скобках <>
-            temp = self.port.read()  # и если оно превышает положенный размер возвращаем None
+            temp = self.readByte()  # и если оно превышает положенный размер возвращаем None
         size = 0
-        temp = self.port.read()
+        temp = self.readByte()
         while temp != b'>':
             if (temp == b'<') or (size > self.fixMaxMessageLen):
                 return None
             buf += temp
             size += 1
-            temp = self.port.read()
+            temp = self.readByte()
         return buf
+
+    def write(self, byteStr):
+        if self.IO == "COM":
+            self.port.write(byteStr)
+        elif self.IO == "BLU":
+            self.sock.send(byteStr)
 
     def parseMessage(self, mes):
         try:

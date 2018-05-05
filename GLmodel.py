@@ -226,9 +226,8 @@ def main():
 def PRHandler(data):
     global ang
     if data[0] == "PRD":
-        print(data[1])
         ang[1] = data[1]
-        #ang[2] = data[2]
+        ang[2] = data[2]
 
 
 def startHandler(data):

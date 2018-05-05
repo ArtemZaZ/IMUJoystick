@@ -1,7 +1,7 @@
 import gi
+import ParseData
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
-import ParseData
 
 
 class Interface:
@@ -16,7 +16,8 @@ class Interface:
         self.startButton.connect("clicked", self.sendStart)
         self.stopButton.connect("clicked", self.sendStop)
         self.vibrateButton.connect("clicked", self.sendVibrate)
-        self.ISP = ParseData.IMUStickParser("/dev/ttyUSB0", 9600)
+        #self.ISP = ParseData.IMUStickParser(portname="/dev/ttyUSB0", baudrate=9600)
+        self.ISP = ParseData.IMUStickParser(address="00:21:13:04:D9:63", portnumber=1)
 
     def delete_event(self, widget, event, data=None):
         Gtk.main_quit()
@@ -28,10 +29,10 @@ class Interface:
         Gtk.main()
 
     def sendStart(self, w):
-        self.ISP.port.write(b"<START 0000>")
+        self.ISP.write(b"<START 0000>")
 
     def sendStop(self, w):
-        self.ISP.port.write(b"<STOP 0000>")
+        self.ISP.write(b"<STOP 0000>")
 
     def sendVibrate(self, w):
-        self.ISP.port.write(b"<VIBRATE 0003>")
+        self.ISP.write(b"<VIBRATE 0003>")
