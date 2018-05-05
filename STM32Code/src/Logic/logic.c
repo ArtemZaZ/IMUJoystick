@@ -3,15 +3,15 @@
 void InitializeAll(void)
 {
 #ifdef IMU
-	IMUInitialize();	
+  IMUInitialize();	
 #endif
 #ifdef MOTOR
-	motorInitialize();
+  motorInitialize();
 #endif
 #ifdef BUTTONS
-	ButtonsInitialize();
+  ButtonsInitialize();
 #endif	
-	BluetoothInitialize();
+  BluetoothInitialize();
   timerInitialize();
 }
 
@@ -129,7 +129,6 @@ void updateActions(float time)
 void sendSTART(void) { sendMsg(packing(SSTART, 0)); }
 void sendSTOP(void) { sendMsg(packing(SSTOP, 0)); }
 void sendERROR(void) { sendMsg(packing(SERR, 0)); }
-void sendREAD(void) {sendMsg(packing(SREAD, 0)); }
 
 uint8_t isActiveFlag_jWF(void) { return joystickWorkFlag; }
 uint8_t isActiveFlag_tTSIMUDF(void) { return timeToSendIMUDataFlag; }

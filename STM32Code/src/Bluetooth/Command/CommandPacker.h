@@ -8,18 +8,17 @@
 
 typedef enum enumSendCommand  // приходящие комманды
 {
-	SSTART, // формат: <START 0000>
-	SSTOP,  // формат: <STOP 0000>
-	SPRD, // Формат: <PRD 001A>  2 байта по 1 байту на ось pitch и roll
-	SBUT, // Формат: <BUT 0101>  2 байта 1й байт - номер кнопки, второй байт - значение
-  SREAD,  // Запрос чтения данных
-	SERR  // Формат: <ERROR 0000>
+  SSTART, // формат: <START 0000>
+  SSTOP,  // формат: <STOP 0000>
+  SPRD, // Формат: <PRD 001A>  2 байта по 1 байту на ось pitch и roll
+  SBUT, // Формат: <BUT 0101>  2 байта 1й байт - номер кнопки, второй байт - значение
+  SERR  // Формат: <ERROR 0000>
 } SendCommand;
 
 typedef struct  // структура приходящих данных
 {
-	uint8_t message[MAX_SENDMESSAGE_LEN];
-	uint8_t size;
+  uint8_t message[MAX_SENDMESSAGE_LEN];
+  uint8_t size;
 } SendData;
 
 SendData packing(SendCommand command, uint16_t data);

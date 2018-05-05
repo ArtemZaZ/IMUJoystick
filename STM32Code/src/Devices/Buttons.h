@@ -13,12 +13,12 @@
 #define LEVELDOWN(target)	!(uint8_t)(target + 0.7f)	// макрос определения пересечения нижнего уровня петли ( по уровню 0.3f)
 typedef struct button
 {
-	GPIO_TypeDef* buttonsGPIO;	//	порт, на котором висит кнопка
-	uint8_t num;	// номер кнопки
-	uint8_t pin;	// пин, на котором висит кнопка
-	uint8_t isPressed;	// флаг - нажата ли кнопка
-	float filteredVar;	// СЛУЖЕБНОЕ: фильтрованное значение	
-	uint8_t hysteresis;	// СЛУЖЕБНОЕ: направление петли гистерезиса 1 - вверх; 0 - вниз;
+  GPIO_TypeDef* buttonsGPIO;	//	порт, на котором висит кнопка
+  uint8_t num;	// номер кнопки
+  uint8_t pin;	// пин, на котором висит кнопка
+  uint8_t isPressed;	// флаг - нажата ли кнопка
+  float filteredVar;	// СЛУЖЕБНОЕ: фильтрованное значение	
+  uint8_t hysteresis;	// СЛУЖЕБНОЕ: направление петли гистерезиса 1 - вверх; 0 - вниз;
 } Button;
 
 static Button buttonList[MAX_AMOUNT_BUTTONS];	// массив кнопок
