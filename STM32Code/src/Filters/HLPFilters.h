@@ -6,7 +6,7 @@
 //#define KP 0.0001f
 
 // параметр oldFilteredVal является выходом по совместительству
-void LPFilterIterator(float rawIn, float oldrawIn, float* oldFilteredVal, float dt, float RC);
-void HPFilterIterator(float rawIn, float* oldFilteredVal, float Kp);
+void HPFilterIterator(float rawIn, float oldrawIn, float* oldFilteredVal, float dt, float RC);
+void LPFilterIterator(float rawIn, float* oldFilteredVal, float Kp);
 #endif /* HLPFILTERS_H_ */
 

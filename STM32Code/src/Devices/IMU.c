@@ -45,6 +45,7 @@ static void I2CInit(void)
 
 static uint8_t TransmitWithoutStop(uint32_t slaveAddr, uint8_t* data, uint32_t size)  // ф-ия отправки данных без отправки стопа(для приема)
 {
+  uint32_t overboardIt = 0; // переменная преостанавливающая цикл, если он завис
   LL_I2C_SetTransferSize(I2Cx, size);	// размер, который нужно отправить
   LL_I2C_SetTransferRequest(I2Cx, LL_I2C_REQUEST_WRITE);	// указываем, что будем отправлять
   LL_I2C_SetSlaveAddr(I2Cx, (slaveAddr << 1));	// указываем адресс ведомого
@@ -54,7 +55,7 @@ static uint8_t TransmitWithoutStop(uint32_t slaveAddr, uint8_t* data, uint32_t s
   I2CInitDelay();
   do 
   {
-    if(LL_I2C_IsActiveFlag_NACK(I2Cx)) // если активен флаг Nack(отправка не удалась)
+    if(LL_I2C_IsActiveFlag_NACK(I2Cx) || (overboardIt > I2C_OVERBOARD)) // если активен флаг Nack(отправка не удалась) или превышено время ожидания
     {
       LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп
       I2CInitDelay();
@@ -67,7 +68,9 @@ static uint8_t TransmitWithoutStop(uint32_t slaveAddr, uint8_t* data, uint32_t s
       LL_I2C_TransmitData8(I2Cx, *(data));	// записать байт данных
       data++;
       size--;
+      overboardIt = 0;  // сбрасываем счетчик сброса
     }
+    overboardIt++;
   } while(size); // пока не закончатся данные
   
   return 1;	// отправка успешна
@@ -83,7 +86,8 @@ static uint8_t Transmit(uint32_t slaveAddr, uint8_t* data, uint32_t size)
 
 uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size)
 {	
-  while(!TransmitWithoutStop(slaveAddr, (uint8_t*)(&regAddr), 1)){;} // передаем адресс регистра
+  while(!TransmitWithoutStop(slaveAddr, (uint8_t*)(&regAddr), 1)); // передаем адресс регистра
+  uint32_t overboardIt = 0;
   LL_I2C_SetTransferSize(I2Cx, size); // размер, который нужно принять
   LL_I2C_SetTransferRequest(I2Cx, LL_I2C_REQUEST_READ); // указываем, что будем читать
   LL_I2C_SetSlaveAddr(I2Cx, (slaveAddr << 1)); // указываем адресс ведомого
@@ -92,7 +96,7 @@ uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size
   I2CInitDelay();
   do
   {
-    if(LL_I2C_IsActiveFlag_NACK(I2Cx)) // если активен флаг Nack(отправка адреса не удалась, я хз, как это еще проверить - даташит adxl345 чтение множества байт)
+    if(LL_I2C_IsActiveFlag_NACK(I2Cx) || (overboardIt > I2C_OVERBOARD)) // если активен флаг Nack(отправка адреса не удалась, я хз, как это еще проверить - даташит adxl345 чтение множества байт)
     {
       LL_I2C_GenerateStopCondition(I2Cx); // Генерим Стоп
       I2CInitDelay();
@@ -103,7 +107,9 @@ uint8_t Receive(uint32_t slaveAddr, uint8_t regAddr, uint8_t* buf, uint32_t size
     {
       *buf++ = LL_I2C_ReceiveData8(I2Cx); // принимаем байт
       size--;
+      overboardIt = 0;
     }		
+    overboardIt++;
   } while(size);
   LL_I2C_GenerateStopCondition(I2Cx);
   I2CInitDelay();

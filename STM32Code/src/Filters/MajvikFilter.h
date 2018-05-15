@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <math.h>
 
-#define BETA 0.5f
+#define BETA 0.1f
 #define PI 3.1415926f
 #define RAD_TO_DEGREE (180.f / PI)
 #define DEGREE_TO_RAD (PI / 180.f)

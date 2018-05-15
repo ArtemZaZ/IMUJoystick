@@ -35,7 +35,7 @@ void ButtonsInitialize(void)
 #ifdef THIRD_BUTTON
   buttonList[butCounter].buttonsGPIO = GPIOA;
   buttonList[butCounter].num = 3;
-  buttonList[butCounter].pin = 5;
+  buttonList[butCounter].pin = 6;
   buttonList[butCounter].isPressed = 0;
   buttonList[butCounter].filteredVar = 0.f;	
   buttonList[butCounter].hysteresis = 1;
@@ -70,7 +70,7 @@ void checkAndFiltrateButtons(Button* buttons, uint8_t* size)
   *size = 0;
   for(uint8_t i = 0; i < butCounter; i++)
   {
-    HPFilterIterator((float)(((buttonList[i].buttonsGPIO -> IDR) & (1 << buttonList[i].pin)) >> buttonList[i].pin), &(buttonList[i].filteredVar), KP);	// фильтрация кнопки
+    LPFilterIterator((float)(((buttonList[i].buttonsGPIO -> IDR) & (1 << buttonList[i].pin)) >> buttonList[i].pin), &(buttonList[i].filteredVar), KP);	// фильтрация кнопки
     if(PushPress(&buttonList[i])) // если кнопка изменила свое состояние
     {
       *buttons++ = buttonList[i];

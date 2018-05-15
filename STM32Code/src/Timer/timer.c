@@ -28,14 +28,14 @@ void TIM2_IRQHandler(void)
 
 float getAllTime()
 {
-  if((TIM2 -> SR) & 1)  // если таймер не успел 
-  {
-    return ((float)((allTime + 1)*PERIOD + (TIM2 -> CNT)))/FREQ;
-  }
-  else  
-  {
-    return ((float)(allTime*PERIOD + (TIM2 -> CNT)))/FREQ;
-  }
+  NVIC_DisableIRQ(TIM2_IRQn); // запрещаем прерывания
+  uint32_t temp = TIM2 -> CNT;  // Измеряем тики
+  uint32_t temp2 = TIM2 -> SR;  //
+  temp2 = temp2 & 1;  // Измеряем статус 
+  temp2 = temp2 & (uint32_t)!(TIM2 -> CNT < temp); // Смотрим было ли переключение таймера до получения статуса и корректируем его, если нужно
+  float temp3 = ((float)((allTime + temp2)*PERIOD + temp))/FREQ;
+  NVIC_EnableIRQ(TIM2_IRQn); // разрешаем прерывания
+  return temp3;
 }
 
 float getDeltaTime(Timer* t)

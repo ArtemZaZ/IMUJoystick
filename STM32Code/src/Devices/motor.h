@@ -3,8 +3,8 @@
 #define MOTOR_H_
 #include "LL/stm32l4xx_ll_gpio.h"
 
-#define PORT_MOTOR 0xA
-#define PIN_MOTOR 1
+#define PORT_MOTOR 0xB
+#define PIN_MOTOR 3
 //#define VIBRO_TIME 3.f // 3 секунды
 
 

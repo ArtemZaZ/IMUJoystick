@@ -86,7 +86,11 @@ void FSM(void)
       }
       else if(isActiveFlag_rSTOPF() || !isActiveFlag_jWF()) // Если пришел сигнал STOP или неактивен флаг работы джойстика
       {
-        if(isActiveFlag_jWF())  sendSTOP(); // Если джойстик до этого работал - отправить стоп
+        if(isActiveFlag_jWF())
+        {
+          sendSTOP(); // Если джойстик до этого работал - отправить стоп
+          BTransmit();
+        }
         State = FSM_STOP; 
       }
       else if(isActiveFlag_rACTIONF())	State = FSM_ACTION;	// Если пришел сигнал действия
