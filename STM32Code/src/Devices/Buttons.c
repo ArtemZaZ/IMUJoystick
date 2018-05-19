@@ -1,5 +1,12 @@
 #include "Buttons.h"
 
+#define KP 0.1f // коэффицинт фильтрации
+#define LEVELUP(target)	(uint8_t)(target + 0.3f)	// макрос определения пересечения верхнего уровня петли (по уровню 0.7f)
+#define LEVELDOWN(target)	!(uint8_t)(target + 0.7f)	// макрос определения пересечения нижнего уровня петли ( по уровню 0.3f)
+
+static Button buttonList[MAX_AMOUNT_BUTTONS];	// массив кнопок
+static uint8_t butCounter = 0;	// общее кол-во кнопок
+
 void ButtonsInitialize(void)
 {
 #ifdef FIRST_BUTTON		

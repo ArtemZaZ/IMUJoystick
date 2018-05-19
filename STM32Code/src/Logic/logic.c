@@ -1,5 +1,23 @@
 #include "logic.h"
 
+#define IMU_DATA_TIME_SEND  0.1f // максимальное время задержки в отправке сообщений с IMU
+#define MAX_AMOUNT_MESSAGES (int)(MAX_UART_RX_BUFFER_LEN / MAX_RECMESSAGE_LEN) + 5 // максимальное кол-во действий - длина буффера UART/длину максимального сообщения
+
+static Button buttons[MAX_AMOUNT_BUTTONS]; // массив кнопок, меняющих значение
+static RecData messages[MAX_AMOUNT_MESSAGES]; // массив всех сообщений, приходящих с UART(вспомогательный массив)
+static RecData actions[MAX_AMOUNT_MESSAGES]; // массив действий, приходящих с UART
+static uint8_t actionsAmount = 0; // количество действий, пришедших с UART
+
+static volatile float OldSendIMUDataTime = 0.f; // время прошедшее с предыдущей отправки сообщения
+
+static volatile uint8_t joystickWorkFlag = 0; // флаг, работает ли джойстик
+static volatile uint8_t buttonPressedFlag = 0;  // флаг, что хоть одна кнопка была нажата, флаг очищается только при его чтении
+static volatile uint8_t timeToSendIMUDataFlag = 0;  // флаг, что пора отправлять данные с IMU
+static volatile uint8_t recieveSTOPFlag = 0;  // флаг, что пришел сигнал STOP, флаг очищается только при его чтении
+static volatile uint8_t recieveSTARTFlag = 0; // флаг, что пришел сигнал START, флаг очищается только при его чтении
+static volatile uint8_t recieveACTIONFlag = 0; // флаг, что пришел сигнал действия, флаг очищается только при его чтении
+
+
 void InitializeAll(void)
 {
 #ifdef IMU
@@ -26,7 +44,7 @@ void filtrationAndSendChangedButtons(void)
     sendMsg(packing(SBUT, data)); // упаковываем и отправляем  
   }  
 #endif
-  if(size != 0) setFlag_bPF(1); // если хотя бы одна кнопка изменила положение, то ставим флаг
+  if(size != 0) set_buttonPressedFlag(1); // если хотя бы одна кнопка изменила положение, то ставим флаг
   //else setFlag_bPF(0);
 }
 
@@ -40,15 +58,15 @@ void readMessages(void)
     switch(messages[i].command)
     {
       case RSTART:
-        setFlag_rSTARTF(1);
+        set_recieveSTARTFlag(1);
         break;
       
       case RSTOP:
-        setFlag_rSTOPF(1);
+        set_recieveSTOPFlag(1);
         break;
       
       case RVIBRATE:
-        setFlag_rACTIONF(1);  // ставим флаг, что пришло действие
+        set_recieveACTIONFlag(1);  // ставим флаг, что пришло действие
         actions[actionsAmount] = messages[i]; // копируем сообщение в массив действий
         actionsAmount++;
         break;
@@ -63,7 +81,7 @@ void updateIMUData(float time)
 {
 #ifdef IMU
   OldSendIMUDataTime += time; // обновляем время прошедшее с предыдущей отправки
-  if(OldSendIMUDataTime > IMU_DATA_TIME_SEND) setFlag_tTSIMUDF(1);  // если времени с предыдущей отправки прошло достаточно  
+  if(OldSendIMUDataTime > IMU_DATA_TIME_SEND) set_timeToSendIMUDataFlag(1);  // если времени с предыдущей отправки прошло достаточно  
   int16_t rD[6];
   readIMUData(rD);
   float ax, ay, az, wx, wy, wz;
@@ -71,16 +89,16 @@ void updateIMUData(float time)
   ax = rD[0]/GY85_A_SENSETIVE;
   ay = rD[1]/GY85_A_SENSETIVE;
   az = rD[2]/GY85_A_SENSETIVE;
-  wx = DEGREE_TO_RAD*(rD[3]/GY85_G_SENSETIVE + goffx);
-  wy = DEGREE_TO_RAD*(rD[4]/GY85_G_SENSETIVE + goffy);
-  wz = DEGREE_TO_RAD*(rD[5]/GY85_G_SENSETIVE + goffz);  
+  wx = DEGREE_TO_RAD*(rD[3]/GY85_G_SENSETIVE + GY85_X_OFFSET);
+  wy = DEGREE_TO_RAD*(rD[4]/GY85_G_SENSETIVE + GY85_Y_OFFSET);
+  wz = DEGREE_TO_RAD*(rD[5]/GY85_G_SENSETIVE + GY85_Z_OFFSET);  
 #elif defined(MPU6050)
   ax = rD[0]/MPU6050_A_SENSETIVE;
   ay = rD[1]/MPU6050_A_SENSETIVE;
   az = rD[2]/MPU6050_A_SENSETIVE;
-  wx = DEGREE_TO_RAD*(rD[3]/MPU6050_G_SENSETIVE + goffx);
-  wy = DEGREE_TO_RAD*(rD[4]/MPU6050_G_SENSETIVE + goffy);
-  wz = DEGREE_TO_RAD*(rD[5]/MPU6050_G_SENSETIVE + goffz);  
+  wx = DEGREE_TO_RAD*(rD[3]/MPU6050_G_SENSETIVE);
+  wy = DEGREE_TO_RAD*(rD[4]/MPU6050_G_SENSETIVE);
+  wz = DEGREE_TO_RAD*(rD[5]/MPU6050_G_SENSETIVE);  
 #endif  /* GY85 */
   MajvikFilter(ax, ay, az, wx, wy, wz, time); // обновляем данные  
 #endif  /* IMU */
@@ -115,7 +133,7 @@ void sendIMUData(void)
   sendMsg(packing(SPRD, data));
   
   OldSendIMUDataTime = 0.f; // обнуляем время прошедшее с предыдущей отправки
-  setFlag_tTSIMUDF(0); 
+  set_timeToSendIMUDataFlag(0); 
 #endif 
 }
 
@@ -130,44 +148,36 @@ void sendSTART(void) { sendMsg(packing(SSTART, 0)); }
 void sendSTOP(void) { sendMsg(packing(SSTOP, 0)); }
 void sendERROR(void) { sendMsg(packing(SERR, 0)); }
 
-uint8_t isActiveFlag_jWF(void) { return joystickWorkFlag; }
-uint8_t isActiveFlag_tTSIMUDF(void) { return timeToSendIMUDataFlag; }
+uint8_t is_joystickWorkFlag(void) { return joystickWorkFlag; }
+uint8_t is_timeToSendIMUDataFlag(void) { return timeToSendIMUDataFlag; }
 
-uint8_t isActiveFlag_bPF(void)  // флаг очищается при чтении
+uint8_t is_buttonPressedFlag(void)  // флаг очищается при чтении
 { 
   uint8_t temp = buttonPressedFlag;
-  setFlag_bPF(0);
+  set_buttonPressedFlag(0);
   return temp;
 }
 
-uint8_t isActiveFlag_rSTOPF(void)
+uint8_t is_recieveSTOPFlag(void)
 { 
   uint8_t temp = recieveSTOPFlag;
-  setFlag_rSTOPF(0);
+  set_recieveSTOPFlag(0);
   return temp; 
 }
 
-uint8_t isActiveFlag_rSTARTF(void) 
+uint8_t is_recieveSTARTFlag(void) 
 { 
   uint8_t temp = recieveSTARTFlag;
-  setFlag_rSTARTF(0);
+  set_recieveSTARTFlag(0);
   return temp;
 }
 
-uint8_t isActiveFlag_rACTIONF(void) 
+uint8_t is_recieveACTIONFlag(void) 
 {
   uint8_t temp = recieveACTIONFlag;
-  setFlag_rACTIONF(0);
+  set_recieveACTIONFlag(0);
   return temp;
 }
-/*
-uint8_t isActiveFlag_rVIBRATEF(void) 
-{
-  uint8_t temp = recieveVIBRATEFlag;
-  setFlag_rVIBRATEF(0);
-  return temp;
-}
-*/
 
 void reInitAll(void)
 {
@@ -177,21 +187,21 @@ void reInitAll(void)
 #endif
   timerReInitialize();
   resetMajvikFilter();
-  setFlag_bPF(0); // очищаем флаги
-  setFlag_tTSIMUDF(0);
-  setFlag_rSTOPF(0);
-  setFlag_rSTARTF(0);
-  setFlag_rACTIONF(0);
+  set_buttonPressedFlag(0); // очищаем флаги
+  set_timeToSendIMUDataFlag(0);
+  set_recieveSTOPFlag(0);
+  set_recieveSTARTFlag(0);
+  set_recieveACTIONFlag(0);
   OldSendIMUDataTime = 0.f;
   actionsAmount = 0;
 }
 
-void setFlag_jWF(uint8_t b) { joystickWorkFlag = b; }
-void setFlag_bPF(uint8_t b) { buttonPressedFlag = b; }
-void setFlag_tTSIMUDF(uint8_t b) { timeToSendIMUDataFlag = b; }
-void setFlag_rSTOPF(uint8_t b) { recieveSTOPFlag = b; }
-void setFlag_rSTARTF(uint8_t b) { recieveSTARTFlag = b; }
-void setFlag_rACTIONF(uint8_t b) { recieveACTIONFlag = b; }
+void set_joystickWorkFlag(uint8_t b) { joystickWorkFlag = b; }
+void set_buttonPressedFlag(uint8_t b) { buttonPressedFlag = b; }
+void set_timeToSendIMUDataFlag(uint8_t b) { timeToSendIMUDataFlag = b; }
+void set_recieveSTOPFlag(uint8_t b) { recieveSTOPFlag = b; }
+void set_recieveSTARTFlag(uint8_t b) { recieveSTARTFlag = b; }
+void set_recieveACTIONFlag(uint8_t b) { recieveACTIONFlag = b; }
 //void setFlag_rVIBRATEF(uint8_t b) { recieveVIBRATEFlag = b; }
 
 

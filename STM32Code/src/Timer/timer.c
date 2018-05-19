@@ -1,5 +1,9 @@
 #include "timer.h"
 
+#define FREQ  200U // Hz
+#define PERIOD  0x0000FFFFU//0xFFFFFFFFU//TIM_ARR_ARR  // ставим период обновления счетчиа на максимум
+static volatile uint32_t allTime = 0;  // время в периодах таймера, прошедшее с начала включения
+
 void timerInitialize(void)
 {
   RCC -> APB1ENR1 |= RCC_APB1ENR1_TIM2EN; // тактируем таймер

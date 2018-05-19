@@ -1,4 +1,10 @@
 #include "MajvikFilter.h"
+#define BETA 0.1f
+
+static volatile float qw = 1.f;				// 
+static volatile float qx = 0.f;     	// составляющие действующий квартернион
+static volatile float qy = 0.f;     	// части
+static volatile float qz = 0.f;     	//    
 
 static inline float fastInvSqrt(float x)
 {

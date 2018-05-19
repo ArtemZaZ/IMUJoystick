@@ -1,5 +1,16 @@
 #include "Bluetooth.h"
 
+#define END_RECEIVE_COUNTER 1000   // максимальное кол-во циклов, до ответа от передатчика
+#define UARTx USART1
+
+static volatile uint8_t UART_TX_Buffer[MAX_UART_TX_BUFFER_LEN];
+static volatile uint8_t UART_RX_Buffer[MAX_UART_RX_BUFFER_LEN];
+
+static volatile uint8_t* UART_TX_BufferCounter;	// каретка
+static volatile uint8_t* UART_RX_BufferCounter;	// каретка
+
+static volatile uint8_t bluetoothReceiveCompleteFlag = 0;  // флаг, означающий можно ли читать сообщения
+
 void BluetoothInitialize(void)
 {
   UART_Initialize();
@@ -45,7 +56,7 @@ void recvMsg(RecData* recMsgBuf, uint8_t* recMsgBufSize)
   }
   UART_RX_Buffer[0] = (uint8_t)'\0';	// очищаем буффер
   UART_RX_BufferCounter = UART_RX_Buffer;	// ставим указатель в начало массива
-  setFlag_bRC(0);
+  set_bluetoothReceiveCompleteFlag(0);
   LL_USART_EnableIT_RXNE(UARTx);
 }
 
@@ -90,18 +101,18 @@ void USART1_IRQHandler(void)
   uint32_t tempSize = 0;
   if(LL_USART_IsActiveFlag_RXNE(UARTx))
   {
-    setFlag_bRC(0);
+    set_bluetoothReceiveCompleteFlag(0);
     tempSize = (uint32_t)(UART_RX_BufferCounter - UART_RX_Buffer);
     if(tempSize > MAX_UART_RX_BUFFER_LEN)
     {
       UART_RX_BufferCounter = UART_RX_Buffer;
       *UART_RX_BufferCounter = (uint8_t)'\0';
-      setFlag_bRC(1);
+      set_bluetoothReceiveCompleteFlag(1);
     }
     *UART_RX_BufferCounter = LL_USART_ReceiveData8(UARTx);
     if(*UART_RX_BufferCounter == (uint8_t)'>')
     {
-      setFlag_bRC(1);
+      set_bluetoothReceiveCompleteFlag(1);
     }
     UART_RX_BufferCounter++;
     *UART_RX_BufferCounter = (uint8_t)'\0';    
@@ -131,5 +142,5 @@ uint8_t BTransmit(void)
   return 1;
 }
 
-uint8_t isActiveFlag_bRC(void) { return bluetoothReceiveComplete; }
-void setFlag_bRC(uint8_t b) { bluetoothReceiveComplete = b; }
+uint8_t is_bluetoothReceiveCompleteFlag(void) { return bluetoothReceiveCompleteFlag; }
+void set_bluetoothReceiveCompleteFlag(uint8_t b) { bluetoothReceiveCompleteFlag = b; }
